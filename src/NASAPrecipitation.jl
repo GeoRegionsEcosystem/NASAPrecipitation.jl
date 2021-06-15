@@ -28,7 +28,6 @@ abstract type MonthlyGPMDataset <: GPMDataset end
 
 ## Including Relevant Files
 
-include("Downloads.jl")
 include("IMERGFinal.jl")
 include("backend.jl")
 
