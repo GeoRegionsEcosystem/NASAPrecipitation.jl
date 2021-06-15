@@ -47,7 +47,7 @@ function download(
 	for dt in npd.dtbeg : Day(1) : npd.dtend
 		ymdfnc = Dates.format(dt,dateformat"yyyymmdd")
 		npddir = joinpath(npd.hroot,"$(year(dt))",@sprintf("%03d",dayofyear(dt)))
-		for it = 1 : 1
+		for it = 1 : 48
 			npdfnc = "$(npd.fpref).$ymdfnc-$(fnc[it]).$(npd.fsuff)"
 			ds = NCDataset(joinpath(npddir,npdfnc))
 			NCDatasets.load!(ds["precipitationCal"].var,tmp,:,:,1)
