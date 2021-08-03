@@ -17,6 +17,8 @@ function IMERGFinalRaw(
     sroot :: AbstractString,
 )
 
+	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Final Processed IMERG raw half-hourly data to be downloaded"
+
     fol = joinpath(sroot,"imergfinal"); if !isdir(fol); mkpath(fol) end
 
     return IMERGFinalRaw{ST,DT}(
@@ -34,9 +36,13 @@ function download(
 	geo :: GeoRegion
 ) where {ST<:AbstractString, DT<:TimeType}
 
+	@info "$(now()) - NASAPrecipitation.jl - Downloading Final Processed IMERG raw half-hourly data for the $(geo.name) GeoRegion from $(ymd2str(npd.dtbeg)) to $(ymd2str(npd.dtend))"
+
 	fnc  = imergrawfiles()
 	lon,lat = gpmlonlat(); nlon = length(lon); nlat = length(lat)
-	ginfo = GeoRegionInfo(geo,lon,lat)
+	ginfo = RegionGrid(geo,lon,lat)
+
+	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of IMERG data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
 	tmp  = zeros(Float32,nlat,nlon)
@@ -45,13 +51,21 @@ function download(
 	isp  = zeros(Bool,nglon,nglat,48)
 
 	for dt in npd.dtbeg : Day(1) : npd.dtend
+
+		@info "$(now()) - NASAPrecipitation.jl - Downloading Final Processed IMERG raw half-hourly data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(ymd2str(dt)) ..."
+
 		ymdfnc = Dates.format(dt,dateformat"yyyymmdd")
 		npddir = joinpath(npd.hroot,"$(year(dt))",@sprintf("%03d",dayofyear(dt)))
 		for it = 1 : 48
+
+			@info "$(now()) - NASAPrecipitation.jl - Loading data into temporary array for timestep $(fnc[it])"
+
 			npdfnc = "$(npd.fpref).$ymdfnc-$(fnc[it]).$(npd.fsuff)"
 			ds = NCDataset(joinpath(npddir,npdfnc))
 			NCDatasets.load!(ds["precipitationCal"].var,tmp,:,:,1)
 			close(ds)
+
+			@info "$(now()) - NASAPrecipitation.jl - Extraction of data from temporary array for the $(geo.name) GeoRegion"
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
 				if varii != 9999.9 && !iszero(varii)
@@ -64,32 +78,35 @@ function download(
 				end
 			end
 		end
-		save(var,isp,dt,npd,geo,ginfo,vint)
+
+		@info "$(now()) - NASAPrecipitation.jl - Converting data from Float32 format to Int16 format in order to save space ..."
+		scale,offset = ncoffsetscale(var)
+		real2int16!(vint,var,scale,offset)
+
+		save(vint,isp,dt,npd,geo,ginfo)
 	end
 
 end
 
 function save(
-	var   :: Array{Float32,3},
+	var   :: Array{Int16,3},
 	isp   :: Array{Bool,3},
 	dt    :: TimeType,
 	npd   :: IMERGFinalRaw,
-	geo   :: GeoRegion,
-	ginfo :: RegionInfo,
-	vint  :: Array{Int16,3},
+	geo   :: GeoRegion
 )
+
+	@info "$(now()) - NASAPrecipitation.jl - Saving Final Processed IMERG raw half-hourly data in the $(geo.name) GeoRegion for $(ymd2str(dt))"
 
 	fol = joinpath(npd.sroot,geo.regID,"raw",yrmo2dir(dt))
 	if !isdir(fol); mkpath(fol) end
 	fnc = joinpath(fol,"$(npd.npdID)-$(ymd2str(dt)).nc")
 	if isfile(fnc)
-		@info "$(now()) - Stale NetCDF file $(fnc) detected.  Overwriting ..."
+		@info "$(now()) - NASAPrecipitation.jl - Overwrite stale NetCDF file $(fnc) ..."
         rm(fnc);
 	end
 
-	scale,offset = ncoffsetscale(var)
-	real2int16!(vint,var,scale,offset)
-
+	@info "$(now()) - NASAPrecipitation.jl - Creating NetCDF file $(fnc) ..."
 	ds = NCDataset(fnc,"c",attrib = Dict(
 		"doi"				=> "10.5067/GPM/IMERG/3B-HH/0",
 		"AlgorithmID"		=> "3IMERGHH",
@@ -129,9 +146,11 @@ function save(
 	nclon[:] = ginfo.glon
 	nclat[:] = ginfo.glat
 	ncisp[:] = isp
-	ncvar.var[:] = vint
+	ncvar.var[:] = var
 
 	close(ds)
+
+	@info "$(now()) - NASAPrecipitation.jl - Final Processed IMERG raw half-hourly data in the $(geo.name) GeoRegion for $(ymd2str(dt)) has been saved into $(fnc)"
 
 end
 
