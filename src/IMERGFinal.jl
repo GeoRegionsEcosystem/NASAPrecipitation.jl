@@ -83,7 +83,7 @@ function download(
 		scale,offset = ncoffsetscale(var)
 		real2int16!(vint,var,scale,offset)
 
-		save(vint,isp,dt,npd,geo,ginfo)
+		save(vint,isp,dt,npd,geo,ginfo,[scale,offset])
 	end
 
 end
@@ -93,7 +93,9 @@ function save(
 	isp   :: Array{Bool,3},
 	dt    :: TimeType,
 	npd   :: IMERGFinalRaw,
-	geo   :: GeoRegion
+	geo   :: GeoRegion,
+	ginfo :: RegionGrid,
+	scale :: Vector{<:Real}
 )
 
 	@info "$(now()) - NASAPrecipitation.jl - Saving Final Processed IMERG raw half-hourly data in the $(geo.name) GeoRegion for $(ymd2str(dt))"
@@ -131,8 +133,8 @@ function save(
 	    "units"         => "kg m**-2 s**-1",
 	    "long_name"     => "log2_of_precipitation_rate",
 		"full_name"     => "log2 of Precipitation Rate",
-        "scale_factor"  => scale,
-        "add_offset"    => offset,
+        "scale_factor"  => scale[1],
+        "add_offset"    => scale[2],
         "_FillValue"    => Int16(-32767),
         "missing_value" => Int16(-32767),
 	))
