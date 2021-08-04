@@ -152,7 +152,7 @@ function save(
 
 	close(ds)
 
-	@info "$(now()) - NASAPrecipitation.jl - Late IMERG raw half-hourly data in the $(geo.name) GeoRegion for $(ymd2str(dt)) has been saved into $(fnc)"
+	@info "$(now()) - NASAPrecipitation.jl - Late IMERG half-hourly data in the $(geo.name) GeoRegion for $(ymd2str(dt)) has been saved into $(fnc)"
 
 end
 

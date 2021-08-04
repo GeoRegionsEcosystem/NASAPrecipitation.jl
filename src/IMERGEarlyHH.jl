@@ -24,8 +24,8 @@ function IMERGEarlyHH(
     return IMERGEarlyHH{ST,DT}(
 		"imergearlyhh",
         dtbeg,dtend,joinpath(sroot,"imergearlyhh"),
-        "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHHL.06",
-        "3B-HHR-L.MS.MRG.3IMERG",
+        "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHHE.06",
+        "3B-HHR-E.MS.MRG.3IMERG",
         "V06B.HDF5",
     )
 
@@ -152,7 +152,7 @@ function save(
 
 	close(ds)
 
-	@info "$(now()) - NASAPrecipitation.jl - Early IMERG raw half-hourly data in the $(geo.name) GeoRegion for $(ymd2str(dt)) has been saved into $(fnc)"
+	@info "$(now()) - NASAPrecipitation.jl - Early IMERG half-hourly data in the $(geo.name) GeoRegion for $(ymd2str(dt)) has been saved into $(fnc)"
 
 end
 
