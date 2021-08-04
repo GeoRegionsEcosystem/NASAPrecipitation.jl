@@ -12,7 +12,8 @@ import Base: download, show
 
 ## Exporting the following functions:
 export
-        IMERGFinalRaw, download
+        IMERGFinalHH, IMERGLateHH, IMERGEarlyHH,
+        download
 
 ## Abstract types
 """
@@ -28,7 +29,9 @@ abstract type MonthlyGPMDataset <: GPMDataset end
 
 ## Including Relevant Files
 
-include("IMERGFinal.jl")
+include("IMERGFinalHH.jl")
+include("IMERGLateHH.jl")
+include("IMERGEarlyHH.jl")
 include("backend.jl")
 
 end

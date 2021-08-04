@@ -1,4 +1,4 @@
-struct IMERGFinalRaw{ST<:AbstractString, DT<:TimeType} <: RawGPMDataset
+struct IMERGEarlyHH{ST<:AbstractString, DT<:TimeType} <: RawGPMDataset
 	npdID :: ST
     dtbeg :: DT
     dtend :: DT
@@ -9,7 +9,7 @@ struct IMERGFinalRaw{ST<:AbstractString, DT<:TimeType} <: RawGPMDataset
 end
 
 
-function IMERGFinalRaw(
+function IMERGEarlyHH(
     ST = String,
     DT = Date;
     dtbeg :: TimeType,
@@ -17,32 +17,32 @@ function IMERGFinalRaw(
     sroot :: AbstractString,
 )
 
-	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Final Processed IMERG raw half-hourly data to be downloaded"
+	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Early IMERG half-hourly data to be downloaded"
 
-    fol = joinpath(sroot,"imergfinal"); if !isdir(fol); mkpath(fol) end
+    fol = joinpath(sroot,"imergearlyhh"); if !isdir(fol); mkpath(fol) end
 
-    return IMERGFinalRaw{ST,DT}(
-		"imergfinal",
-        dtbeg,dtend,joinpath(sroot,"imergfinal"),
-        "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHH.06",
-        "3B-HHR.MS.MRG.3IMERG",
+    return IMERGEarlyHH{ST,DT}(
+		"imergearlyhh",
+        dtbeg,dtend,joinpath(sroot,"imergearlyhh"),
+        "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHHL.06",
+        "3B-HHR-L.MS.MRG.3IMERG",
         "V06B.HDF5",
     )
 
 end
 
 function download(
-	npd :: IMERGFinalRaw{ST,DT},
+	npd :: IMERGEarlyHH{ST,DT},
 	geo :: GeoRegion
 ) where {ST<:AbstractString, DT<:TimeType}
 
-	@info "$(now()) - NASAPrecipitation.jl - Downloading Final Processed IMERG raw half-hourly data for the $(geo.name) GeoRegion from $(ymd2str(npd.dtbeg)) to $(ymd2str(npd.dtend))"
+	@info "$(now()) - NASAPrecipitation.jl - Downloading Early IMERG half-hourly data for the $(geo.name) GeoRegion from $(ymd2str(npd.dtbeg)) to $(ymd2str(npd.dtend))"
 
 	fnc  = imergrawfiles()
 	lon,lat = gpmlonlat(); nlon = length(lon); nlat = length(lat)
 	ginfo = RegionGrid(geo,lon,lat)
 
-	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of IMERG data for the $(geo.name) GeoRegion from the original gridded dataset"
+	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of Early IMERG half-hourly data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
 	tmp  = zeros(Float32,nlat,nlon)
@@ -52,20 +52,20 @@ function download(
 
 	for dt in npd.dtbeg : Day(1) : npd.dtend
 
-		@info "$(now()) - NASAPrecipitation.jl - Downloading Final Processed IMERG raw half-hourly data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(ymd2str(dt)) ..."
+		@info "$(now()) - NASAPrecipitation.jl - Downloading Early IMERG half-hourly data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(ymd2str(dt)) ..."
 
 		ymdfnc = Dates.format(dt,dateformat"yyyymmdd")
 		npddir = joinpath(npd.hroot,"$(year(dt))",@sprintf("%03d",dayofyear(dt)))
 		for it = 1 : 48
 
-			@info "$(now()) - NASAPrecipitation.jl - Loading data into temporary array for timestep $(fnc[it])"
+			@debug "$(now()) - NASAPrecipitation.jl - Loading data into temporary array for timestep $(fnc[it])"
 
 			npdfnc = "$(npd.fpref).$ymdfnc-$(fnc[it]).$(npd.fsuff)"
 			ds = NCDataset(joinpath(npddir,npdfnc))
 			NCDatasets.load!(ds["precipitationCal"].var,tmp,:,:,1)
 			close(ds)
 
-			@info "$(now()) - NASAPrecipitation.jl - Extraction of data from temporary array for the $(geo.name) GeoRegion"
+			@debug "$(now()) - NASAPrecipitation.jl - Extraction of data from temporary array for the $(geo.name) GeoRegion"
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
 				if varii != 9999.9 && !iszero(varii)
@@ -79,7 +79,7 @@ function download(
 			end
 		end
 
-		@info "$(now()) - NASAPrecipitation.jl - Converting data from Float32 format to Int16 format in order to save space ..."
+		@debug "$(now()) - NASAPrecipitation.jl - Converting data from Float32 format to Int16 format in order to save space ..."
 		scale,offset = ncoffsetscale(var)
 		real2int16!(vint,var,scale,offset)
 
@@ -92,17 +92,17 @@ function save(
 	var   :: Array{Int16,3},
 	isp   :: Array{Bool,3},
 	dt    :: TimeType,
-	npd   :: IMERGFinalRaw,
+	npd   :: IMERGEarlyHH,
 	geo   :: GeoRegion,
 	ginfo :: RegionGrid,
 	scale :: Vector{<:Real}
 )
 
-	@info "$(now()) - NASAPrecipitation.jl - Saving Final Processed IMERG raw half-hourly data in the $(geo.name) GeoRegion for $(ymd2str(dt))"
+	@info "$(now()) - NASAPrecipitation.jl - Saving Early IMERG raw half-hourly data in the $(geo.name) GeoRegion for $(ymd2str(dt))"
 
 	fol = joinpath(npd.sroot,geo.regID,"raw",yrmo2dir(dt))
 	if !isdir(fol); mkpath(fol) end
-	fnc = joinpath(fol,"$(npd.npdID)-$(ymd2str(dt)).nc")
+	fnc = joinpath(fol,"$(npd.npdID)-$(geo.regID)-$(ymd2str(dt)).nc")
 	if isfile(fnc)
 		@info "$(now()) - NASAPrecipitation.jl - Overwrite stale NetCDF file $(fnc) ..."
         rm(fnc);
@@ -110,7 +110,7 @@ function save(
 
 	@info "$(now()) - NASAPrecipitation.jl - Creating NetCDF file $(fnc) ..."
 	ds = NCDataset(fnc,"c",attrib = Dict(
-		"doi"				=> "10.5067/GPM/IMERG/3B-HH/0",
+		"doi"				=> "10.5067/GPM/IMERG/3B-HH-E/06",
 		"AlgorithmID"		=> "3IMERGHH",
 		"AlgorithmVersion"	=> "3IMERGH_6.3"
 	))
@@ -152,14 +152,14 @@ function save(
 
 	close(ds)
 
-	@info "$(now()) - NASAPrecipitation.jl - Final Processed IMERG raw half-hourly data in the $(geo.name) GeoRegion for $(ymd2str(dt)) has been saved into $(fnc)"
+	@info "$(now()) - NASAPrecipitation.jl - Early IMERG raw half-hourly data in the $(geo.name) GeoRegion for $(ymd2str(dt)) has been saved into $(fnc)"
 
 end
 
-function show(io::IO, npd::IMERGFinalRaw{ST,DT}) where {ST<:AbstractString, DT<:TimeType}
+function show(io::IO, npd::IMERGEarlyHH{ST,DT}) where {ST<:AbstractString, DT<:TimeType}
     print(
 		io,
-		"The NASA Precipitation Dataset {$ST,$DT} is IMERG Final Raw (Half-Hourly):\n",
+		"The NASA Precipitation Dataset {$ST,$DT} is Early IMERG (Half-Hourly):\n",
 		"    Data Directory  : ", npd.sroot, '\n',
 		"    Date Begin      : ", npd.dtbeg, '\n',
 		"    Date End        : ", npd.dtend, '\n',
