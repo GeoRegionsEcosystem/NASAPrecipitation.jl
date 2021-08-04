@@ -21,8 +21,8 @@ function IMERGFinalDY(
 
     fol = joinpath(sroot,"imergfinaldy"); if !isdir(fol); mkpath(fol) end
 
-	dtbeg = Date(year(dtbeg),month(dtbeg))
-	dtend = Date(year(dtend),month(dtend))
+	dtbeg = Date(year(dtbeg),month(dtbeg),1)
+	dtend = Date(year(dtend),month(dtend),daysinmonth(dtend))
 
     return IMERGFinalDY{ST,DT}(
 		"imergfinaldy",
@@ -57,7 +57,7 @@ function download(
 
 		@info "$(now()) - NASAPrecipitation.jl - Downloading Final IMERG Daily data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(ymd2str(dt)) ..."
 
-		npddir = joinpath(npd.hroot,year(dt))
+		npddir = joinpath(npd.hroot,"$(yrmo2dir(dt))")
 		ndy = daysinmonth(dt)
 
 		for dy in 1 : ndy
@@ -168,7 +168,7 @@ function show(io::IO, npd::IMERGFinalDY{ST,DT}) where {ST<:AbstractString, DT<:T
 		"    Data Directory  : ", npd.sroot, '\n',
 		"    Date Begin      : ", npd.dtbeg, '\n',
 		"    Date End        : ", npd.dtend, '\n',
-		"    Timestep        : 30 minutes\n",
+		"    Timestep        : 1 Day\n",
         "    Data Resolution : 0.1º\n",
         "    Data Server     : ", npd.hroot, '\n',
 	)
