@@ -105,7 +105,7 @@ function save(
 
 	@info "$(now()) - NASAPrecipitation.jl - Saving Late IMERG Daily data in the $(geo.name) GeoRegion for $(Dates.format(dt,dateformat"yyyy-mm"))"
 
-	fol = joinpath(npd.sroot,geo.regID,"raw",yrmo2dir(dt))
+	fol = joinpath(npd.sroot,geo.regID,"raw","$(year(dt))")
 	if !isdir(fol); mkpath(fol) end
 	fnc = joinpath(fol,"$(npd.npdID)-$(geo.regID)-$(yrmo2str(dt)).nc")
 	if isfile(fnc)
@@ -116,7 +116,7 @@ function save(
 	@info "$(now()) - NASAPrecipitation.jl - Creating NetCDF file $(fnc) ..."
 	ds = NCDataset(fnc,"c",attrib = Dict(
 		"doi"				=> "10.5067/GPM/IMERGDL/DAY/06",
-		"AlgorithmID"		=> "3IMERGDF",
+		"AlgorithmID"		=> "3IMERGD",
 	))
 
 	ndy = daysinmonth(dt)

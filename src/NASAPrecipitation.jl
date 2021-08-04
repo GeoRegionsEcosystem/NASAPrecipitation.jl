@@ -37,6 +37,7 @@ include("IMERGEarlyHH.jl")
 include("IMERGFinalDY.jl")
 include("IMERGLateDY.jl")
 include("IMERGEarlyDY.jl")
+include("IMERGFinalMO.jl")
 include("backend.jl")
 
 end
