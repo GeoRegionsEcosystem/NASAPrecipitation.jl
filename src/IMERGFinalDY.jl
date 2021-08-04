@@ -88,14 +88,14 @@ function download(
 		scale,offset = ncoffsetscale(view(var,:,:,1:ndy))
 		real2int16!(vint,view(var,:,:,1:ndy),scale,offset)
 
-		save(vint,isp,dt,npd,geo,ginfo,[scale,offset])
+		save(view(vint,:,:,1:ndy),view(isp,:,:,1:ndy),dt,npd,geo,ginfo,[scale,offset])
 	end
 
 end
 
 function save(
-	var   :: Array{Int16,3},
-	isp   :: Array{Bool,3},
+	var   :: AbstractArray{Int16,3},
+	isp   :: AbstractArray{Bool,3},
 	dt    :: TimeType,
 	npd   :: IMERGFinalDY,
 	geo   :: GeoRegion,

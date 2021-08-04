@@ -39,7 +39,7 @@ function gpmlonlat()
     return lon,lat
 end
 
-function ncoffsetscale(data::Array{<:Real},init=0)
+function ncoffsetscale(data::AbstractArray{<:Real},init=0)
 
     dmax = init
     dmin = init
@@ -59,8 +59,8 @@ function ncoffsetscale(data::Array{<:Real},init=0)
 end
 
 function real2int16!(
-    outarray :: Array{Int16},
-    inarray  :: Array{<:Real},
+    outarray :: AbstractArray{Int16},
+    inarray  :: AbstractArray{<:Real},
     scale    :: Real,
     offset   :: Real
 )
