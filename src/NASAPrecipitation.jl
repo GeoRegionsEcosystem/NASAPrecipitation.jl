@@ -13,6 +13,7 @@ import Base: download, show
 ## Exporting the following functions:
 export
         IMERGFinalHH, IMERGLateHH, IMERGEarlyHH,
+        IMERGFinalDY,
         download
 
 ## Abstract types
@@ -32,6 +33,7 @@ abstract type MonthlyGPMDataset <: GPMDataset end
 include("IMERGFinalHH.jl")
 include("IMERGLateHH.jl")
 include("IMERGEarlyHH.jl")
+include("IMERGFinalDY.jl")
 include("backend.jl")
 
 end

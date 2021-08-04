@@ -1,4 +1,4 @@
-struct IMERGFinalHH{ST<:AbstractString, DT<:TimeType} <: RawGPMDataset
+struct IMERGFinalDY{ST<:AbstractString, DT<:TimeType} <: RawGPMDataset
 	npdID :: ST
     dtbeg :: DT
     dtend :: DT
@@ -9,7 +9,7 @@ struct IMERGFinalHH{ST<:AbstractString, DT<:TimeType} <: RawGPMDataset
 end
 
 
-function IMERGFinalHH(
+function IMERGFinalDY(
     ST = String,
     DT = Date;
     dtbeg :: TimeType,
@@ -17,71 +17,76 @@ function IMERGFinalHH(
     sroot :: AbstractString,
 )
 
-	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Final IMERG half-hourly data to be downloaded"
+	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Final IMERG Daily data to be downloaded"
 
-    fol = joinpath(sroot,"imergfinalhh"); if !isdir(fol); mkpath(fol) end
+    fol = joinpath(sroot,"imergfinaldy"); if !isdir(fol); mkpath(fol) end
 
-    return IMERGFinalHH{ST,DT}(
-		"imergfinalhh",
-        dtbeg,dtend,joinpath(sroot,"imergfinalhh"),
-        "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHH.06",
-        "3B-HHR.MS.MRG.3IMERG",
-        "V06B.HDF5",
+	dtbeg = Date(year(dtbeg),month(dtbeg))
+	dtend = Date(year(dtend),month(dtend))
+
+    return IMERGFinalDY{ST,DT}(
+		"imergfinaldy",
+        dtbeg,dtend,joinpath(sroot,"imergfinaldy"),
+        "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06",
+        "3B-DAY.MS.MRG.3IMERG",
+        "S000000-E235959.V06.nc4",
     )
 
 end
 
 function download(
-	npd :: IMERGFinalHH{ST,DT},
+	npd :: IMERGFinalDY{ST,DT},
 	geo :: GeoRegion
 ) where {ST<:AbstractString, DT<:TimeType}
 
-	@info "$(now()) - NASAPrecipitation.jl - Downloading Final IMERG half-hourly data for the $(geo.name) GeoRegion from $(ymd2str(npd.dtbeg)) to $(ymd2str(npd.dtend))"
+	@info "$(now()) - NASAPrecipitation.jl - Downloading Final IMERG Daily data for the $(geo.name) GeoRegion from $(ymd2str(npd.dtbeg)) to $(ymd2str(npd.dtend))"
 
 	fnc  = imergrawfiles()
 	lon,lat = gpmlonlat(); nlon = length(lon); nlat = length(lat)
 	ginfo = RegionGrid(geo,lon,lat)
 
-	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of Final IMERG half-hourly data for the $(geo.name) GeoRegion from the original gridded dataset"
+	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of Final IMERG Daily data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
 	tmp  = zeros(Float32,nlat,nlon)
-	var  = zeros(Float32,nglon,nglat,48)
-	vint = zeros(Int16,nglon,nglat,48)
-	isp  = zeros(Bool,nglon,nglat,48)
+	var  = zeros(Float32,nglon,nglat,31)
+	vint = zeros(Int16,nglon,nglat,31)
+	isp  = zeros(Bool,nglon,nglat,31)
 
-	for dt in npd.dtbeg : Day(1) : npd.dtend
+	for dt in npd.dtbeg : Month(1) : npd.dtend
 
-		@info "$(now()) - NASAPrecipitation.jl - Downloading Final IMERG half-hourly data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(ymd2str(dt)) ..."
+		@info "$(now()) - NASAPrecipitation.jl - Downloading Final IMERG Daily data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(ymd2str(dt)) ..."
 
-		ymdfnc = Dates.format(dt,dateformat"yyyymmdd")
-		npddir = joinpath(npd.hroot,"$(year(dt))",@sprintf("%03d",dayofyear(dt)))
-		for it = 1 : 48
+		npddir = joinpath(npd.hroot,year(dt))
+		ndy = daysinmonth(dt)
 
-			@debug "$(now()) - NASAPrecipitation.jl - Loading data into temporary array for timestep $(fnc[it])"
+		for dy in 1 : ndy
 
-			npdfnc = "$(npd.fpref).$ymdfnc-$(fnc[it]).$(npd.fsuff)"
+			ymdfnc = Dates.format(dt,dateformat"yyyymmdd")
+			npdfnc = "$(npd.fpref).$ymdfnc-$(npd.fsuff)"
 			ds = NCDataset(joinpath(npddir,npdfnc))
 			NCDatasets.load!(ds["precipitationCal"].var,tmp,:,:,1)
 			close(ds)
 
 			@debug "$(now()) - NASAPrecipitation.jl - Extraction of data from temporary array for the $(geo.name) GeoRegion"
+
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
 				if varii != 9999.9 && !iszero(varii)
-					  var[ilon,ilat,it] = log2(varii/3600)
-  					  isp[ilon,ilat,it] = 1
+					  var[ilon,ilat,dy] = log2(varii/3600)
+					  isp[ilon,ilat,dy] = 1
 				elseif iszero(varii)
-					  var[ilon,ilat,it] = NaN32
-					  isp[ilon,ilat,it] = 1
-				else; var[ilon,ilat,it] = NaN32
+					  var[ilon,ilat,dy] = NaN32
+					  isp[ilon,ilat,dy] = 1
+				else; var[ilon,ilat,dy] = NaN32
 				end
 			end
+
 		end
 
 		@debug "$(now()) - NASAPrecipitation.jl - Converting data from Float32 format to Int16 format in order to save space ..."
-		scale,offset = ncoffsetscale(var)
-		real2int16!(vint,var,scale,offset)
+		scale,offset = ncoffsetscale(view(var,:,:,1:ndy))
+		real2int16!(vint,view(var,:,:,1:ndy),scale,offset)
 
 		save(vint,isp,dt,npd,geo,ginfo,[scale,offset])
 	end
@@ -92,7 +97,7 @@ function save(
 	var   :: Array{Int16,3},
 	isp   :: Array{Bool,3},
 	dt    :: TimeType,
-	npd   :: IMERGFinalHH,
+	npd   :: IMERGFinalDY,
 	geo   :: GeoRegion,
 	ginfo :: RegionGrid,
 	scale :: Vector{<:Real}
@@ -110,14 +115,14 @@ function save(
 
 	@info "$(now()) - NASAPrecipitation.jl - Creating NetCDF file $(fnc) ..."
 	ds = NCDataset(fnc,"c",attrib = Dict(
-		"doi"				=> "10.5067/GPM/IMERG/3B-HH/06",
-		"AlgorithmID"		=> "3IMERGHH",
-		"AlgorithmVersion"	=> "3IMERGH_6.3"
+		"doi"				=> "10.5067/GPM/IMERGDF/DAY/06",
+		"AlgorithmID"		=> "3IMERGDF",
 	))
 
+	ndy = daysinmonth(dt)
 	ds.dim["longitude"] = length(ginfo.glon)
 	ds.dim["latitude"]  = length(ginfo.glat)
-	ds.dim["time"] = 48
+	ds.dim["time"] 		= ndy
 
 	nclon = defVar(ds,"longitude",Float32,("longitude",),attrib = Dict(
 	    "units"     => "degrees_east",
@@ -152,14 +157,14 @@ function save(
 
 	close(ds)
 
-	@info "$(now()) - NASAPrecipitation.jl - Final IMERG half-hourly data in the $(geo.name) GeoRegion for $(ymd2str(dt)) has been saved into $(fnc)"
+	@info "$(now()) - NASAPrecipitation.jl - Final IMERG daily data in the $(geo.name) GeoRegion for $(yrmostr(dt)) has been saved into $(fnc)"
 
 end
 
-function show(io::IO, npd::IMERGFinalHH{ST,DT}) where {ST<:AbstractString, DT<:TimeType}
+function show(io::IO, npd::IMERGFinalDY{ST,DT}) where {ST<:AbstractString, DT<:TimeType}
     print(
 		io,
-		"The NASA Precipitation Dataset {$ST,$DT} is Final IMERG (Half-Hourly):\n",
+		"The NASA Precipitation Dataset {$ST,$DT} is Final IMERG (Daily):\n",
 		"    Data Directory  : ", npd.sroot, '\n',
 		"    Date Begin      : ", npd.dtbeg, '\n',
 		"    Date End        : ", npd.dtend, '\n',
