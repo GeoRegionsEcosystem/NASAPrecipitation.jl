@@ -134,7 +134,7 @@ function save(
 	    "long_name" => "latitude",
 	))
 
-	ncvar = defVar(ds,"prcp_tot",Int16,("longitude","latitude","time"),attrib = Dict(
+	ncvar = defVar(ds,"precipitationrate",Int16,("longitude","latitude","time"),attrib = Dict(
 	    "units"         => "kg m**-2 s**-1",
 	    "long_name"     => "log2_of_precipitation_rate",
 		"full_name"     => "log2 of Precipitation Rate",
