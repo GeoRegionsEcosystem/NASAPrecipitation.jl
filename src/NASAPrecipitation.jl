@@ -13,7 +13,8 @@ import Base: download, show
 ## Exporting the following functions:
 export
         IMERGFinalHH, IMERGLateHH, IMERGEarlyHH,
-        IMERGFinalDY,
+        IMERGFinalDY, IMERGLateDY, IMERGEarlyDY,
+        IMERGFinalMO
         download
 
 ## Abstract types
@@ -34,6 +35,8 @@ include("IMERGFinalHH.jl")
 include("IMERGLateHH.jl")
 include("IMERGEarlyHH.jl")
 include("IMERGFinalDY.jl")
+include("IMERGLateDY.jl")
+include("IMERGEarlyDY.jl")
 include("backend.jl")
 
 end
