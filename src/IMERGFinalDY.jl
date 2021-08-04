@@ -157,7 +157,7 @@ function save(
 
 	close(ds)
 
-	@info "$(now()) - NASAPrecipitation.jl - Final IMERG daily data in the $(geo.name) GeoRegion for $(yrmostr(dt)) has been saved into $(fnc)"
+	@info "$(now()) - NASAPrecipitation.jl - Final IMERG daily data in the $(geo.name) GeoRegion for $(yrmo2str(dt)) has been saved into $(fnc)"
 
 end
 
