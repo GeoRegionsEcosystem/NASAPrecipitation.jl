@@ -61,8 +61,8 @@ function download(
 		ndy = daysinmonth(dt)
 
 		for dy in 1 : ndy
-
-			ymdfnc = Dates.format(dt,dateformat"yyyymmdd")
+			dtii   = Date(year(dt),month(dt),dy)
+			ymdfnc = "$(ymd2str(dtii))"
 			npdfnc = "$(npd.fpref).$ymdfnc-$(npd.fsuff)"
 			ds = NCDataset(joinpath(npddir,npdfnc))
 			NCDatasets.load!(ds["precipitationCal"].var,tmp,:,:,1)
@@ -73,7 +73,7 @@ function download(
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
 				if varii != 9999.9 && !iszero(varii)
-					  var[ilon,ilat,dy] = log2(varii/3600)
+					  var[ilon,ilat,dy] = log2(varii/86400)
 					  isp[ilon,ilat,dy] = 1
 				elseif iszero(varii)
 					  var[ilon,ilat,dy] = NaN32
@@ -157,7 +157,7 @@ function save(
 
 	close(ds)
 
-	@info "$(now()) - NASAPrecipitation.jl - Final IMERG daily data in the $(geo.name) GeoRegion for $(Dates.format(dt,dateformat"yyyy-mm")) has been saved into $(fnc)"
+	@info "$(now()) - NASAPrecipitation.jl - Final IMERG Daily data in the $(geo.name) GeoRegion for $(Dates.format(dt,dateformat"yyyy-mm")) has been saved into $(fnc)"
 
 end
 
