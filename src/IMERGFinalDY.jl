@@ -39,7 +39,7 @@ function download(
 	geo :: GeoRegion
 ) where {ST<:AbstractString, DT<:TimeType}
 
-	@info "$(now()) - NASAPrecipitation.jl - Downloading Final IMERG Daily data for the $(geo.name) GeoRegion from $(ymd2str(npd.dtbeg)) to $(ymd2str(npd.dtend))"
+	@info "$(now()) - NASAPrecipitation.jl - Downloading Final IMERG Daily data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
 
 	fnc  = imergrawfiles()
 	lon,lat = gpmlonlat(); nlon = length(lon); nlat = length(lat)
@@ -103,11 +103,11 @@ function save(
 	scale :: Vector{<:Real}
 )
 
-	@info "$(now()) - NASAPrecipitation.jl - Saving Final IMERG half-hourly data in the $(geo.name) GeoRegion for $(ymd2str(dt))"
+	@info "$(now()) - NASAPrecipitation.jl - Saving Final IMERG Daily data in the $(geo.name) GeoRegion for $(Dates.format(dt,dateformat"yyyy-mm"))"
 
 	fol = joinpath(npd.sroot,geo.regID,"raw",yrmo2dir(dt))
 	if !isdir(fol); mkpath(fol) end
-	fnc = joinpath(fol,"$(npd.npdID)-$(geo.regID)-$(ymd2str(dt)).nc")
+	fnc = joinpath(fol,"$(npd.npdID)-$(geo.regID)-$(yrmo2str(dt)).nc")
 	if isfile(fnc)
 		@info "$(now()) - NASAPrecipitation.jl - Overwrite stale NetCDF file $(fnc) ..."
         rm(fnc);
@@ -157,7 +157,7 @@ function save(
 
 	close(ds)
 
-	@info "$(now()) - NASAPrecipitation.jl - Final IMERG daily data in the $(geo.name) GeoRegion for $(yrmo2str(dt)) has been saved into $(fnc)"
+	@info "$(now()) - NASAPrecipitation.jl - Final IMERG daily data in the $(geo.name) GeoRegion for $(Dates.format(dt,dateformat"yyyy-mm")) has been saved into $(fnc)"
 
 end
 

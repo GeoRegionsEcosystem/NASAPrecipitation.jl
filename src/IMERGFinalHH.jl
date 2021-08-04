@@ -17,7 +17,7 @@ function IMERGFinalHH(
     sroot :: AbstractString,
 )
 
-	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Final IMERG half-hourly data to be downloaded"
+	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Final IMERG Half-Hourly data to be downloaded"
 
     fol = joinpath(sroot,"imergfinalhh"); if !isdir(fol); mkpath(fol) end
 
@@ -36,13 +36,13 @@ function download(
 	geo :: GeoRegion
 ) where {ST<:AbstractString, DT<:TimeType}
 
-	@info "$(now()) - NASAPrecipitation.jl - Downloading Final IMERG half-hourly data for the $(geo.name) GeoRegion from $(ymd2str(npd.dtbeg)) to $(ymd2str(npd.dtend))"
+	@info "$(now()) - NASAPrecipitation.jl - Downloading Final IMERG Half-Hourly data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
 
 	fnc  = imergrawfiles()
 	lon,lat = gpmlonlat(); nlon = length(lon); nlat = length(lat)
 	ginfo = RegionGrid(geo,lon,lat)
 
-	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of Final IMERG half-hourly data for the $(geo.name) GeoRegion from the original gridded dataset"
+	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of Final IMERG Half-Hourly data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
 	tmp  = zeros(Float32,nlat,nlon)
@@ -52,7 +52,7 @@ function download(
 
 	for dt in npd.dtbeg : Day(1) : npd.dtend
 
-		@info "$(now()) - NASAPrecipitation.jl - Downloading Final IMERG half-hourly data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(ymd2str(dt)) ..."
+		@info "$(now()) - NASAPrecipitation.jl - Downloading Final IMERG Half-Hourly data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) ..."
 
 		ymdfnc = Dates.format(dt,dateformat"yyyymmdd")
 		npddir = joinpath(npd.hroot,"$(year(dt))",@sprintf("%03d",dayofyear(dt)))
@@ -98,7 +98,7 @@ function save(
 	scale :: Vector{<:Real}
 )
 
-	@info "$(now()) - NASAPrecipitation.jl - Saving Final IMERG half-hourly data in the $(geo.name) GeoRegion for $(ymd2str(dt))"
+	@info "$(now()) - NASAPrecipitation.jl - Saving Final IMERG Half-Hourly data in the $(geo.name) GeoRegion for $(dt)"
 
 	fol = joinpath(npd.sroot,geo.regID,"raw",yrmo2dir(dt))
 	if !isdir(fol); mkpath(fol) end
@@ -152,7 +152,7 @@ function save(
 
 	close(ds)
 
-	@info "$(now()) - NASAPrecipitation.jl - Final IMERG half-hourly data in the $(geo.name) GeoRegion for $(ymd2str(dt)) has been saved into $(fnc)"
+	@info "$(now()) - NASAPrecipitation.jl - Final IMERG Half-Hourly data in the $(geo.name) GeoRegion for $(dt) has been saved into $(fnc)"
 
 end
 
