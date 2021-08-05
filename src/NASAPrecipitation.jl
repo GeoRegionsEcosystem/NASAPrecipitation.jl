@@ -14,7 +14,8 @@ import Base: download, show
 export
         IMERGFinalHH, IMERGLateHH, IMERGEarlyHH,
         IMERGFinalDY, IMERGLateDY, IMERGEarlyDY,
-        IMERGFinalMO
+        IMERGFinalMO,
+        getgpmlsm, gettrmmlsm,
         download
 
 ## Abstract types
@@ -38,7 +39,8 @@ include("IMERGFinalDY.jl")
 include("IMERGLateDY.jl")
 include("IMERGEarlyDY.jl")
 include("IMERGFinalMO.jl")
-include("LandSeaMask.jl")
+include("GPMLandSeaMask.jl")
+include("TRMMLandSeaMask.jl")
 include("backend.jl")
 
 end

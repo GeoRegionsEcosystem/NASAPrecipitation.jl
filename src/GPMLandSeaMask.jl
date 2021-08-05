@@ -57,7 +57,7 @@ function savegpmlsm(
 	))
 
 	ds.dim["longitude"] = length(ginfo.glon)
-	ds.dim["latitude"] = length(ginfo.glat)
+	ds.dim["latitude"]  = length(ginfo.glat)
 
 	nclon = defVar(ds,"longitude",Float32,("longitude",),attrib = Dict(
 	    "units"     => "degrees_east",
@@ -82,33 +82,5 @@ function savegpmlsm(
 	close(ds)
 
 	@info "$(now()) - NASAPrecipitation.jl - GPM-IMERG Land-Sea Mask data in the $(geo.name) GeoRegion has been saved into $(fnc)"
-
-end
-
-function extractregionlsm!(
-	outarray :: Array{<:Real,2},
-	inarray  :: Array{<:Real,2},
-	ginfo	 :: RectGrid
-)
-
-	iglon = ginfo.ilon; nglon = length(iglon)
-	iglat = ginfo.ilat; nglat = length(iglat)
-	for ilat = 1 : nglat, ilon = 1 : nglon
-		outarray[ilon,ilat] = inarray[iglat[ilat],iglon[ilon]]
-	end
-
-end
-
-function extractregionlsm!(
-	outarray :: Array{<:Real,2},
-	inarray  :: Array{<:Real,2},
-	ginfo	 :: PolyGrid
-)
-
-	iglon = ginfo.ilon; nglon = length(iglon)
-	iglat = ginfo.ilat; nglat = length(iglat)
-	for ilat = 1 : nglat, ilon = 1 : nglon
-		outarray[ilon,ilat] = inarray[iglat[ilat],iglon[ilon]] * ginfo.mask[ilon,ilat]
-	end
 
 end

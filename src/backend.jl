@@ -39,6 +39,12 @@ function gpmlonlat()
     return lon,lat
 end
 
+function trmmlonlat()
+    lon = convert(Array,-179.875:0.25:179.875)
+    lat = convert(Array,-89.875:0.25:89.875)
+    return lon,lat
+end
+
 function ncoffsetscale(data::AbstractArray{<:Real},init=0)
 
     dmax = init
@@ -76,5 +82,33 @@ function real2int16!(
     end
 
     return
+
+end
+
+function extractregionlsm!(
+	outarray :: Array{<:Real,2},
+	inarray  :: Array{<:Real,2},
+	ginfo	 :: RectGrid
+)
+
+	iglon = ginfo.ilon; nglon = length(iglon)
+	iglat = ginfo.ilat; nglat = length(iglat)
+	for ilat = 1 : nglat, ilon = 1 : nglon
+		outarray[ilon,ilat] = inarray[iglat[ilat],iglon[ilon]]
+	end
+
+end
+
+function extractregionlsm!(
+	outarray :: Array{<:Real,2},
+	inarray  :: Array{<:Real,2},
+	ginfo	 :: PolyGrid
+)
+
+	iglon = ginfo.ilon; nglon = length(iglon)
+	iglat = ginfo.ilat; nglat = length(iglat)
+	for ilat = 1 : nglat, ilon = 1 : nglon
+		outarray[ilon,ilat] = inarray[iglat[ilat],iglon[ilon]] * ginfo.mask[ilon,ilat]
+	end
 
 end
