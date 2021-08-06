@@ -51,6 +51,7 @@ function download(
 		real2int16!(vint,var,scale,offset)
 
 		save(vint,isp,dt,npd,geo,ginfo,[scale,offset])
+		
 	end
 
 end
@@ -109,6 +110,7 @@ function download(
 		real2int16!(vint,view(var,:,:,1:ndy),scale,offset)
 
 		save(view(vint,:,:,1:ndy),view(isp,:,:,1:ndy),dt,npd,geo,ginfo,[scale,offset])
+
 	end
 
 end
@@ -166,6 +168,187 @@ function download(
 		real2int16!(vint,var,scale,offset)
 
 		save(vint,isp,dt,npd,geo,ginfo,[scale,offset])
+
+	end
+
+end
+
+function download(
+	npd :: TRMM3Hourly{ST,DT},
+	geo :: GeoRegion
+) where {ST<:AbstractString, DT<:TimeType}
+
+	@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
+
+	fnc  = imergrawfiles()
+	lon,lat = gpmlonlat(); nlon = length(lon); nlat = length(lat)
+	ginfo = RegionGrid(geo,lon,lat)
+
+	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
+	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
+	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
+	tmp  = zeros(Float32,nlat,nlon)
+	var  = zeros(Float32,nglon,nglat,8)
+	vint = zeros(Int16,nglon,nglat,8)
+	isp  = zeros(Bool,nglon,nglat,8)
+
+	for dt in npd.dtbeg : Day(1) : npd.dtend
+
+		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) ..."
+
+		ymdfnc = Dates.format(dt,dateformat"yyyymmdd")
+
+		for it = 1 : 8
+
+			@debug "$(now()) - NASAPrecipitation.jl - Loading data into temporary array for timestep $(fnc[it])"
+
+			if isone(it); di = dt-Day(1)
+				  npddir = joinpath(npd.hroot,"$(year(di))",@sprintf("%03d",dayofyear(di)))
+			else; npddir = joinpath(npd.hroot,"$(year(dt))",@sprintf("%03d",dayofyear(dt)))
+			end
+
+			npdfnc = "$(npd.fpref).$ymdfnc.$((it-1)*3).$(npd.fsuff)"
+			ds = NCDataset(joinpath(npddir,npdfnc))
+			NCDatasets.load!(ds["precipitation"].var,tmp,:,:,1)
+			close(ds)
+
+			@debug "$(now()) - NASAPrecipitation.jl - Extraction of data from temporary array for the $(geo.name) GeoRegion"
+			for ilat = 1 : nglat, ilon = 1 : nglon
+				varii = tmp[iglat[ilat],iglon[ilon]]
+				if varii != 9999.9 && !iszero(varii)
+					  var[ilon,ilat,it] = log2(varii/3600)
+  					  isp[ilon,ilat,it] = 1
+				elseif iszero(varii)
+					  var[ilon,ilat,it] = NaN32
+					  isp[ilon,ilat,it] = 1
+				else; var[ilon,ilat,it] = NaN32
+				end
+			end
+		end
+
+		@debug "$(now()) - NASAPrecipitation.jl - Converting data from Float32 format to Int16 format in order to save space ..."
+		scale,offset = ncoffsetscale(var)
+		real2int16!(vint,var,scale,offset)
+
+		save(vint,isp,dt,npd,geo,ginfo,[scale,offset])
+
+	end
+
+end
+
+function download(
+	npd :: TRMMDaily{ST,DT},
+	geo :: GeoRegion
+) where {ST<:AbstractString, DT<:TimeType}
+
+	@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
+
+	lon,lat = trmmlonlat(); nlon = length(lon); nlat = length(lat)
+	ginfo = RegionGrid(geo,lon,lat)
+
+	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
+	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
+	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
+	tmp  = zeros(Float32,nlat,nlon)
+	var  = zeros(Float32,nglon,nglat,31)
+	vint = zeros(Int16,nglon,nglat,31)
+	isp  = zeros(Bool,nglon,nglat,31)
+
+	for dt in npd.dtbeg : Month(1) : npd.dtend
+
+		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(ymd2str(dt)) ..."
+
+		npddir = joinpath(npd.hroot,"$(yrmo2dir(dt))")
+		ndy = daysinmonth(dt)
+
+		for dy in 1 : ndy
+			dtii   = Date(year(dt),month(dt),dy)
+			ymdfnc = "$(ymd2str(dtii))"
+			npdfnc = "$(npd.fpref).$ymdfnc.$(npd.fsuff)"
+			ds = NCDataset(joinpath(npddir,npdfnc))
+			NCDatasets.load!(ds["precipitation"].var,tmp,:,:,1)
+			close(ds)
+
+			@debug "$(now()) - NASAPrecipitation.jl - Extraction of data from temporary array for the $(geo.name) GeoRegion"
+
+			for ilat = 1 : nglat, ilon = 1 : nglon
+				varii = tmp[iglat[ilat],iglon[ilon]]
+				if varii != 9999.9 && !iszero(varii)
+					  var[ilon,ilat,dy] = log2(varii/86400)
+					  isp[ilon,ilat,dy] = 1
+				elseif iszero(varii)
+					  var[ilon,ilat,dy] = NaN32
+					  isp[ilon,ilat,dy] = 1
+				else; var[ilon,ilat,dy] = NaN32
+				end
+			end
+
+		end
+
+		@debug "$(now()) - NASAPrecipitation.jl - Converting data from Float32 format to Int16 format in order to save space ..."
+		scale,offset = ncoffsetscale(view(var,:,:,1:ndy))
+		real2int16!(vint,view(var,:,:,1:ndy),scale,offset)
+
+		save(view(vint,:,:,1:ndy),view(isp,:,:,1:ndy),dt,npd,geo,ginfo,[scale,offset])
+
+	end
+
+end
+
+function download(
+	npd :: TRMMMonthly{ST,DT},
+	geo :: GeoRegion
+) where {ST<:AbstractString, DT<:TimeType}
+
+	@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
+
+	lon,lat = trmmlonlat(); nlon = length(lon); nlat = length(lat)
+	ginfo = RegionGrid(geo,lon,lat)
+
+	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
+	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
+	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
+	tmp  = zeros(Float32,nlat,nlon)
+	var  = zeros(Float32,nglon,nglat,12)
+	vint = zeros(Int16,nglon,nglat,12)
+	isp  = zeros(Bool,nglon,nglat,12)
+
+	for dt in npd.dtbeg : Year(1) : npd.dtend
+
+		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(ymd2str(dt)) ..."
+
+		npddir = joinpath(npd.hroot,"$(year(dt))")
+
+		for mo in 1 : 12
+			dtii   = Date(year(dt),mo,1)
+			ymdfnc = "$(ymd2str(dtii))"
+			npdfnc = "$(npd.fpref).$ymdfnc.$(npd.fsuff)"
+			ds = NCDataset(joinpath(npddir,npdfnc))
+			NCDatasets.load!(ds["precipitation"].var,tmp,:,:,1)
+			close(ds)
+
+			@debug "$(now()) - NASAPrecipitation.jl - Extraction of data from temporary array for the $(geo.name) GeoRegion"
+
+			for ilat = 1 : nglat, ilon = 1 : nglon
+				varii = tmp[iglat[ilat],iglon[ilon]]
+				if varii != 9999.9 && !iszero(varii)
+					  var[ilon,ilat,mo] = log2(varii/3600)
+					  isp[ilon,ilat,mo] = 1
+				elseif iszero(varii)
+					  var[ilon,ilat,mo] = NaN32
+					  isp[ilon,ilat,mo] = 1
+				else; var[ilon,ilat,mo] = NaN32
+				end
+			end
+
+		end
+
+		@debug "$(now()) - NASAPrecipitation.jl - Converting data from Float32 format to Int16 format in order to save space ..."
+		scale,offset = ncoffsetscale(var)
+		real2int16!(vint,var,scale,offset)
+
+		save(vint,isp,dt,npd,geo,ginfo,[scale,offset])
+
 	end
 
 end
