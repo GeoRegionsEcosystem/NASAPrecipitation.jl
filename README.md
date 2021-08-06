@@ -34,6 +34,12 @@
 ] add https://github.com/natgeo-wong/NASAPrecipitation.jl.git
 ```
 
+## **Usage**
+
+Please refer to the [documentation](https://natgeo-wong.github.io/NASAPrecipitation.jl/dev/) for instructions and examples.  A working knowledge of the `GeoRegion` and `RegionInfo` supertypes used in [`GeoRegions.jl`](https://github.com/JuliaClimate/GeoRegions.jl) v2 is also needed.
+
+*__Tip:__ Both the `GeoRegions.jl` and `Dates` dependencies are reexported by `NASAPrecipitation.jl`, and therefore there is no need to call either `GeoRegions.jl` or `Dates` separately when using the `NASAPrecipitation.jl` package.*
+
 ## **Supported Datasets**
 
 The following datasets are supported:
@@ -47,7 +53,3 @@ The following datasets are supported:
 Only the calibrated precipitation data is downloaded, with units of rate in log2(mm/s).
 
 If there is demand, I can easily add other datasets available on the `gpm1` and `disc2` NASA OPeNDAP servers to the mix as well. Please open an issue if you want me to do so.
-
-## **Usage**
-
-Please refer to the [documentation](https://natgeo-wong.github.io/NASAPrecipitation.jl/dev/) for instructions and examples.  A working knowledge of the `GeoRegion` and `RegionInfo` supertypes used in [`GeoRegions.jl`](https://github.com/JuliaClimate/GeoRegions.jl) v2 is also needed.

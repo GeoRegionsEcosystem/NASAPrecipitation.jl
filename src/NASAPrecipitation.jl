@@ -1,12 +1,15 @@
 module NASAPrecipitation
 
 ## Modules Used
-using Dates
-using GeoRegions
 using Logging
 using NCDatasets
 using Printf
 using Statistics
+
+## Reexporting exported functions within these modules
+using Reexport
+@reexport using Dates
+@reexport using GeoRegions
 
 import Base: download, show
 
