@@ -1,4 +1,4 @@
-struct IMERGFinalMO{ST<:AbstractString, DT<:TimeType} <: GPMMonthly
+struct IMERGFinalMO{ST<:AbstractString, DT<:TimeType} <: IMERGMonthly
 	npdID :: ST
     dtbeg :: DT
     dtend :: DT

@@ -1,4 +1,4 @@
-struct IMERGLateHH{ST<:AbstractString, DT<:TimeType} <: GPMHalfHour
+struct IMERGLateHH{ST<:AbstractString, DT<:TimeType} <: IMERGHalfHour
 	npdID :: ST
     dtbeg :: DT
     dtend :: DT

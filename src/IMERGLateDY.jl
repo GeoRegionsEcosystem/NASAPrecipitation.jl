@@ -1,4 +1,4 @@
-struct IMERGLateDY{ST<:AbstractString, DT<:TimeType} <: GPMDaily
+struct IMERGLateDY{ST<:AbstractString, DT<:TimeType} <: IMERGDaily
 	npdID :: ST
     dtbeg :: DT
     dtend :: DT
