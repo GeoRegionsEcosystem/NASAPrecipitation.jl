@@ -1,14 +1,2 @@
-```@meta
-CurrentModule = NASAPrecipitation
-```
-
-# NASAPrecipitation
-
-Documentation for [NASAPrecipitation](https://github.com/natgeo-wong/NASAPrecipitation.jl).
-
-```@index
-```
-
-```@autodocs
-Modules = [NASAPrecipitation]
-```
+# [NASAPrecipitation.jl](https://github.com/natgeo-wong/NASAPrecipitation.jl)
+*Dealing with Datasets from the NASA Precipitation Measurement Mission*
