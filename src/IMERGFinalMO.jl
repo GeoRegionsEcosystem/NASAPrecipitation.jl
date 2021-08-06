@@ -1,4 +1,4 @@
-struct IMERGFinalMO{ST<:AbstractString, DT<:TimeType} <: RawGPMDataset
+struct IMERGFinalMO{ST<:AbstractString, DT<:TimeType} <: GPMMonthly
 	npdID :: ST
     dtbeg :: DT
     dtend :: DT

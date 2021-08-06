@@ -1,4 +1,4 @@
-struct IMERGEarlyHH{ST<:AbstractString, DT<:TimeType} <: RawGPMDataset
+struct IMERGEarlyHH{ST<:AbstractString, DT<:TimeType} <: GPMHalfHour
 	npdID :: ST
     dtbeg :: DT
     dtend :: DT

@@ -1,4 +1,4 @@
-struct IMERGEarlyDY{ST<:AbstractString, DT<:TimeType} <: RawGPMDataset
+struct IMERGEarlyDY{ST<:AbstractString, DT<:TimeType} <: GPMDaily
 	npdID :: ST
     dtbeg :: DT
     dtend :: DT

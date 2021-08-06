@@ -26,9 +26,9 @@ Abstract supertype for NASA Precipitation datasets on NASA Servers.
 """
 abstract type GPMDataset end
 
-abstract type RawGPMDataset     <: GPMDataset end
-
-abstract type MonthlyGPMDataset <: GPMDataset end
+abstract type GPMHalfHour <: GPMDataset end
+abstract type GPMDaily    <: GPMDataset end
+abstract type GPMMonthly  <: GPMDataset end
 
 ## Including Relevant Files
 
