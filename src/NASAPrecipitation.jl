@@ -52,6 +52,8 @@ Fields:
 * `hroot` : The URL of the NASA's EOSDIS OPeNDAP server for which this dataset is stored
 * `fpref` : The prefix component of the NetCDF files to be downloaded
 * `fsuff` : The suffix component of the NetCDF files to be downloaded
+
+Of these fields, only `dtbeg`, `dtend` and `sroot` are user-defined.  All other fields are predetermined depending on the type of NASA Precipitation Dataset called.
 """
 abstract type NASAPrecipitationDataset end
 

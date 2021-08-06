@@ -1,3 +1,8 @@
+"""
+    IMERGMonthly{ST<:AbstractString, DT<:TimeType} <: IMERGDataset
+
+Object containing information on Montly IMERG datasets to be downloaded
+"""
 struct IMERGMonthly{ST<:AbstractString, DT<:TimeType} <: IMERGDataset
 	npdID :: ST
 	lname :: ST
@@ -10,6 +15,31 @@ struct IMERGMonthly{ST<:AbstractString, DT<:TimeType} <: IMERGDataset
     fsuff :: ST
 end
 
+"""
+    IMERGMonthly(
+        ST = String,
+        DT = Date;
+        dtbeg :: TimeType,
+        dtend :: TimeType,
+        sroot :: AbstractString,
+    ) -> npd :: IMERGMonthly{ST,DT}
+
+Creates a `IMERGMonthly` dataset `npd` to retrieve datasets for Monthly output
+
+Keyword Arguments
+=================
+- `dtbeg` : Date at which download / analysis of the dataset begins
+- `dtend` : Date at which download / analysis of the dataset ends
+- `sroot` : The directory in which the folder `imergmonthly` will be created for data downloads, storage and analysis
+
+The following fields in `npd` will be fixed as below:
+- `npdID` : imergmonthly
+- `npdID` : IMERG Monthly
+- `doi`   : 10.5067/GPM/IMERG/3B-MONTH/06
+- `hroot` : https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.06
+- `fpref` : 3B-MO.MS.MRG.3IMERG
+- `fsuff` : V06B.HDF5
+"""
 function IMERGMonthly(
     ST = String,
     DT = Date;
