@@ -1,4 +1,4 @@
-function gettrmmlsm(
+function getTRMMlsm(
     sroot :: AbstractString,
     geo   :: GeoRegion
 )
@@ -24,11 +24,11 @@ function gettrmmlsm(
 
 	extractregionlsm!(var,tmp,ginfo)
 
-	savetrmmlsm(var,geo,ginfo,sroot)
+	saveTRMMlsm(var,geo,ginfo,sroot)
 
 end
 
-function savetrmmlsm(
+function saveTRMMlsm(
 	lsm   :: AbstractArray{<:Real,2},
 	geo   :: GeoRegion,
 	ginfo :: RegionGrid,

@@ -1,5 +1,7 @@
-struct IMERGLateDY{ST<:AbstractString, DT<:TimeType} <: IMERGDaily
+struct IMERGDaily{ST<:AbstractString, DT<:TimeType} <: IMERGDataset
 	npdID :: ST
+	lname :: ST
+	doi   :: ST
     dtbeg :: DT
     dtend :: DT
     sroot :: ST
@@ -8,6 +10,30 @@ struct IMERGLateDY{ST<:AbstractString, DT<:TimeType} <: IMERGDaily
     fsuff :: ST
 end
 
+function IMERGEarlyDY(
+    ST = String,
+    DT = Date;
+    dtbeg :: TimeType,
+    dtend :: TimeType,
+    sroot :: AbstractString,
+)
+
+	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Early IMERG Daily data to be downloaded"
+
+    fol = joinpath(sroot,"imergfinaldy"); if !isdir(fol); mkpath(fol) end
+
+	dtbeg = Date(year(dtbeg),month(dtbeg),1)
+	dtend = Date(year(dtend),month(dtend),daysinmonth(dtend))
+
+    return IMERGDaily{ST,DT}(
+		"imergearlydy", "Early IMERG Daily", "10.5067/GPM/IMERGDE/DAY/06",
+        dtbeg, dtend,
+		joinpath(sroot,"imergearlydy"),
+        "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDE.06",
+        "3B-DAY-E.MS.MRG.3IMERG", "S000000-E235959.V06.nc4",
+    )
+
+end
 
 function IMERGLateDY(
     ST = String,
@@ -24,28 +50,52 @@ function IMERGLateDY(
 	dtbeg = Date(year(dtbeg),month(dtbeg),1)
 	dtend = Date(year(dtend),month(dtend),daysinmonth(dtend))
 
-    return IMERGLateDY{ST,DT}(
-		"imerglatedy",
-        dtbeg,dtend,joinpath(sroot,"imerglatedy"),
+    return IMERGDaily{ST,DT}(
+		"imerglatedy", "Late IMERG Daily", "10.5067/GPM/IMERGDL/DAY/06",
+        dtbeg, dtend,
+		joinpath(sroot,"imerglatedy"),
         "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDL.06",
-        "3B-DAY-L.MS.MRG.3IMERG",
-        "S000000-E235959.V06.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG", "S000000-E235959.V06.nc4",
+    )
+
+end
+
+function IMERGFinalDY(
+    ST = String,
+    DT = Date;
+    dtbeg :: TimeType,
+    dtend :: TimeType,
+    sroot :: AbstractString,
+)
+
+	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Final IMERG Daily data to be downloaded"
+
+    fol = joinpath(sroot,"imergfinaldy"); if !isdir(fol); mkpath(fol) end
+
+	dtbeg = Date(year(dtbeg),month(dtbeg),1)
+	dtend = Date(year(dtend),month(dtend),daysinmonth(dtend))
+
+    return IMERGDaily{ST,DT}(
+		"imergfinaldy", "Final IMERG Daily", "10.5067/GPM/IMERGDF/DAY/06",
+        dtbeg, dtend,
+		joinpath(sroot,"imergfinaldy"),
+        "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06",
+        "3B-DAY.MS.MRG.3IMERG", "S000000-E235959.V06.nc4",
     )
 
 end
 
 function download(
-	npd :: IMERGLateDY{ST,DT},
+	npd :: IMERGDaily{ST,DT},
 	geo :: GeoRegion
 ) where {ST<:AbstractString, DT<:TimeType}
 
-	@info "$(now()) - NASAPrecipitation.jl - Downloading Late IMERG Daily data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
+	@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
 
-	fnc  = imergrawfiles()
 	lon,lat = gpmlonlat(); nlon = length(lon); nlat = length(lat)
 	ginfo = RegionGrid(geo,lon,lat)
 
-	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of Late IMERG Daily data for the $(geo.name) GeoRegion from the original gridded dataset"
+	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
 	tmp  = zeros(Float32,nlat,nlon)
@@ -55,7 +105,7 @@ function download(
 
 	for dt in npd.dtbeg : Month(1) : npd.dtend
 
-		@info "$(now()) - NASAPrecipitation.jl - Downloading Late IMERG Daily data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(ymd2str(dt)) ..."
+		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(ymd2str(dt)) ..."
 
 		npddir = joinpath(npd.hroot,"$(yrmo2dir(dt))")
 		ndy = daysinmonth(dt)
@@ -97,13 +147,13 @@ function save(
 	var   :: AbstractArray{Int16,3},
 	isp   :: AbstractArray{Bool,3},
 	dt    :: TimeType,
-	npd   :: IMERGLateDY,
+	npd   :: IMERGDaily,
 	geo   :: GeoRegion,
 	ginfo :: RegionGrid,
 	scale :: Vector{<:Real}
 )
 
-	@info "$(now()) - NASAPrecipitation.jl - Saving Late IMERG Daily data in the $(geo.name) GeoRegion for $(Dates.format(dt,dateformat"yyyy-mm"))"
+	@info "$(now()) - NASAPrecipitation.jl - Saving $(npd.lname) data in the $(geo.name) GeoRegion for $(Dates.format(dt,dateformat"yyyy-mm"))"
 
 	fol = joinpath(npd.sroot,geo.regID,"raw","$(year(dt))")
 	if !isdir(fol); mkpath(fol) end
@@ -115,7 +165,7 @@ function save(
 
 	@info "$(now()) - NASAPrecipitation.jl - Creating NetCDF file $(fnc) ..."
 	ds = NCDataset(fnc,"c",attrib = Dict(
-		"doi"				=> "10.5067/GPM/IMERGDL/DAY/06",
+		"doi"				=> npd.doi,
 		"AlgorithmID"		=> "3IMERGD",
 	))
 
@@ -157,19 +207,22 @@ function save(
 
 	close(ds)
 
-	@info "$(now()) - NASAPrecipitation.jl - Late IMERG Daily data in the $(geo.name) GeoRegion for $(Dates.format(dt,dateformat"yyyy-mm")) has been saved into $(fnc)"
+	@info "$(now()) - NASAPrecipitation.jl - $(npd.lname) data in the $(geo.name) GeoRegion for $(Dates.format(dt,dateformat"yyyy-mm")) has been saved into $(fnc)"
 
 end
 
-function show(io::IO, npd::IMERGLateDY{ST,DT}) where {ST<:AbstractString, DT<:TimeType}
+function show(io::IO, npd::IMERGDaily{ST,DT}) where {ST<:AbstractString, DT<:TimeType}
     print(
 		io,
-		"The NASA Precipitation Dataset {$ST,$DT} is Late IMERG (Daily):\n",
-		"    Data Directory  : ", npd.sroot, '\n',
-		"    Date Begin      : ", npd.dtbeg, '\n',
-		"    Date End        : ", npd.dtend, '\n',
-		"    Timestep        : 1 Day\n",
-        "    Data Resolution : 0.1º\n",
-        "    Data Server     : ", npd.hroot, '\n',
+		"The NASA Precipitation Dataset {$ST,$DT} has the following properties:\n",
+		"    Dataset ID      (npdID) : ", npd.npdID, '\n',
+		"    Logging Name    (lname) : ", npd.lname, '\n',
+		"    DOI URL          (doi)  : ", npd.doi,   '\n',
+		"    Data Directory  (sroot) : ", npd.sroot, '\n',
+		"    Date Begin      (dtbeg) : ", npd.dtbeg, '\n',
+		"    Date End        (dtend) : ", npd.dtend, '\n',
+		"    Timestep                : 1 Day\n",
+        "    Data Resolution         : 0.1º\n",
+        "    Data Server     (hroot) : ", npd.hroot, '\n',
 	)
 end

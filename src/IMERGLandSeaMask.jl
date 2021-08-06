@@ -1,4 +1,4 @@
-function getimerglsm(
+function getIMERGlsm(
     sroot :: AbstractString,
     geo   :: GeoRegion
 )
@@ -24,11 +24,11 @@ function getimerglsm(
 
 	extractregionlsm!(var,tmp,ginfo)
 
-	saveimerglsm(var,geo,ginfo,sroot)
+	saveIMERGlsm(var,geo,ginfo,sroot)
 
 end
 
-function saveimerglsm(
+function saveIMERGlsm(
 	lsm   :: AbstractArray{<:Real,2},
 	geo   :: GeoRegion,
 	ginfo :: RegionGrid,

@@ -14,31 +14,24 @@ import Base: download, show
 export
         IMERGFinalHH, IMERGLateHH, IMERGEarlyHH,
         IMERGFinalDY, IMERGLateDY, IMERGEarlyDY,
-        IMERGFinalMO,
-        getimerglsm, gettrmmlsm,
+        IMERGMonthly,
+        getIMERGlsm, getTRMMlsm,
         download
 
 ## Abstract types
 """
-    NASAServer
+    IMERGDataset
 
-Abstract supertype for NASA Precipitation datasets on NASA Servers.
+Abstract supertype for GPM IMERG datasets on NASA OPeNDAP Servers.
 """
 abstract type IMERGDataset end
-abstract type IMERGHalfHour <: IMERGDataset end
-abstract type IMERGDaily    <: IMERGDataset end
-abstract type IMERGMonthly  <: IMERGDataset end
 
 
 ## Including Relevant Files
 
-include("IMERGFinalHH.jl")
-include("IMERGLateHH.jl")
-include("IMERGEarlyHH.jl")
-include("IMERGFinalDY.jl")
-include("IMERGLateDY.jl")
-include("IMERGEarlyDY.jl")
-include("IMERGFinalMO.jl")
+include("IMERGHalfHourly.jl")
+include("IMERGDaily.jl")
+include("IMERGMonthly.jl")
 include("IMERGLandSeaMask.jl")
 include("TRMMLandSeaMask.jl")
 include("backend.jl")

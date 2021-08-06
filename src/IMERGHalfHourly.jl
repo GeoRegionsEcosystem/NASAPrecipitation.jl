@@ -1,5 +1,7 @@
-struct IMERGLateHH{ST<:AbstractString, DT<:TimeType} <: IMERGHalfHour
+struct IMERGHalfHourly{ST<:AbstractString, DT<:TimeType} <: IMERGDataset
 	npdID :: ST
+	lname :: ST
+	doi   :: ST
     dtbeg :: DT
     dtend :: DT
     sroot :: ST
@@ -8,6 +10,27 @@ struct IMERGLateHH{ST<:AbstractString, DT<:TimeType} <: IMERGHalfHour
     fsuff :: ST
 end
 
+function IMERGEarlyHH(
+    ST = String,
+    DT = Date;
+    dtbeg :: TimeType,
+    dtend :: TimeType,
+    sroot :: AbstractString,
+)
+
+	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Early IMERG Half-Hourly data to be downloaded"
+
+    fol = joinpath(sroot,"imergearlyhh"); if !isdir(fol); mkpath(fol) end
+
+    return IMERGHalfHourly{ST,DT}(
+		"imergearlyhh", "Early IMERG Half-Hourly", "10.5067/GPM/IMERG/3B-HH-E/06",
+        dtbeg, dtend,
+		joinpath(sroot,"imergearlyhh"),
+        "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHHE.06",
+        "3B-HHR-E.MS.MRG.3IMERG", "V06B.HDF5",
+    )
+
+end
 
 function IMERGLateHH(
     ST = String,
@@ -21,28 +44,50 @@ function IMERGLateHH(
 
     fol = joinpath(sroot,"imerglatehh"); if !isdir(fol); mkpath(fol) end
 
-    return IMERGLateHH{ST,DT}(
-		"imerglatehh",
-        dtbeg,dtend,joinpath(sroot,"imerglatehh"),
+    return IMERGHalfHourly{ST,DT}(
+		"imerglatehh", "Late IMERG Half-Hourly", "10.5067/GPM/IMERG/3B-HH-L/06",
+        dtbeg, dtend,
+		joinpath(sroot,"imerglatehh"),
         "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHHL.06",
-        "3B-HHR-L.MS.MRG.3IMERG",
-        "V06B.HDF5",
+        "3B-HHR-L.MS.MRG.3IMERG", "V06B.HDF5",
+    )
+
+end
+
+function IMERGFinalHH(
+    ST = String,
+    DT = Date;
+    dtbeg :: TimeType,
+    dtend :: TimeType,
+    sroot :: AbstractString,
+)
+
+	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Final IMERG Half-Hourly data to be downloaded"
+
+    fol = joinpath(sroot,"imergfinalhh"); if !isdir(fol); mkpath(fol) end
+
+    return IMERGHalfHourly{ST,DT}(
+		"imergfinalhh", "Final IMERG Half-Hourly", "10.5067/GPM/IMERG/3B-HH/06",
+        dtbeg, dtend,
+		joinpath(sroot,"imergfinalhh"),
+        "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHH.06",
+        "3B-HHR.MS.MRG.3IMERG", "V06B.HDF5",
     )
 
 end
 
 function download(
-	npd :: IMERGLateHH{ST,DT},
+	npd :: IMERGHalfHourly{ST,DT},
 	geo :: GeoRegion
 ) where {ST<:AbstractString, DT<:TimeType}
 
-	@info "$(now()) - NASAPrecipitation.jl - Downloading Late IMERG Half-Hourly data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
+	@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
 
 	fnc  = imergrawfiles()
 	lon,lat = gpmlonlat(); nlon = length(lon); nlat = length(lat)
 	ginfo = RegionGrid(geo,lon,lat)
 
-	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of Late IMERG Half-Hourly data for the $(geo.name) GeoRegion from the original gridded dataset"
+	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
 	tmp  = zeros(Float32,nlat,nlon)
@@ -52,7 +97,7 @@ function download(
 
 	for dt in npd.dtbeg : Day(1) : npd.dtend
 
-		@info "$(now()) - NASAPrecipitation.jl - Downloading Late IMERG Half-Hourly data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) ..."
+		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) ..."
 
 		ymdfnc = Dates.format(dt,dateformat"yyyymmdd")
 		npddir = joinpath(npd.hroot,"$(year(dt))",@sprintf("%03d",dayofyear(dt)))
@@ -92,13 +137,13 @@ function save(
 	var   :: Array{Int16,3},
 	isp   :: Array{Bool,3},
 	dt    :: TimeType,
-	npd   :: IMERGLateHH,
+	npd   :: IMERGHalfHourly,
 	geo   :: GeoRegion,
 	ginfo :: RegionGrid,
 	scale :: Vector{<:Real}
 )
 
-	@info "$(now()) - NASAPrecipitation.jl - Saving Late IMERG raw Half-Hourly data in the $(geo.name) GeoRegion for $(dt)"
+	@info "$(now()) - NASAPrecipitation.jl - Saving $(npd.lname) data in the $(geo.name) GeoRegion for $(dt)"
 
 	fol = joinpath(npd.sroot,geo.regID,"raw",yrmo2dir(dt))
 	if !isdir(fol); mkpath(fol) end
@@ -110,7 +155,7 @@ function save(
 
 	@info "$(now()) - NASAPrecipitation.jl - Creating NetCDF file $(fnc) ..."
 	ds = NCDataset(fnc,"c",attrib = Dict(
-		"doi"				=> "10.5067/GPM/IMERG/3B-HH-L/06",
+		"doi"				=> npd.doi,
 		"AlgorithmID"		=> "3IMERGHH",
 		"AlgorithmVersion"	=> "3IMERGH_6.3"
 	))
@@ -152,19 +197,22 @@ function save(
 
 	close(ds)
 
-	@info "$(now()) - NASAPrecipitation.jl - Late IMERG Half-Hourly data in the $(geo.name) GeoRegion for $(dt) has been saved into $(fnc)"
+	@info "$(now()) - NASAPrecipitation.jl - $(npd.lname) data in the $(geo.name) GeoRegion for $(dt) has been saved into $(fnc)"
 
 end
 
-function show(io::IO, npd::IMERGLateHH{ST,DT}) where {ST<:AbstractString, DT<:TimeType}
+function show(io::IO, npd::IMERGHalfHourly{ST,DT}) where {ST<:AbstractString, DT<:TimeType}
     print(
 		io,
-		"The NASA Precipitation Dataset {$ST,$DT} is Late IMERG (Half-Hourly):\n",
-		"    Data Directory  : ", npd.sroot, '\n',
-		"    Date Begin      : ", npd.dtbeg, '\n',
-		"    Date End        : ", npd.dtend, '\n',
-		"    Timestep        : 30 minutes\n",
-        "    Data Resolution : 0.1º\n",
-        "    Data Server     : ", npd.hroot, '\n',
+		"The NASA Precipitation Dataset {$ST,$DT} has the following properties:\n",
+		"    Dataset ID      (npdID) : ", npd.npdID, '\n',
+		"    Logging Name    (lname) : ", npd.lname, '\n',
+		"    DOI URL          (doi)  : ", npd.doi,   '\n',
+		"    Data Directory  (sroot) : ", npd.sroot, '\n',
+		"    Date Begin      (dtbeg) : ", npd.dtbeg, '\n',
+		"    Date End        (dtend) : ", npd.dtend, '\n',
+		"    Timestep                : 30 minutes\n",
+        "    Data Resolution         : 0.1º\n",
+        "    Data Server     (hroot) : ", npd.hroot, '\n',
 	)
 end

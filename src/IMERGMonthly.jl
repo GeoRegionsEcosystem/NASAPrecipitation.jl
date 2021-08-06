@@ -1,5 +1,7 @@
-struct IMERGFinalMO{ST<:AbstractString, DT<:TimeType} <: IMERGMonthly
+struct IMERGMonthly{ST<:AbstractString, DT<:TimeType} <: IMERGDataset
 	npdID :: ST
+	lname :: ST
+	doi   :: ST
     dtbeg :: DT
     dtend :: DT
     sroot :: ST
@@ -8,8 +10,7 @@ struct IMERGFinalMO{ST<:AbstractString, DT<:TimeType} <: IMERGMonthly
     fsuff :: ST
 end
 
-
-function IMERGFinalMO(
+function IMERGMonthly(
     ST = String,
     DT = Date;
     dtbeg :: TimeType,
@@ -25,27 +26,26 @@ function IMERGFinalMO(
 	dtend = Date(year(dtend),12,31)
 
     return IMERGFinalMO{ST,DT}(
-		"imergfinalmo",
-        dtbeg,dtend,joinpath(sroot,"imergfinalmo"),
+		"imergfinalmo", "IMERG Monthly", "10.5067/GPM/IMERG/3B-MONTH/06",
+        dtbeg, dtend,
+		joinpath(sroot,"imergfinalmo"),
         "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.06",
-        "3B-MO.MS.MRG.3IMERG",
-        "V06B.HDF5",
+        "3B-MO.MS.MRG.3IMERG", "V06B.HDF5",
     )
 
 end
 
 function download(
-	npd :: IMERGFinalMO{ST,DT},
+	npd :: IMERGMonthly{ST,DT},
 	geo :: GeoRegion
 ) where {ST<:AbstractString, DT<:TimeType}
 
-	@info "$(now()) - NASAPrecipitation.jl - Downloading IMERG Monthly data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
+	@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
 
-	fnc  = imergrawfiles()
 	lon,lat = gpmlonlat(); nlon = length(lon); nlat = length(lat)
 	ginfo = RegionGrid(geo,lon,lat)
 
-	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of IMERG Monthly data for the $(geo.name) GeoRegion from the original gridded dataset"
+	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
 	tmp  = zeros(Float32,nlat,nlon)
@@ -55,7 +55,7 @@ function download(
 
 	for dt in npd.dtbeg : Year(1) : npd.dtend
 
-		@info "$(now()) - NASAPrecipitation.jl - Downloading IMERG Monthly data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(ymd2str(dt)) ..."
+		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(ymd2str(dt)) ..."
 
 		npddir = joinpath(npd.hroot,"$(year(dt))")
 
@@ -96,13 +96,13 @@ function save(
 	var   :: AbstractArray{Int16,3},
 	isp   :: AbstractArray{Bool,3},
 	dt    :: TimeType,
-	npd   :: IMERGFinalMO,
+	npd   :: IMERGMonthly,
 	geo   :: GeoRegion,
 	ginfo :: RegionGrid,
 	scale :: Vector{<:Real}
 )
 
-	@info "$(now()) - NASAPrecipitation.jl - Saving IMERG Monthly data in the $(geo.name) GeoRegion for $(Dates.format(dt,dateformat"yyyy-mm"))"
+	@info "$(now()) - NASAPrecipitation.jl - Saving $(npd.lname) data in the $(geo.name) GeoRegion for $(Dates.format(dt,dateformat"yyyy-mm"))"
 
 	fol = joinpath(npd.sroot,geo.regID,"raw")
 	if !isdir(fol); mkpath(fol) end
@@ -114,7 +114,7 @@ function save(
 
 	@info "$(now()) - NASAPrecipitation.jl - Creating NetCDF file $(fnc) ..."
 	ds = NCDataset(fnc,"c",attrib = Dict(
-		"doi"				=> "10.5067/GPM/IMERG/3B-MONTH/06",
+		"doi"				=> npd.doi,
 		"AlgorithmID"		=> "3IMERGM",
 		"AlgorithmVersion"	=> "3IMERGM_6.3",
 	))
@@ -156,19 +156,22 @@ function save(
 
 	close(ds)
 
-	@info "$(now()) - NASAPrecipitation.jl - IMERG Monthly data in the $(geo.name) GeoRegion for $(Dates.format(dt,dateformat"yyyy-mm")) has been saved into $(fnc)"
+	@info "$(now()) - NASAPrecipitation.jl - $(npd.lname) data in the $(geo.name) GeoRegion for $(Dates.format(dt,dateformat"yyyy-mm")) has been saved into $(fnc)"
 
 end
 
-function show(io::IO, npd::IMERGFinalMO{ST,DT}) where {ST<:AbstractString, DT<:TimeType}
+function show(io::IO, npd::IMERGMonthly{ST,DT}) where {ST<:AbstractString, DT<:TimeType}
     print(
 		io,
-		"The NASA Precipitation Dataset {$ST,$DT} is IMERG (Monthly):\n",
-		"    Data Directory  : ", npd.sroot, '\n',
-		"    Date Begin      : ", npd.dtbeg, '\n',
-		"    Date End        : ", npd.dtend, '\n',
-		"    Timestep        : 1 Month\n",
-        "    Data Resolution : 0.1º\n",
-        "    Data Server     : ", npd.hroot, '\n',
+		"The NASA Precipitation Dataset {$ST,$DT} has the following properties:\n",
+		"    Dataset ID      (npdID) : ", npd.npdID, '\n',
+		"    Logging Name    (lname) : ", npd.lname, '\n',
+		"    DOI URL          (doi)  : ", npd.doi,   '\n',
+		"    Data Directory  (sroot) : ", npd.sroot, '\n',
+		"    Date Begin      (dtbeg) : ", npd.dtbeg, '\n',
+		"    Date End        (dtend) : ", npd.dtend, '\n',
+		"    Timestep                : 1 Month\n",
+        "    Data Resolution         : 0.1º\n",
+        "    Data Server     (hroot) : ", npd.hroot, '\n',
 	)
 end
