@@ -26,6 +26,17 @@ function save(
 	    "long_name" => "latitude",
 	))
 
+	ncisp = defVar(ds,"valid",Int8,("longitude","latitude","time"),attrib = Dict(
+	    "units"         => "0-1",
+	    "long_name"     => "valid_precipitation_measurement",
+		"full_name"     => "Mask of Valid Precipitation Measurement",
+	))
+
+	ncmsk = defVar(ds,"mask",Float32,("latitude",),attrib = Dict(
+	    "long_name" => "region_mask",
+		"full_name" => "GeoRegion Mask",
+	))
+
 	ncvar = defVar(ds,"precipitationrate",Int16,("longitude","latitude","time"),attrib = Dict(
 	    "units"         => "kg m**-2 s**-1",
 	    "long_name"     => "log2_of_precipitation_rate",
@@ -36,15 +47,15 @@ function save(
         "missing_value" => Int16(-32767),
 	))
 
-	ncisp = defVar(ds,"valid",Int8,("longitude","latitude","time"),attrib = Dict(
-	    "units"         => "0-1",
-	    "long_name"     => "valid_precipitation_measurement",
-		"full_name"     => "Mask of Valid Precipitation Measurement",
-	))
-
 	nclon[:] = ginfo.glon
 	nclat[:] = ginfo.glat
 	ncisp[:] = isp
+
+	if typeof(geo) <: PolyRegion
+		  ncmsk[:] = Float32.(ginfo.mask)
+	else; ncmsk[:] = ones(Float32,length(ginfo.glon),length(ginfo.glat))
+	end
+
 	ncvar.var[:] = var
 
 	close(ds)
