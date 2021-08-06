@@ -28,23 +28,44 @@ export
 
 ## Abstract types
 """
-    NASAPrecipitationDataset
+    NASAPrecipitationDataset{ST<:AbstractString, DT<:TimeType}
+        npdID :: ST
+        lname :: ST
+        doi   :: ST
+        dtbeg :: DT
+        dtend :: DT
+        sroot :: ST
+        hroot :: ST
+        fpref :: ST
+        fsuff :: ST
+    end
 
 Abstract supertype for NASA Precipitation datasets on NASA OPeNDAP Servers.
+
+Fields:
+* `npdID` : ID for the `NASAPrecipitationDataset`, used in determining containing folders and filenames of the NetCDF
+* `lname` : The name describing the `NASAPrecipitationDataset`, used mostly in Logging
+* `doi`   : The DOI identifier, to be saved into the NetCDF
+* `dtbeg` : The start date (Y,M,D) of our download / analysis
+* `dtbeg` : The end date (Y,M,D) of our download / analysis
+* `sroot` : The directory in which to save our downloads and analysis files to
+* `hroot` : The URL of the NASA's EOSDIS OPeNDAP server for which this dataset is stored
+* `fpref` : The prefix component of the NetCDF files to be downloaded
+* `fsuff` : The suffix component of the NetCDF files to be downloaded
 """
 abstract type NASAPrecipitationDataset end
 
 """
     IMERGDataset <: NASAPrecipitationDataset
 
-Abstract supertype for GPM IMERG datasets on NASA OPeNDAP Servers, a subType of NASAPrecipitationDataset.
+Abstract supertype for GPM IMERG datasets on NASA OPeNDAP Servers, a subType of `NASAPrecipitationDataset`.
 """
 abstract type IMERGDataset <: NASAPrecipitationDataset end
 
 """
     TRMMDataset <: NASAPrecipitationDataset
 
-Abstract supertype for TRMM TMPA datasets on NASA OPeNDAP Servers, a subType of NASAPrecipitationDataset.
+Abstract supertype for TRMM TMPA datasets on NASA OPeNDAP Servers, a subType of `NASAPrecipitationDataset`.
 """
 abstract type TRMMDataset  <: NASAPrecipitationDataset end
 

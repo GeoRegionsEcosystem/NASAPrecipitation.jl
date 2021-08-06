@@ -8,7 +8,12 @@ makedocs(;
     authors  = "Nathanael Wong <natgeo.wong@outlook.com>",
     sitename = "NASAPrecipitation.jl",
     pages    = [
-        "Home" => "index.md",
+        "Home"                        => "index.md",
+        "Dataset Basics" => [
+            "NASA Precipitation Datasets" => "datasets/npd.md",
+            "GPM IMERG Datasets"          => "datasets/imerg.md",
+            "TRMM TMPA Datasets"          => "datasets/trmm.md",
+        ],
     ],
 )
 
