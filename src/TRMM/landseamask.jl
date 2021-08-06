@@ -5,7 +5,7 @@ function getTRMMlsm(
 
     @info "$(now()) - NASAPrecipitation.jl - Retrieving Land-Sea Mask for the TRMM-TMPA dataset"
 
-    lon,lat = trmmlonlat(); nlon = length(lon); nlat = length(lat)
+    lon,lat = trmmlonlat(full=true); nlon = length(lon); nlat = length(lat)
 	ginfo = RegionGrid(geo,lon,lat)
 
 	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary array for extraction of TRMM-TMPA Land-Sea Mask data for the $(geo.name) GeoRegion from the original global gridded dataset"

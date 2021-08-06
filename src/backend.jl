@@ -4,14 +4,6 @@ yrmo2str(date::TimeType) = Dates.format(date,dateformat"yyyymm")
 yr2str(date::TimeType)   = Dates.format(date,dateformat"yyyy")
 ymd2str(date::TimeType)  = Dates.format(date,dateformat"yyyymmdd")
 
-function arthurhou(email::AbstractString)
-    return "https://$(email):$(email)@arthurhouhttps.pps.eosdis.nasa.gov/"
-end
-
-function jsimpson(email::AbstractString)
-    return "https://$(email):$(email)@jsimpsonhttps.pps.eosdis.nasa.gov/"
-end
-
 function imergrawfiles()
 
     fnc = Vector{AbstractString}(undef,48);
@@ -39,9 +31,14 @@ function gpmlonlat()
     return lon,lat
 end
 
-function trmmlonlat()
+function trmmlonlat(;full::Bool=false)
+
     lon = convert(Array,-179.875:0.25:179.875)
-    lat = convert(Array,-89.875:0.25:89.875)
+    if !full
+		  lat = convert(Array,-49.875:0.25:49.875)
+	else; lat = convert(Array,-89.875:0.25:89.875)
+	end
+
     return lon,lat
 end
 
