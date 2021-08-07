@@ -1,3 +1,16 @@
+"""
+    download(
+        npd :: NASAPrecipitationDataset,
+        geo :: GeoRegion
+    ) -> nothing
+
+Downloads a NASA Precipitation dataset specified by `npd` for a GeoRegion specified by `geo`
+
+Arguments
+=========
+- `npd` : a `NASAPrecipitationDataset` specifying the dataset details and date download range
+- `geo` : a `GeoRegion` (see [GeoRegions.jl](https://github.com/JuliaClimate/GeoRegions.jl)) that sets the geographic bounds of the data array in lon-lat
+"""
 function download(
 	npd :: IMERGHalfHourly{ST,DT},
 	geo :: GeoRegion
@@ -51,7 +64,7 @@ function download(
 		real2int16!(vint,var,scale,offset)
 
 		save(vint,isp,dt,npd,geo,ginfo,[scale,offset])
-		
+
 	end
 
 end

@@ -10,7 +10,7 @@ The Types that each dataset calls are listed below, along with their function ca
 |   Daily   |    `IMERGDaily`   | `IMERGEarlyDY()` | `IMERGLateDY()` | `IMERGFinalDY()` |
 |  Monthly  |   `IMERGMonthly`  |                  |                 | `IMERGMonthly()` |
 
-So, for example, if we wanted to get the the Early Near Real-Time IMERG Half-Hourly dataset, we would call the function `IMERGEarlyHH`, which would return a `IMERGHalfHourly` data structure.
+So, for example, if we wanted to get the the Early Near Real-Time IMERG Half-Hourly dataset, we would call the function `IMERGEarlyHH`, which would return a `IMERGHalfHourly` data structure (see example at the end of the page).
 
 ## `IMERGDataset` Types / Objects
 

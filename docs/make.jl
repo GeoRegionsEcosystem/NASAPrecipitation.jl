@@ -13,6 +13,11 @@ makedocs(;
             "NASA Precipitation Datasets" => "datasets/npd.md",
             "GPM IMERG Datasets"          => "datasets/imerg.md",
             "TRMM TMPA Datasets"          => "datasets/trmm.md",
+            "Land-Sea Mask Datasets"      => "datasets/landseamask.md",
+        ],
+        "Downloading Data" => [
+            "Introduction to GeoRegions" => "download/georegions.md",
+            "API for Downloads"          => "download/download.md",
         ],
     ],
 )
