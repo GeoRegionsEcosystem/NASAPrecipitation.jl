@@ -1,3 +1,7 @@
+<p align="center">
+<img alt="NASAPrecipitation.jl Logo" src=https://raw.githubusercontent.com/natgeo-wong/NASAPrecipitation.jl/main/src/logosmall.png />
+</p>
+
 # **<div align="center">NASAPrecipitation.jl</div>**
 
 <p align="center">
