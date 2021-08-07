@@ -34,7 +34,7 @@ Keyword Arguments
 
 The following fields in `npd` will be fixed as below:
 - `npdID` : imergearlyhh
-- `npdID` : Early IMERG Half-Hourly
+- `lname` : Early IMERG Half-Hourly
 - `doi`   : 10.5067/GPM/IMERG/3B-HH-E/06
 - `hroot` : https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHHE.06
 - `fpref` : 3B-HHR-E.MS.MRG.3IMERG
@@ -81,7 +81,7 @@ Keyword Arguments
 
 The following fields in `npd` will be fixed as below:
 - `npdID` : imerglatehh
-- `npdID` : Late IMERG Half-Hourly
+- `lname` : Late IMERG Half-Hourly
 - `doi`   : 10.5067/GPM/IMERG/3B-HH-L/06
 - `hroot` : https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHHL.06
 - `fpref` : 3B-HHR-L.MS.MRG.3IMERG
@@ -128,7 +128,7 @@ Keyword Arguments
 
 The following fields in `npd` will be fixed as below:
 - `npdID` : imergfinalhh
-- `npdID` : Final IMERG Half-Hourly
+- `lname` : Final IMERG Half-Hourly
 - `doi`   : 10.5067/GPM/IMERG/3B-HH/06
 - `hroot` : https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHH.06
 - `fpref` : 3B-HHR.MS.MRG.3IMERG

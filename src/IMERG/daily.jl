@@ -34,7 +34,7 @@ Keyword Arguments
 
 The following fields in `npd` will be fixed as below:
 - `npdID` : imergearlydy
-- `npdID` : Early IMERG Daily
+- `lname` : Early IMERG Daily
 - `doi`   : 10.5067/GPM/IMERGDE/DAY/06
 - `hroot` : https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDE.06
 - `fpref` : 3B-DAY-E.MS.MRG.3IMERG
@@ -84,7 +84,7 @@ Keyword Arguments
 
 The following fields in `npd` will be fixed as below:
 - `npdID` : imerglatedy
-- `npdID` : Late IMERG Daily
+- `lname` : Late IMERG Daily
 - `doi`   : 10.5067/GPM/IMERGDL/DAY/06
 - `hroot` : https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDL.06
 - `fpref` : 3B-DAY-L.MS.MRG.3IMERG

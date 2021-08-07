@@ -1,3 +1,8 @@
+"""
+    TRMMDaily{ST<:AbstractString, DT<:TimeType} <: TRMMDataset
+
+Object containing information on Daily TRMM datasets to be downloaded
+"""
 struct TRMMDaily{ST<:AbstractString, DT<:TimeType} <: TRMMDataset
 	npdID :: ST
 	lname :: ST
@@ -10,6 +15,31 @@ struct TRMMDaily{ST<:AbstractString, DT<:TimeType} <: TRMMDataset
     fsuff :: ST
 end
 
+"""
+    TRMMDaily(
+        ST = String,
+        DT = Date;
+        dtbeg :: TimeType,
+        dtend :: TimeType,
+        sroot :: AbstractString,
+    ) -> npd :: TRMMDaily{ST,DT}
+
+Creates a `TRMMDaily` dataset `npd` to retrieve datasets from the Final post-processing runs for Daily output
+
+Keyword Arguments
+=================
+- `dtbeg` : Date at which download / analysis of the dataset begins
+- `dtend` : Date at which download / analysis of the dataset ends
+- `sroot` : The directory in which the folder `trmmdaily` will be created for data downloads, storage and analysis
+
+The following fields in `npd` will be fixed as below:
+- `npdID` : trmmdaily
+- `lname` : Final TRMM Daily
+- `doi`   : 10.5067/TRMM/TMPA/DAY/7
+- `hroot` : https://disc2.gesdisc.eosdis.nasa.gov/opendap/TRMM_L3/TRMM_3B42_Daily.7
+- `fpref` : 3B42_Daily
+- `fsuff` : 7.nc4
+"""
 function TRMMDaily(
     ST = String,
     DT = Date;
@@ -35,6 +65,31 @@ function TRMMDaily(
 
 end
 
+"""
+    TRMMDailyNRT(
+        ST = String,
+        DT = Date;
+        dtbeg :: TimeType,
+        dtend :: TimeType,
+        sroot :: AbstractString,
+    ) -> npd :: TRMMDaily{ST,DT}
+
+Creates a `TRMMDaily` dataset `npd` to retrieve datasets from the Near Real-Time processing runs for Daily output
+
+Keyword Arguments
+=================
+- `dtbeg` : Date at which download / analysis of the dataset begins
+- `dtend` : Date at which download / analysis of the dataset ends
+- `sroot` : The directory in which the folder `trmmdailynrt` will be created for data downloads, storage and analysis
+
+The following fields in `npd` will be fixed as below:
+- `npdID` : trmmdailynrt
+- `lname` : Near Real-Time TRMM Daily
+- `doi`   : 10.5067/TRMM/TMPA/DAY-E/7
+- `hroot` : https://disc2.gesdisc.eosdis.nasa.gov/opendap/TRMM_RT/TRMM_3B42RT_Daily.7
+- `fpref` : 3B42RT_Daily
+- `fsuff` : 7.nc4
+"""
 function TRMMDailyNRT(
     ST = String,
     DT = Date;

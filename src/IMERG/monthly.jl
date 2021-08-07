@@ -34,7 +34,7 @@ Keyword Arguments
 
 The following fields in `npd` will be fixed as below:
 - `npdID` : imergmonthly
-- `npdID` : IMERG Monthly
+- `lname` : IMERG Monthly
 - `doi`   : 10.5067/GPM/IMERG/3B-MONTH/06
 - `hroot` : https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.06
 - `fpref` : 3B-MO.MS.MRG.3IMERG

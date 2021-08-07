@@ -57,11 +57,13 @@ The `IMERGMonthly` dataset structure is used to contain information monthly dail
 * `IMERGMonthly`, which is used to retrieve the Final post-processing runs
 
 ```@docs
-NASAPrecipitation.IMERGMonthly(ST = String,
+NASAPrecipitation.IMERGMonthly(
+    ST = String,
     DT = Date;
     dtbeg :: TimeType,
     dtend :: TimeType,
-    sroot :: AbstractString)
+    sroot :: AbstractString
+)
 ```
 
 ## Example

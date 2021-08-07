@@ -47,7 +47,7 @@ Fields:
 * `lname` : The name describing the `NASAPrecipitationDataset`, used mostly in Logging
 * `doi`   : The DOI identifier, to be saved into the NetCDF
 * `dtbeg` : The start date (Y,M,D) of our download / analysis
-* `dtbeg` : The end date (Y,M,D) of our download / analysis
+* `dtend` : The end date (Y,M,D) of our download / analysis
 * `sroot` : The directory in which to save our downloads and analysis files to
 * `hroot` : The URL of the NASA's EOSDIS OPeNDAP server for which this dataset is stored
 * `fpref` : The prefix component of the NetCDF files to be downloaded

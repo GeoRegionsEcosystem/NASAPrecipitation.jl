@@ -1,3 +1,8 @@
+"""
+    TRMMMonthly{ST<:AbstractString, DT<:TimeType} <: TRMMDataset
+
+Object containing information on Monthly TRMM datasets to be downloaded
+"""
 struct TRMMMonthly{ST<:AbstractString, DT<:TimeType} <: TRMMDataset
 	npdID :: ST
 	lname :: ST
@@ -10,6 +15,31 @@ struct TRMMMonthly{ST<:AbstractString, DT<:TimeType} <: TRMMDataset
     fsuff :: ST
 end
 
+"""
+    TRMMMonthly(
+        ST = String,
+        DT = Date;
+        dtbeg :: TimeType,
+        dtend :: TimeType,
+        sroot :: AbstractString,
+    ) -> npd :: TRMMMonthly{ST,DT}
+
+Creates a `TRMMMonthly` dataset `npd` to retrieve datasets from the Final post-processing runs for Monthly output
+
+Keyword Arguments
+=================
+- `dtbeg` : Date at which download / analysis of the dataset begins
+- `dtend` : Date at which download / analysis of the dataset ends
+- `sroot` : The directory in which the folder `trmmmonthly` will be created for data downloads, storage and analysis
+
+The following fields in `npd` will be fixed as below:
+- `npdID` : trmmmonthly
+- `lname` : TRMM Monthly (TMPA 3B43)
+- `doi`   : 10.5067/TRMM/TMPA/MONTH/7
+- `hroot` : https://disc2.gesdisc.eosdis.nasa.gov/opendap/TRMM_L3/TRMM_3B43.7
+- `fpref` : 3B43
+- `fsuff` : 7.HDF
+"""
 function TRMMMonthly(
     ST = String,
     DT = Date;
@@ -25,7 +55,7 @@ function TRMMMonthly(
 	dtbeg = Date(year(dtbeg),1,1)
 	dtend = Date(year(dtend),12,31)
 
-    return trmmfinalmo{ST,DT}(
+    return TRMMMonthly{ST,DT}(
 		"trmmmonthly", "TRMM Monthly (TMPA 3B43)", "10.5067/TRMM/TMPA/MONTH/7",
         dtbeg, dtend,
 		joinpath(sroot,"trmmmonthly"),
