@@ -31,6 +31,16 @@ Here, `blon` and `blat` denote the longitude and latitude coordinates of the rec
 
 ![boundvshape](boundvshape.png)
 
+## How `GeoRegion`s are used in NASAPrecipitation.jl
+
+When a `GeoRegion` is specified, it can be one of two categories:
+* A rectilinear GeoRegion are denoted by the `RectRegion` type
+* A polygonal GeoRegions are denoted by the `PolyRegion` type
+
+In a `RectRegion`, the bounds and the shape define the same area.  This is not true for a `PolyRegion` (see the figure below).  When a `GeoRegion` is called, NASAPrecipitation.jl will create a grid that spans the bounds of the `GeoRegion` (red dots), but will only download valid data in the **shape** of the `GeoRegion` (blue dots).
+
+![regiongrid](regiongrid.png)
+
 ## NASAPrecipitation.jl reexports GeoRegion.jl
 
 For ease of use, NASAPrecipitation.jl reexports all the functionality of GeoRegions.jl.
@@ -57,7 +67,3 @@ addNPDGeoRegions() # Checking to see if NASAPrecipitation.jl GeoRegions exists
 ```@docs
 NASAPrecipitation.addNPDGeoRegions()
 ```
-
-## How `GeoRegion`s are used in NASAPrecipitation.jl
-
-Test

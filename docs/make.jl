@@ -10,14 +10,15 @@ makedocs(;
     pages    = [
         "Home"                        => "index.md",
         "Dataset Basics" => [
-            "NASA Precipitation Datasets" => "datasets/npd.md",
-            "GPM IMERG Datasets"          => "datasets/imerg.md",
-            "TRMM TMPA Datasets"          => "datasets/trmm.md",
-            "Land-Sea Mask Datasets"      => "datasets/landseamask.md",
+            "NASA Precipitation Datasets"    => "datasets/npd.md",
+            "GPM IMERG Datasets"             => "datasets/imerg.md",
+            "TRMM TMPA Datasets"             => "datasets/trmm.md",
+            "Land-Sea Mask Datasets"         => "datasets/landseamask.md",
+            "A Basic Primer to `GeoRegion`s" => "datasets/georegions.md",
         ],
         "Downloading Data" => [
-            "Download APIs and Examples" => "download/download.md",
-            "A Basic Primer to `GeoRegion`s" => "download/georegions.md",
+            "Download API" => "download/download.md",
+            "Examples" => "download/examples.md",
         ],
     ],
 )

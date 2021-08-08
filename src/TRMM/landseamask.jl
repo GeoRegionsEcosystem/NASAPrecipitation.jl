@@ -1,6 +1,22 @@
+"""
+    getTRMMlsm(
+        geo :: GeoRegion = GeoRegion("GLB");
+	    sroot :: AbstractString = pwd()
+    ) -> nothing
+
+Downloads the TRMM-TMPA Land-Sea Mask for a GeoRegion specified by `geo` and saves it into `sroot`
+
+Arguments
+=========
+- `geo` : a `GeoRegion` (see [GeoRegions.jl](https://github.com/JuliaClimate/GeoRegions.jl)) that sets the geographic bounds of the data array in lon-lat
+
+Keyword Arguments
+=================
+- `sroot` : the directory to save the TRMM-TMPA Land-Sea Mask
+"""
 function getTRMMlsm(
-    sroot :: AbstractString,
-    geo   :: GeoRegion = GeoRegion("GLB")
+	geo   :: GeoRegion = GeoRegion("GLB");
+    sroot :: AbstractString = pwd(),
 )
 
     @info "$(now()) - NASAPrecipitation.jl - Retrieving Land-Sea Mask for the TRMM-TMPA dataset"
@@ -21,6 +37,7 @@ function getTRMMlsm(
 	tmp  = zeros(Float32,nlat,nlon)
 	var  = zeros(Float32,nglon,nglat)
 
+	@info "$(now()) - NASAPrecipitation.jl - Retrieving the original TRMM-TMPA Land-Sea Mask data from NASA's EOSDIS OPeNDAP servers"
 	hroot = "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/AUXILIARY"
     npdnc = "TRMM_TMPA_LandSeaMask.2/TRMM_TMPA_LandSeaMask.2.nc4"
     npdds = NCDataset(joinpath(hroot,npdnc))

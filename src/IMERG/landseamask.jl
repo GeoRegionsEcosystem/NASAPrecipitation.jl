@@ -1,6 +1,22 @@
+"""
+    getIMERGlsm(
+        geo :: GeoRegion = GeoRegion("GLB");
+	    sroot :: AbstractString = pwd()
+    ) -> nothing
+
+Downloads the GPM-IMERG Land-Sea Mask for a GeoRegion specified by `geo` and saves it into `sroot`
+
+Arguments
+=========
+- `geo` : a `GeoRegion` (see [GeoRegions.jl](https://github.com/JuliaClimate/GeoRegions.jl)) that sets the geographic bounds of the data array in lon-lat
+
+Keyword Arguments
+=================
+- `sroot` : the directory to save the GPM-IMERG Land-Sea Mask
+"""
 function getIMERGlsm(
-    sroot :: AbstractString,
-    geo   :: GeoRegion = GeoRegion("GLB")
+	geo   :: GeoRegion = GeoRegion("GLB");
+    sroot :: AbstractString = pwd(),
 )
 
     @info "$(now()) - NASAPrecipitation.jl - Retrieving Land-Sea Mask for the GPM IMERG dataset"
@@ -21,6 +37,7 @@ function getIMERGlsm(
 	tmp  = zeros(Float32,nlat,nlon)
 	var  = zeros(Float32,nglon,nglat)
 
+	@info "$(now()) - NASAPrecipitation.jl - Retrieving the original GPM-IMERG Land-Sea Mask data from NASA's EOSDIS OPeNDAP servers"
 	hroot = "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/AUXILIARY"
     gpmnc = "GPM_IMERG_LandSeaMask.2/GPM_IMERG_LandSeaMask.2.nc4"
     gpmds = NCDataset(joinpath(hroot,gpmnc))

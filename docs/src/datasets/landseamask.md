@@ -10,4 +10,4 @@ Along with the precipitation data, NASA also provides global land-sea masks at t
 NASAPrecipitation.jl also allows for the specification of a `GeoRegion` within which a
 For more information on the api for downloading the land-sea masks.  The default (if a `GeoRegion` is not specified) is to download for the entire globe.
 
-The API for downloading Land-Sea Mask dataset is found in the page *[Download API and Examples](../download/download.md)*.
+The API for downloading Land-Sea Mask dataset is found in the page *[Download API](../download/download.md)*.
