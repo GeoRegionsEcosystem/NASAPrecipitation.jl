@@ -1,9 +1,16 @@
 function getIMERGlsm(
     sroot :: AbstractString,
-    geo   :: GeoRegion
+    geo   :: GeoRegion = GeoRegion("GLB")
 )
 
     @info "$(now()) - NASAPrecipitation.jl - Retrieving Land-Sea Mask for the GPM IMERG dataset"
+
+	if geo.regID == "GLB"
+		@info "$(now()) - NASAPrecipitation.jl - Global dataset request has been detected, switching to the IMERG GeoRegion"
+		addNPDGeoRegions(); geo = GeoRegion("IMERG")
+	else
+		isinGeoRegion(geo,GeoRegion("IMERG"))
+	end
 
     lon,lat = gpmlonlat(); nlon = length(lon); nlat = length(lat)
 	ginfo = RegionGrid(geo,lon,lat)

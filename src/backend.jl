@@ -1,3 +1,27 @@
+"""
+    addNPDGeoRegions() -> nothing
+
+Checks for the three GeoRegions (GPM, TRMM, TRMMLSM) required by NASAPrecipitation.jl, and adds them if they do not exist.
+"""
+function addNPDGeoRegions()
+	@info "$(now()) - NASAPrecipitation.jl - Checking to see if GeoRegions required by NASAPrecipitation.jl have been added to the list of available GeoRegions"
+    disable_logging(Logging.Warn)
+	if !isGeoRegion("GPM",throw=false) ||
+	    !isGeoRegion("TRMM",throw=false) ||
+	    !isGeoRegion("TRMMLSM",throw=false)
+        disable_logging(Logging.Debug)
+        @info "$(now()) - NASAPrecipitation.jl - At least one of the required three GeoRegions (GPM, TRMM, TRMMLSM) has not been added, proceeding to add them again ..."
+        disable_logging(Logging.Warn)
+	    addGeoRegions(joinpath(@__DIR__,"NPDGeoRegions.txt"))
+    else
+        disable_logging(Logging.Debug)
+        @info "$(now()) - NASAPrecipitation.jl - All of the required three GeoRegions (GPM, TRMM, TRMMLSM) have been added"
+        disable_logging(Logging.Warn)
+	end
+    disable_logging(Logging.Debug)
+	return
+end
+
 ## DateString Aliasing
 yrmo2dir(date::TimeType) = Dates.format(date,dateformat"yyyy/mm")
 yrmo2str(date::TimeType) = Dates.format(date,dateformat"yyyymm")

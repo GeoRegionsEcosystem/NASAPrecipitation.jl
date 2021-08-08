@@ -23,7 +23,8 @@ export
         TRMMDaily,   TRMMDailyNRT,
         TRMMMonthly,
 
-        getIMERGlsm, getTRMMlsm,
+        getIMERGlsm, getTRMMlsm, addNPDGeoRegions
+
         download
 
 ## Abstract types

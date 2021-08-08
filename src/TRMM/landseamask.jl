@@ -1,9 +1,16 @@
 function getTRMMlsm(
     sroot :: AbstractString,
-    geo   :: GeoRegion
+    geo   :: GeoRegion = GeoRegion("GLB")
 )
 
     @info "$(now()) - NASAPrecipitation.jl - Retrieving Land-Sea Mask for the TRMM-TMPA dataset"
+
+	if geo.regID == "GLB"
+		@info "$(now()) - NASAPrecipitation.jl - Global dataset request has been detected, switching to the TRMM LandSea Mask GeoRegion"
+		addNPDGeoRegions(); geo = GeoRegion("TRMMLSM")
+	else
+		isinGeoRegion(geo,GeoRegion("TRMMLSM"))
+	end
 
     lon,lat = trmmlonlat(full=true); nlon = length(lon); nlat = length(lat)
 	ginfo = RegionGrid(geo,lon,lat)

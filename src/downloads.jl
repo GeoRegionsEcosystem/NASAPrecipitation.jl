@@ -1,7 +1,7 @@
 """
     download(
         npd :: NASAPrecipitationDataset,
-        geo :: GeoRegion
+        geo :: GeoRegion = GeoRegion("GLB")
     ) -> nothing
 
 Downloads a NASA Precipitation dataset specified by `npd` for a GeoRegion specified by `geo`
@@ -13,10 +13,17 @@ Arguments
 """
 function download(
 	npd :: IMERGHalfHourly{ST,DT},
-	geo :: GeoRegion
+	geo :: GeoRegion = GeoRegion("GLB")
 ) where {ST<:AbstractString, DT<:TimeType}
 
 	@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
+
+	if geo.regID == "GLB"
+		@info "$(now()) - NASAPrecipitation.jl - Global dataset request has been detected, switching to the IMERG GeoRegion"
+		addNPDGeoRegions(); geo = GeoRegion("IMERG")
+	else
+		isinGeoRegion(geo,GeoRegion("IMERG"))
+	end
 
 	fnc  = imergrawfiles()
 	lon,lat = gpmlonlat(); nlon = length(lon); nlat = length(lat)
@@ -77,10 +84,17 @@ end
 
 function download(
 	npd :: IMERGDaily{ST,DT},
-	geo :: GeoRegion
+	geo :: GeoRegion = GeoRegion("GLB")
 ) where {ST<:AbstractString, DT<:TimeType}
 
 	@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
+
+	if geo.regID == "GLB"
+		@info "$(now()) - NASAPrecipitation.jl - Global dataset request has been detected, switching to the IMERG GeoRegion"
+		addNPDGeoRegions(); geo = GeoRegion("IMERG")
+	else
+		isinGeoRegion(geo,GeoRegion("IMERG"))
+	end
 
 	lon,lat = gpmlonlat(); nlon = length(lon); nlat = length(lat)
 	ginfo = RegionGrid(geo,lon,lat)
@@ -141,10 +155,17 @@ end
 
 function download(
 	npd :: IMERGMonthly{ST,DT},
-	geo :: GeoRegion
+	geo :: GeoRegion = GeoRegion("GLB")
 ) where {ST<:AbstractString, DT<:TimeType}
 
 	@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
+
+	if geo.regID == "GLB"
+		@info "$(now()) - NASAPrecipitation.jl - Global dataset request has been detected, switching to the IMERG GeoRegion"
+		addNPDGeoRegions(); geo = GeoRegion("IMERG")
+	else
+		isinGeoRegion(geo,GeoRegion("IMERG"))
+	end
 
 	lon,lat = gpmlonlat(); nlon = length(lon); nlat = length(lat)
 	ginfo = RegionGrid(geo,lon,lat)
@@ -204,10 +225,17 @@ end
 
 function download(
 	npd :: TRMM3Hourly{ST,DT},
-	geo :: GeoRegion
+	geo :: GeoRegion = GeoRegion("GLB")
 ) where {ST<:AbstractString, DT<:TimeType}
 
 	@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
+
+	if geo.regID == "GLB"
+		@info "$(now()) - NASAPrecipitation.jl - Global dataset request has been detected, switching to the TRMM GeoRegion"
+		addNPDGeoRegions(); geo = GeoRegion("TRMM")
+	else
+		isinGeoRegion(geo,GeoRegion("TRMM"))
+	end
 
 	fnc  = imergrawfiles()
 	lon,lat = gpmlonlat(); nlon = length(lon); nlat = length(lat)
@@ -272,10 +300,17 @@ end
 
 function download(
 	npd :: TRMMDaily{ST,DT},
-	geo :: GeoRegion
+	geo :: GeoRegion = GeoRegion("GLB")
 ) where {ST<:AbstractString, DT<:TimeType}
 
 	@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
+
+	if geo.regID == "GLB"
+		@info "$(now()) - NASAPrecipitation.jl - Global dataset request has been detected, switching to the TRMM GeoRegion"
+		addNPDGeoRegions(); geo = GeoRegion("TRMM")
+	else
+		isinGeoRegion(geo,GeoRegion("TRMM"))
+	end
 
 	lon,lat = trmmlonlat(); nlon = length(lon); nlat = length(lat)
 	ginfo = RegionGrid(geo,lon,lat)
@@ -336,10 +371,17 @@ end
 
 function download(
 	npd :: TRMMMonthly{ST,DT},
-	geo :: GeoRegion
+	geo :: GeoRegion = GeoRegion("GLB")
 ) where {ST<:AbstractString, DT<:TimeType}
 
 	@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
+
+	if geo.regID == "GLB"
+		@info "$(now()) - NASAPrecipitation.jl - Global dataset request has been detected, switching to the TRMM GeoRegion"
+		addNPDGeoRegions(); geo = GeoRegion("TRMM")
+	else
+		isinGeoRegion(geo,GeoRegion("TRMM"))
+	end
 
 	lon,lat = trmmlonlat(); nlon = length(lon); nlat = length(lat)
 	ginfo = RegionGrid(geo,lon,lat)
