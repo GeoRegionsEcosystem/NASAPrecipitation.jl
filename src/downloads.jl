@@ -61,7 +61,7 @@ function download(
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
 				mskii = msk[ilon,ilat]
-				if varii != 9999.9 && !iszero(varii) && !isnan(mskii)
+				if varii != -9999.9f0 && !iszero(varii) && !isnan(mskii)
 					  var[ilon,ilat,it] = log2(varii/3600)
   					  isp[ilon,ilat,it] = 1
 				elseif iszero(varii) && !isnan(mskii)
@@ -131,7 +131,7 @@ function download(
 
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
-				if varii != 9999.9 && !iszero(varii) && !isnan(mskii)
+				if varii != -9999.9 && !iszero(varii) && !isnan(mskii)
 					  var[ilon,ilat,dy] = log2(varii/86400)
 					  isp[ilon,ilat,dy] = 1
 				elseif iszero(varii) && !isnan(mskii)
@@ -201,7 +201,7 @@ function download(
 
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
-				if varii != 9999.9 && !iszero(varii) && !isnan(mskii)
+				if varii != -9999.9 && !iszero(varii) && !isnan(mskii)
 					  var[ilon,ilat,mo] = log2(varii/3600)
 					  isp[ilon,ilat,mo] = 1
 				elseif iszero(varii) && !isnan(mskii)
@@ -277,7 +277,7 @@ function download(
 			@debug "$(now()) - NASAPrecipitation.jl - Extraction of data from temporary array for the $(geo.name) GeoRegion"
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
-				if varii != 9999.9 && !iszero(varii) && !isnan(mskii)
+				if varii != -9999.9 && !iszero(varii) && !isnan(mskii)
 					  var[ilon,ilat,it] = log2(varii/3600)
   					  isp[ilon,ilat,it] = 1
 				elseif iszero(varii) && !isnan(mskii)
@@ -347,7 +347,7 @@ function download(
 
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
-				if varii != 9999.9 && !iszero(varii) && !isnan(mskii)
+				if varii != -9999.9 && !iszero(varii) && !isnan(mskii)
 					  var[ilon,ilat,dy] = log2(varii/86400)
 					  isp[ilon,ilat,dy] = 1
 				elseif iszero(varii) && !isnan(mskii)
@@ -417,7 +417,7 @@ function download(
 
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
-				if varii != 9999.9 && !iszero(varii) && !isnan(mskii)
+				if varii != -9999.9 && !iszero(varii) && !isnan(mskii)
 					  var[ilon,ilat,mo] = log2(varii/3600)
 					  isp[ilon,ilat,mo] = 1
 				elseif iszero(varii) && !isnan(mskii)
