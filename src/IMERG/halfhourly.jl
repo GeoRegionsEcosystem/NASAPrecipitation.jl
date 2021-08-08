@@ -21,7 +21,7 @@ end
         DT = Date;
         dtbeg :: TimeType,
         dtend :: TimeType,
-        sroot :: AbstractString,
+        sroot :: AbstractString = homedir(),
     ) -> npd :: IMERGHalfHourly{ST,DT}
 
 Creates a `IMERGHalfHourly` dataset `npd` to retrieve datasets from the Near Real-Time Early processing runs for Half-Hourly output
@@ -30,7 +30,7 @@ Keyword Arguments
 =================
 - `dtbeg` : Date at which download / analysis of the dataset begins
 - `dtend` : Date at which download / analysis of the dataset ends
-- `sroot` : The directory in which the folder `imergearlyhh` will be created for data downloads, storage and analysis
+- `sroot` : The directory in which the folder `imergearlyhh` will be created for data downloads, storage and analysis, default is the home directoy called by `homedir()`
 
 The following fields in `npd` will be fixed as below:
 - `npdID` : imergearlyhh
@@ -45,7 +45,7 @@ function IMERGEarlyHH(
     DT = Date;
     dtbeg :: TimeType,
     dtend :: TimeType,
-    sroot :: AbstractString,
+    sroot :: AbstractString = homedir(),
 )
 
 	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Early IMERG Half-Hourly data to be downloaded"
@@ -68,7 +68,7 @@ end
         DT = Date;
         dtbeg :: TimeType,
         dtend :: TimeType,
-        sroot :: AbstractString,
+        sroot :: AbstractString = homedir(),
     ) -> npd :: IMERGHalfHourly{ST,DT}
 
 Creates a `IMERGHalfHourly` dataset `npd` to retrieve datasets from the Near Real-Time Late processing runs for Half-Hourly output
@@ -77,7 +77,7 @@ Keyword Arguments
 =================
 - `dtbeg` : Date at which download / analysis of the dataset begins
 - `dtend` : Date at which download / analysis of the dataset ends
-- `sroot` : The directory in which the folder `imerglatehh` will be created for data downloads, storage and analysis
+- `sroot` : The directory in which the folder `imerglatehh` will be created for data downloads, storage and analysis, default is the home directoy called by `homedir()`
 
 The following fields in `npd` will be fixed as below:
 - `npdID` : imerglatehh
@@ -92,7 +92,7 @@ function IMERGLateHH(
     DT = Date;
     dtbeg :: TimeType,
     dtend :: TimeType,
-    sroot :: AbstractString,
+    sroot :: AbstractString = homedir(),
 )
 
 	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Late IMERG Half-Hourly data to be downloaded"
@@ -115,7 +115,7 @@ end
         DT = Date;
         dtbeg :: TimeType,
         dtend :: TimeType,
-        sroot :: AbstractString,
+        sroot :: AbstractString = homedir(),
     ) -> npd :: IMERGHalfHourly{ST,DT}
 
 Creates a `IMERGHalfHourly` dataset `npd` to retrieve datasets from the final post-processing runs for Half-Hourly output
@@ -124,7 +124,7 @@ Keyword Arguments
 =================
 - `dtbeg` : Date at which download / analysis of the dataset begins
 - `dtend` : Date at which download / analysis of the dataset ends
-- `sroot` : The directory in which the folder `imergfinalhh` will be created for data downloads, storage and analysis
+- `sroot` : The directory in which the folder `imergfinalhh` will be created for data downloads, storage and analysis, default is the home directoy called by `homedir()`
 
 The following fields in `npd` will be fixed as below:
 - `npdID` : imergfinalhh
@@ -139,7 +139,7 @@ function IMERGFinalHH(
     DT = Date;
     dtbeg :: TimeType,
     dtend :: TimeType,
-    sroot :: AbstractString,
+    sroot :: AbstractString = homedir(),
 )
 
 	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Final IMERG Half-Hourly data to be downloaded"

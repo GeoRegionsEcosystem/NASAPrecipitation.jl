@@ -1,7 +1,7 @@
 """
     getTRMMlsm(
         geo :: GeoRegion = GeoRegion("GLB");
-	    sroot :: AbstractString = pwd()
+	    sroot :: AbstractString = homedir()
     ) -> nothing
 
 Downloads the TRMM-TMPA Land-Sea Mask for a GeoRegion specified by `geo` and saves it into `sroot`
@@ -12,11 +12,11 @@ Arguments
 
 Keyword Arguments
 =================
-- `sroot` : the directory to save the TRMM-TMPA Land-Sea Mask
+- `sroot` : the directory to save the TRMM-TMPA Land-Sea Mask, default is the home directoy called by `homedir()`
 """
 function getTRMMlsm(
 	geo   :: GeoRegion = GeoRegion("GLB");
-    sroot :: AbstractString = pwd(),
+    sroot :: AbstractString = homedir(),
 )
 
     @info "$(now()) - NASAPrecipitation.jl - Retrieving Land-Sea Mask for the TRMM-TMPA dataset"

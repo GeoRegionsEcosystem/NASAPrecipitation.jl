@@ -21,7 +21,7 @@ end
         DT = Date;
         dtbeg :: TimeType,
         dtend :: TimeType,
-        sroot :: AbstractString,
+        sroot :: AbstractString = homedir(),
     ) -> npd :: TRMMDaily{ST,DT}
 
 Creates a `TRMMDaily` dataset `npd` to retrieve datasets from the Final post-processing runs for Daily output
@@ -30,7 +30,7 @@ Keyword Arguments
 =================
 - `dtbeg` : Date at which download / analysis of the dataset begins
 - `dtend` : Date at which download / analysis of the dataset ends
-- `sroot` : The directory in which the folder `trmmdaily` will be created for data downloads, storage and analysis
+- `sroot` : The directory in which the folder `trmmdaily` will be created for data downloads, storage and analysis, default is the home directoy called by `homedir()`
 
 The following fields in `npd` will be fixed as below:
 - `npdID` : trmmdaily
@@ -45,7 +45,7 @@ function TRMMDaily(
     DT = Date;
     dtbeg :: TimeType,
     dtend :: TimeType,
-    sroot :: AbstractString,
+    sroot :: AbstractString = homedir(),
 )
 
 	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Final TRMM Daily data to be downloaded"
@@ -71,7 +71,7 @@ end
         DT = Date;
         dtbeg :: TimeType,
         dtend :: TimeType,
-        sroot :: AbstractString,
+        sroot :: AbstractString = homedir(),
     ) -> npd :: TRMMDaily{ST,DT}
 
 Creates a `TRMMDaily` dataset `npd` to retrieve datasets from the Near Real-Time processing runs for Daily output
@@ -80,7 +80,7 @@ Keyword Arguments
 =================
 - `dtbeg` : Date at which download / analysis of the dataset begins
 - `dtend` : Date at which download / analysis of the dataset ends
-- `sroot` : The directory in which the folder `trmmdailynrt` will be created for data downloads, storage and analysis
+- `sroot` : The directory in which the folder `trmmdailynrt` will be created for data downloads, storage and analysis, default is the home directoy called by `homedir()`
 
 The following fields in `npd` will be fixed as below:
 - `npdID` : trmmdailynrt
@@ -95,7 +95,7 @@ function TRMMDailyNRT(
     DT = Date;
     dtbeg :: TimeType,
     dtend :: TimeType,
-    sroot :: AbstractString,
+    sroot :: AbstractString = homedir(),
 )
 
 	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Near Real-Time TRMM Daily data to be downloaded"

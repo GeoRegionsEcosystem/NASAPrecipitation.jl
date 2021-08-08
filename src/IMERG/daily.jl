@@ -21,7 +21,7 @@ end
         DT = Date;
         dtbeg :: TimeType,
         dtend :: TimeType,
-        sroot :: AbstractString,
+        sroot :: AbstractString = homedir(),
     ) -> npd :: IMERGDaily{ST,DT}
 
 Creates a `IMERGDaily` dataset `npd` to retrieve datasets from the Near Real-Time Early processing runs for Daily output
@@ -30,7 +30,7 @@ Keyword Arguments
 =================
 - `dtbeg` : Date at which download / analysis of the dataset begins
 - `dtend` : Date at which download / analysis of the dataset ends
-- `sroot` : The directory in which the folder `imergearlydy` will be created for data downloads, storage and analysis
+- `sroot` : The directory in which the folder `imergearlydy` will be created for data downloads, storage and analysis, default is the home directoy called by `homedir()`
 
 The following fields in `npd` will be fixed as below:
 - `npdID` : imergearlydy
@@ -45,7 +45,7 @@ function IMERGEarlyDY(
     DT = Date;
     dtbeg :: TimeType,
     dtend :: TimeType,
-    sroot :: AbstractString,
+    sroot :: AbstractString = homedir(),
 )
 
 	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Early IMERG Daily data to be downloaded"
@@ -71,7 +71,7 @@ end
         DT = Date;
         dtbeg :: TimeType,
         dtend :: TimeType,
-        sroot :: AbstractString,
+        sroot :: AbstractString = homedir(),
     ) -> npd :: IMERGDaily{ST,DT}
 
 Creates a `IMERGDaily` dataset `npd` to retrieve datasets from the Near Real-Time Late processing runs for Daily output
@@ -80,7 +80,7 @@ Keyword Arguments
 =================
 - `dtbeg` : Date at which download / analysis of the dataset begins
 - `dtend` : Date at which download / analysis of the dataset ends
-- `sroot` : The directory in which the folder `imerglatedy` will be created for data downloads, storage and analysis
+- `sroot` : The directory in which the folder `imerglatedy` will be created for data downloads, storage and analysis, default is the home directoy called by `homedir()`
 
 The following fields in `npd` will be fixed as below:
 - `npdID` : imerglatedy
@@ -95,7 +95,7 @@ function IMERGLateDY(
     DT = Date;
     dtbeg :: TimeType,
     dtend :: TimeType,
-    sroot :: AbstractString,
+    sroot :: AbstractString = homedir(),
 )
 
 	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Late IMERG Daily data to be downloaded"
@@ -121,7 +121,7 @@ end
         DT = Date;
         dtbeg :: TimeType,
         dtend :: TimeType,
-        sroot :: AbstractString,
+        sroot :: AbstractString = homedir(),
     ) -> npd :: IMERGDaily{ST,DT}
 
 Creates a `IMERGDaily` dataset `npd` to retrieve datasets from the Final post-processing runs for Daily output
@@ -130,7 +130,7 @@ Keyword Arguments
 =================
 - `dtbeg` : Date at which download / analysis of the dataset begins
 - `dtend` : Date at which download / analysis of the dataset ends
-- `sroot` : The directory in which the folder `imergfinaldy` will be created for data downloads, storage and analysis
+- `sroot` : The directory in which the folder `imergfinaldy` will be created for data downloads, storage and analysis, default is the home directoy called by `homedir()`
 
 The following fields in `npd` will be fixed as below:
 - `npdID` : imergfinaldy
@@ -145,7 +145,7 @@ function IMERGFinalDY(
     DT = Date;
     dtbeg :: TimeType,
     dtend :: TimeType,
-    sroot :: AbstractString,
+    sroot :: AbstractString = homedir(),
 )
 
 	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Final IMERG Daily data to be downloaded"

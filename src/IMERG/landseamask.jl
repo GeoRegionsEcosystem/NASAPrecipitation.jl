@@ -1,7 +1,7 @@
 """
     getIMERGlsm(
         geo :: GeoRegion = GeoRegion("GLB");
-	    sroot :: AbstractString = pwd()
+	    sroot :: AbstractString = homedir()
     ) -> nothing
 
 Downloads the GPM-IMERG Land-Sea Mask for a GeoRegion specified by `geo` and saves it into `sroot`
@@ -12,11 +12,11 @@ Arguments
 
 Keyword Arguments
 =================
-- `sroot` : the directory to save the GPM-IMERG Land-Sea Mask
+- `sroot` : the directory to save the GPM-IMERG Land-Sea Mask, default is the home directoy called by `homedir()`
 """
 function getIMERGlsm(
 	geo   :: GeoRegion = GeoRegion("GLB");
-    sroot :: AbstractString = pwd(),
+    sroot :: AbstractString = homedir(),
 )
 
     @info "$(now()) - NASAPrecipitation.jl - Retrieving Land-Sea Mask for the GPM IMERG dataset"

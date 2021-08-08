@@ -21,7 +21,7 @@ end
         DT = Date;
         dtbeg :: TimeType,
         dtend :: TimeType,
-        sroot :: AbstractString,
+        sroot :: AbstractString = homedir(),
     ) -> npd :: TRMM3Hourly{ST,DT}
 
 Creates a `TRMM3Hourly` dataset `npd` to retrieve datasets from the Final post-processing runs for 3-Hourly output
@@ -30,7 +30,7 @@ Keyword Arguments
 =================
 - `dtbeg` : Date at which download / analysis of the dataset begins
 - `dtend` : Date at which download / analysis of the dataset ends
-- `sroot` : The directory in which the folder `trmm3hourly` will be created for data downloads, storage and analysis
+- `sroot` : The directory in which the folder `trmm3hourly` will be created for data downloads, storage and analysis, default is the home directoy called by `homedir()`
 
 The following fields in `npd` will be fixed as below:
 - `npdID` : trmm3hourly
@@ -45,7 +45,7 @@ function TRMM3Hourly(
     DT = Date;
     dtbeg :: TimeType,
     dtend :: TimeType,
-    sroot :: AbstractString,
+    sroot :: AbstractString = homedir(),
 )
 
 	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Final TRMM 3-Hourly data to be downloaded"
@@ -71,7 +71,7 @@ end
         DT = Date;
         dtbeg :: TimeType,
         dtend :: TimeType,
-        sroot :: AbstractString,
+        sroot :: AbstractString = homedir(),
     ) -> npd :: TRMM3Hourly{ST,DT}
 
 Creates a `TRMM3Hourly` dataset `npd` to retrieve datasets from the Near Real-Time runs for 3-Hourly output
@@ -80,7 +80,7 @@ Keyword Arguments
 =================
 - `dtbeg` : Date at which download / analysis of the dataset begins
 - `dtend` : Date at which download / analysis of the dataset ends
-- `sroot` : The directory in which the folder `trmm3hourlynrt` will be created for data downloads, storage and analysis
+- `sroot` : The directory in which the folder `trmm3hourlynrt` will be created for data downloads, storage and analysis, default is the home directoy called by `homedir()`
 
 The following fields in `npd` will be fixed as below:
 - `npdID` : trmm3hourlynrt
@@ -95,7 +95,7 @@ function TRMM3HourlyNRT(
     DT = Date;
     dtbeg :: TimeType,
     dtend :: TimeType,
-    sroot :: AbstractString,
+    sroot :: AbstractString = homedir(),
 )
 
 	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Near Real-Time TRMM 3-Hourly data to be downloaded"
