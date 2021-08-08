@@ -48,7 +48,9 @@ GeoRegion("IMERG")
 GeoRegion("TRMM")
 GeoRegion("TRMMLSM")
 resetGeoRegions()  # Clear custom GeoRegions
+GeoRegion("IMERG")
 addNPDGeoRegions() # Adding NASAPrecipitation.jl GeoRegions
+GeoRegion("IMERG")
 addNPDGeoRegions() # Checking to see if NASAPrecipitation.jl GeoRegions exists
 ```
 
