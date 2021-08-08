@@ -16,8 +16,8 @@ makedocs(;
             "Land-Sea Mask Datasets"      => "datasets/landseamask.md",
         ],
         "Downloading Data" => [
-            "Introduction to GeoRegions" => "download/georegions.md",
-            "API for Downloads"          => "download/download.md",
+            "Download APIs and Examples" => "download/download.md",
+            "A Basic Primer to `GeoRegion`s" => "download/georegions.md",
         ],
     ],
 )
