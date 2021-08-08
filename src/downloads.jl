@@ -34,8 +34,6 @@ function download(
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
 	tmp  = zeros(Float32,nlat,nlon)
 	var  = zeros(Float32,nglon,nglat,48)
-	vint = zeros(Int16,nglon,nglat,48)
-	isp  = zeros(Bool,nglon,nglat,48)
 
 	if typeof(geo) <: PolyRegion
 		  msk = ginfo.mask
@@ -61,22 +59,14 @@ function download(
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
 				mskii = msk[ilon,ilat]
-				if varii != -9999.9f0 && !iszero(varii) && !isnan(mskii)
-					  var[ilon,ilat,it] = log2(varii/3600)
-  					  isp[ilon,ilat,it] = 1
-				elseif iszero(varii) && !isnan(mskii)
-					  var[ilon,ilat,it] = NaN32
-					  isp[ilon,ilat,it] = 1
+				if (varii != -9999.9f0) && !iszero(varii) && !isnan(mskii)
+					  var[ilon,ilat,it] = varii / 3600
 				else; var[ilon,ilat,it] = NaN32
 				end
 			end
 		end
 
-		@debug "$(now()) - NASAPrecipitation.jl - Converting data from Float32 format to Int16 format in order to save space ..."
-		scale,offset = ncoffsetscale(var)
-		real2int16!(vint,var,scale,offset)
-
-		save(vint,isp,dt,npd,geo,ginfo,[scale,offset])
+		save(var,dt,npd,geo,ginfo,[scale,offset])
 
 	end
 
@@ -104,8 +94,6 @@ function download(
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
 	tmp  = zeros(Float32,nlat,nlon)
 	var  = zeros(Float32,nglon,nglat,31)
-	vint = zeros(Int16,nglon,nglat,31)
-	isp  = zeros(Bool,nglon,nglat,31)
 
 	if typeof(geo) <: PolyRegion
 		  msk = ginfo.mask
@@ -131,23 +119,15 @@ function download(
 
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
-				if varii != -9999.9 && !iszero(varii) && !isnan(mskii)
-					  var[ilon,ilat,dy] = log2(varii/86400)
-					  isp[ilon,ilat,dy] = 1
-				elseif iszero(varii) && !isnan(mskii)
-					  var[ilon,ilat,dy] = NaN32
-					  isp[ilon,ilat,dy] = 1
+				if (varii != -9999.9f0) && !iszero(varii) && !isnan(mskii)
+					  var[ilon,ilat,dy] = varii / 86400
 				else; var[ilon,ilat,dy] = NaN32
 				end
 			end
 
 		end
 
-		@debug "$(now()) - NASAPrecipitation.jl - Converting data from Float32 format to Int16 format in order to save space ..."
-		scale,offset = ncoffsetscale(view(var,:,:,1:ndy))
-		real2int16!(vint,view(var,:,:,1:ndy),scale,offset)
-
-		save(view(vint,:,:,1:ndy),view(isp,:,:,1:ndy),dt,npd,geo,ginfo,[scale,offset])
+		save(view(var,:,:,1:ndy),dt,npd,geo,ginfo,[scale,offset])
 
 	end
 
@@ -175,8 +155,6 @@ function download(
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
 	tmp  = zeros(Float32,nlat,nlon)
 	var  = zeros(Float32,nglon,nglat,12)
-	vint = zeros(Int16,nglon,nglat,12)
-	isp  = zeros(Bool,nglon,nglat,12)
 
 	if typeof(geo) <: PolyRegion
 		  msk = ginfo.mask
@@ -201,23 +179,15 @@ function download(
 
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
-				if varii != -9999.9 && !iszero(varii) && !isnan(mskii)
-					  var[ilon,ilat,mo] = log2(varii/3600)
-					  isp[ilon,ilat,mo] = 1
-				elseif iszero(varii) && !isnan(mskii)
-					  var[ilon,ilat,mo] = NaN32
-					  isp[ilon,ilat,mo] = 1
+				if (varii != -9999.9f0) && !iszero(varii) && !isnan(mskii)
+					  var[ilon,ilat,mo] = varii / 3600
 				else; var[ilon,ilat,mo] = NaN32
 				end
 			end
 
 		end
 
-		@debug "$(now()) - NASAPrecipitation.jl - Converting data from Float32 format to Int16 format in order to save space ..."
-		scale,offset = ncoffsetscale(var)
-		real2int16!(vint,var,scale,offset)
-
-		save(vint,isp,dt,npd,geo,ginfo,[scale,offset])
+		save(var,dt,npd,geo,ginfo,[scale,offset])
 
 	end
 
@@ -246,8 +216,6 @@ function download(
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
 	tmp  = zeros(Float32,nlat,nlon)
 	var  = zeros(Float32,nglon,nglat,8)
-	vint = zeros(Int16,nglon,nglat,8)
-	isp  = zeros(Bool,nglon,nglat,8)
 
 	if typeof(geo) <: PolyRegion
 		  msk = ginfo.mask
@@ -277,22 +245,14 @@ function download(
 			@debug "$(now()) - NASAPrecipitation.jl - Extraction of data from temporary array for the $(geo.name) GeoRegion"
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
-				if varii != -9999.9 && !iszero(varii) && !isnan(mskii)
-					  var[ilon,ilat,it] = log2(varii/3600)
-  					  isp[ilon,ilat,it] = 1
-				elseif iszero(varii) && !isnan(mskii)
-					  var[ilon,ilat,it] = NaN32
-					  isp[ilon,ilat,it] = 1
+				if (varii != -9999.9f0) && !iszero(varii) && !isnan(mskii)
+					  var[ilon,ilat,it] = varii / 3600
 				else; var[ilon,ilat,it] = NaN32
 				end
 			end
 		end
 
-		@debug "$(now()) - NASAPrecipitation.jl - Converting data from Float32 format to Int16 format in order to save space ..."
-		scale,offset = ncoffsetscale(var)
-		real2int16!(vint,var,scale,offset)
-
-		save(vint,isp,dt,npd,geo,ginfo,[scale,offset])
+		save(var,dt,npd,geo,ginfo,[scale,offset])
 
 	end
 
@@ -320,8 +280,6 @@ function download(
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
 	tmp  = zeros(Float32,nlat,nlon)
 	var  = zeros(Float32,nglon,nglat,31)
-	vint = zeros(Int16,nglon,nglat,31)
-	isp  = zeros(Bool,nglon,nglat,31)
 
 	if typeof(geo) <: PolyRegion
 		  msk = ginfo.mask
@@ -347,23 +305,15 @@ function download(
 
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
-				if varii != -9999.9 && !iszero(varii) && !isnan(mskii)
-					  var[ilon,ilat,dy] = log2(varii/86400)
-					  isp[ilon,ilat,dy] = 1
-				elseif iszero(varii) && !isnan(mskii)
-					  var[ilon,ilat,dy] = NaN32
-					  isp[ilon,ilat,dy] = 1
+				if (varii != -9999.9f0) && !iszero(varii) && !isnan(mskii)
+					  var[ilon,ilat,dy] = varii / 86400
 				else; var[ilon,ilat,dy] = NaN32
 				end
 			end
 
 		end
 
-		@debug "$(now()) - NASAPrecipitation.jl - Converting data from Float32 format to Int16 format in order to save space ..."
-		scale,offset = ncoffsetscale(view(var,:,:,1:ndy))
-		real2int16!(vint,view(var,:,:,1:ndy),scale,offset)
-
-		save(view(vint,:,:,1:ndy),view(isp,:,:,1:ndy),dt,npd,geo,ginfo,[scale,offset])
+		save(view(var,:,:,1:ndy),dt,npd,geo,ginfo,[scale,offset])
 
 	end
 
@@ -391,8 +341,6 @@ function download(
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
 	tmp  = zeros(Float32,nlat,nlon)
 	var  = zeros(Float32,nglon,nglat,12)
-	vint = zeros(Int16,nglon,nglat,12)
-	isp  = zeros(Bool,nglon,nglat,12)
 
 	if typeof(geo) <: PolyRegion
 		  msk = ginfo.mask
@@ -417,23 +365,15 @@ function download(
 
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
-				if varii != -9999.9 && !iszero(varii) && !isnan(mskii)
-					  var[ilon,ilat,mo] = log2(varii/3600)
-					  isp[ilon,ilat,mo] = 1
-				elseif iszero(varii) && !isnan(mskii)
-					  var[ilon,ilat,mo] = NaN32
-					  isp[ilon,ilat,mo] = 1
+				if (varii != -9999.9f0) && !iszero(varii) && !isnan(mskii)
+					  var[ilon,ilat,mo] = varii / 3600
 				else; var[ilon,ilat,mo] = NaN32
 				end
 			end
 
 		end
 
-		@debug "$(now()) - NASAPrecipitation.jl - Converting data from Float32 format to Int16 format in order to save space ..."
-		scale,offset = ncoffsetscale(var)
-		real2int16!(vint,var,scale,offset)
-
-		save(vint,isp,dt,npd,geo,ginfo,[scale,offset])
+		save(var,dt,npd,geo,ginfo,[scale,offset])
 
 	end
 

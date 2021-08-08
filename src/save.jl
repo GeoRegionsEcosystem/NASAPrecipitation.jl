@@ -1,6 +1,5 @@
 function save(
-	var   :: Array{Int16,3},
-	isp   :: Array{Bool,3},
+	var   :: AbstractArray{Float32,3},
 	dt    :: TimeType,
 	npd   :: NASAPrecipitationDataset,
 	geo   :: GeoRegion,
@@ -26,26 +25,16 @@ function save(
 	    "long_name" => "latitude",
 	))
 
-	ncisp = defVar(ds,"valid",Int8,("longitude","latitude","time"),attrib = Dict(
-	    "units"         => "0-1",
-	    "long_name"     => "valid_precipitation_measurement",
-		"full_name"     => "Mask of Valid Precipitation Measurement",
-	))
-
-	ncvar = defVar(ds,"precipitationrate",Int16,("longitude","latitude","time"),attrib = Dict(
+	ncvar = defVar(ds,"prcp_rate",Float32,("longitude","latitude","time"),attrib = Dict(
 	    "units"         => "kg m**-2 s**-1",
-	    "long_name"     => "log2_of_precipitation_rate",
-		"full_name"     => "log2 of Precipitation Rate",
-        "scale_factor"  => scale[1],
-        "add_offset"    => scale[2],
-        "_FillValue"    => Int16(-32767),
-        "missing_value" => Int16(-32767),
+	    "long_name"     => "precipitation_rate",
+		"full_name"     => "Precipitation Rate",
 	))
 
 	nclon[:] = ginfo.glon
 	nclat[:] = ginfo.glat
 	ncisp[:] = isp
-	ncvar.var[:] = var
+	ncvar[:] = var
 
 	close(ds)
 
@@ -121,6 +110,54 @@ function makenpdnc(
 		"doi"				=> npd.doi,
 		"AlgorithmID"		=> "3IMERGM",
 		"AlgorithmVersion"	=> "3IMERGM_6.3",
+	))
+
+	return ds,fnc
+
+end
+
+function makenpdnc(
+	npd :: TRMM3Hourly,
+	geo :: GeoRegion,
+	dt  :: TimeType,
+)
+
+	fol = joinpath(npd.sroot,geo.regID,"raw",yrmo2dir(dt))
+	if !isdir(fol); mkpath(fol) end
+	fnc = joinpath(fol,"$(npd.npdID)-$(geo.regID)-$(ymd2str(dt)).nc")
+	if isfile(fnc)
+		@info "$(now()) - NASAPrecipitation.jl - Overwrite stale NetCDF file $(fnc) ..."
+        rm(fnc);
+	end
+
+	@info "$(now()) - NASAPrecipitation.jl - Creating NetCDF file $(fnc) ..."
+	ds = NCDataset(fnc,"c",attrib = Dict(
+		"doi"				=> npd.doi,
+		"AlgorithmID"		=> "3B42",
+		"AlgorithmVersion"	=> "3B42_7.0"
+	))
+
+	return ds,fnc
+
+end
+
+function makenpdnc(
+	npd :: TRMMDaily,
+	geo :: GeoRegion,
+	dt  :: TimeType,
+)
+
+	fol = joinpath(npd.sroot,geo.regID,"raw","$(year(dt))")
+	if !isdir(fol); mkpath(fol) end
+	fnc = joinpath(fol,"$(npd.npdID)-$(geo.regID)-$(yrmo2str(dt)).nc")
+	if isfile(fnc)
+		@info "$(now()) - NASAPrecipitation.jl - Overwrite stale NetCDF file $(fnc) ..."
+		rm(fnc);
+	end
+
+	@info "$(now()) - NASAPrecipitation.jl - Creating NetCDF file $(fnc) ..."
+	ds = NCDataset(fnc,"c",attrib = Dict(
+		"doi"				=> npd.doi,
 	))
 
 	return ds,fnc
