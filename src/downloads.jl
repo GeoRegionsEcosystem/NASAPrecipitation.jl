@@ -30,6 +30,11 @@ function download(
 	vint = zeros(Int16,nglon,nglat,48)
 	isp  = zeros(Bool,nglon,nglat,48)
 
+	if typeof(geo) <: PolyRegion
+		  msk = ginfo.mask
+	else; msk = ones(nglon,nglat)
+	end
+
 	for dt in npd.dtbeg : Day(1) : npd.dtend
 
 		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) ..."
@@ -48,10 +53,11 @@ function download(
 			@debug "$(now()) - NASAPrecipitation.jl - Extraction of data from temporary array for the $(geo.name) GeoRegion"
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
-				if varii != 9999.9 && !iszero(varii)
+				mskii = msk[ilon,ilat]
+				if varii != 9999.9 && !iszero(varii) && !isnan(mskii)
 					  var[ilon,ilat,it] = log2(varii/3600)
   					  isp[ilon,ilat,it] = 1
-				elseif iszero(varii)
+				elseif iszero(varii) && !isnan(mskii)
 					  var[ilon,ilat,it] = NaN32
 					  isp[ilon,ilat,it] = 1
 				else; var[ilon,ilat,it] = NaN32
@@ -87,6 +93,11 @@ function download(
 	vint = zeros(Int16,nglon,nglat,31)
 	isp  = zeros(Bool,nglon,nglat,31)
 
+	if typeof(geo) <: PolyRegion
+		  msk = ginfo.mask
+	else; msk = ones(nglon,nglat)
+	end
+
 	for dt in npd.dtbeg : Month(1) : npd.dtend
 
 		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(ymd2str(dt)) ..."
@@ -106,10 +117,10 @@ function download(
 
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
-				if varii != 9999.9 && !iszero(varii)
+				if varii != 9999.9 && !iszero(varii) && !isnan(mskii)
 					  var[ilon,ilat,dy] = log2(varii/86400)
 					  isp[ilon,ilat,dy] = 1
-				elseif iszero(varii)
+				elseif iszero(varii) && !isnan(mskii)
 					  var[ilon,ilat,dy] = NaN32
 					  isp[ilon,ilat,dy] = 1
 				else; var[ilon,ilat,dy] = NaN32
@@ -146,6 +157,11 @@ function download(
 	vint = zeros(Int16,nglon,nglat,12)
 	isp  = zeros(Bool,nglon,nglat,12)
 
+	if typeof(geo) <: PolyRegion
+		  msk = ginfo.mask
+	else; msk = ones(nglon,nglat)
+	end
+
 	for dt in npd.dtbeg : Year(1) : npd.dtend
 
 		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(ymd2str(dt)) ..."
@@ -164,10 +180,10 @@ function download(
 
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
-				if varii != 9999.9 && !iszero(varii)
+				if varii != 9999.9 && !iszero(varii) && !isnan(mskii)
 					  var[ilon,ilat,mo] = log2(varii/3600)
 					  isp[ilon,ilat,mo] = 1
-				elseif iszero(varii)
+				elseif iszero(varii) && !isnan(mskii)
 					  var[ilon,ilat,mo] = NaN32
 					  isp[ilon,ilat,mo] = 1
 				else; var[ilon,ilat,mo] = NaN32
@@ -205,6 +221,11 @@ function download(
 	vint = zeros(Int16,nglon,nglat,8)
 	isp  = zeros(Bool,nglon,nglat,8)
 
+	if typeof(geo) <: PolyRegion
+		  msk = ginfo.mask
+	else; msk = ones(nglon,nglat)
+	end
+
 	for dt in npd.dtbeg : Day(1) : npd.dtend
 
 		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) ..."
@@ -228,10 +249,10 @@ function download(
 			@debug "$(now()) - NASAPrecipitation.jl - Extraction of data from temporary array for the $(geo.name) GeoRegion"
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
-				if varii != 9999.9 && !iszero(varii)
+				if varii != 9999.9 && !iszero(varii) && !isnan(mskii)
 					  var[ilon,ilat,it] = log2(varii/3600)
   					  isp[ilon,ilat,it] = 1
-				elseif iszero(varii)
+				elseif iszero(varii) && !isnan(mskii)
 					  var[ilon,ilat,it] = NaN32
 					  isp[ilon,ilat,it] = 1
 				else; var[ilon,ilat,it] = NaN32
@@ -267,6 +288,11 @@ function download(
 	vint = zeros(Int16,nglon,nglat,31)
 	isp  = zeros(Bool,nglon,nglat,31)
 
+	if typeof(geo) <: PolyRegion
+		  msk = ginfo.mask
+	else; msk = ones(nglon,nglat)
+	end
+
 	for dt in npd.dtbeg : Month(1) : npd.dtend
 
 		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(ymd2str(dt)) ..."
@@ -286,10 +312,10 @@ function download(
 
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
-				if varii != 9999.9 && !iszero(varii)
+				if varii != 9999.9 && !iszero(varii) && !isnan(mskii)
 					  var[ilon,ilat,dy] = log2(varii/86400)
 					  isp[ilon,ilat,dy] = 1
-				elseif iszero(varii)
+				elseif iszero(varii) && !isnan(mskii)
 					  var[ilon,ilat,dy] = NaN32
 					  isp[ilon,ilat,dy] = 1
 				else; var[ilon,ilat,dy] = NaN32
@@ -326,6 +352,11 @@ function download(
 	vint = zeros(Int16,nglon,nglat,12)
 	isp  = zeros(Bool,nglon,nglat,12)
 
+	if typeof(geo) <: PolyRegion
+		  msk = ginfo.mask
+	else; msk = ones(nglon,nglat)
+	end
+
 	for dt in npd.dtbeg : Year(1) : npd.dtend
 
 		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(ymd2str(dt)) ..."
@@ -344,10 +375,10 @@ function download(
 
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
-				if varii != 9999.9 && !iszero(varii)
+				if varii != 9999.9 && !iszero(varii) && !isnan(mskii)
 					  var[ilon,ilat,mo] = log2(varii/3600)
 					  isp[ilon,ilat,mo] = 1
-				elseif iszero(varii)
+				elseif iszero(varii) && !isnan(mskii)
 					  var[ilon,ilat,mo] = NaN32
 					  isp[ilon,ilat,mo] = 1
 				else; var[ilon,ilat,mo] = NaN32
