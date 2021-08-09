@@ -79,6 +79,6 @@ NASAPrecipitation.TRMMMonthly(
 
 ```@repl
 using NASAPrecipitation
-npd = TRMMMonthly(dtbeg=Date(2017,2,1),dtend=Date(2017,2,1),sroot=pwd())
+npd = TRMMMonthly(dtbeg=Date(2017,2,1),dtend=Date(2017,2,1))
 typeof(npd)
 ```

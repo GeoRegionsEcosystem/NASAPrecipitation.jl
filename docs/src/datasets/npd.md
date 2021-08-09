@@ -13,7 +13,7 @@ NASAPrecipitation.NASAPrecipitationDataset
 All subTypes of the `NASAPrecipitationDataset` have the same basic fields and structure.
 ```@repl
 using NASAPrecipitation
-npd = IMERGFinalHH(dtbeg=Date(2017,2,1),dtend=Date(2017,2,1),sroot=pwd())
+npd = IMERGFinalHH(dtbeg=Date(2017,2,1),dtend=Date(2017,2,1),sroot=homedir())
 npd.dtbeg
 npd.sroot
 npd.fpref

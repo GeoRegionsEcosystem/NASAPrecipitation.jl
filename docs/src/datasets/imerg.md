@@ -70,6 +70,6 @@ NASAPrecipitation.IMERGMonthly(
 
 ```@repl
 using NASAPrecipitation
-npd = IMERGEarlyHH(dtbeg=Date(2017,2,1),dtend=Date(2017,2,1),sroot=pwd())
+npd = IMERGEarlyHH(dtbeg=Date(2017,2,1),dtend=Date(2017,2,1))
 typeof(npd)
 ```

@@ -16,9 +16,10 @@ makedocs(;
             "Land-Sea Mask Datasets"         => "datasets/landseamask.md",
             "A Basic Primer to `GeoRegion`s" => "datasets/georegions.md",
         ],
-        "Downloading Data" => [
-            "Download API" => "download/download.md",
-            "Examples" => "download/examples.md",
+        "Downloading Data" => "download.md",
+        "Examples" => [
+            "Downloading IMERG Data"  => "examples/download.md",
+            "Land-Sea Mask Filtering" => "examples/landseamask.md",
         ],
     ],
 )

@@ -1,3 +1,29 @@
+# Julia stuff
+*.jl.cov
+*.jl.*.cov
+*.jl.mem
+*.mem
+deps/deps.jl
+Manifest.toml
+
+# Documenter.jl and MkDocs
+docs/build
+docs/site
+docs/src/generated
+docs/extra
+
+# Data Files
+*.dat
+*.nc
+*.jld2
+
+# Plots
+*.gif
+*.mp4
+
+# Jupyter Lab stuff and notebooks
+*.ipynb
+.ipynb_checkpoints
+
+# MacOS stuff
 *.DS_Store
-/Manifest.toml
-/docs/build/
