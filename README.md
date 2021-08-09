@@ -38,6 +38,16 @@
 ] add https://github.com/natgeo-wong/NASAPrecipitation.jl.git
 ```
 
+## **Required Installation**
+
+In order to access NASA's EOSDIS OPeNDAP servers, the following steps are required for [NCDatasets.jl](https://github.com/Alexander-Barth/NCDatasets.jl) to access the data:
+* You need to register an account with Earthdata
+* Create a `.netrc` file, and paste the following:
+  * `machine urs.earthdata.nasa.gov login <your login> password <your password>`
+* Create a `.dodsrc` file, and paste the following:
+  * `HTTP.COOKIEJAR=/<home directory>/.urs_cookies`
+  * `HTTP.NETRC=/<home directory>/.netrc`
+
 ## **Usage**
 
 Please refer to the [documentation](https://natgeo-wong.github.io/NASAPrecipitation.jl/dev/) for instructions and examples.  A working knowledge of the `GeoRegion` and `RegionInfo` supertypes used in [`GeoRegions.jl`](https://github.com/JuliaClimate/GeoRegions.jl) v2 is also needed.

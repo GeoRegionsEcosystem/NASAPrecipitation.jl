@@ -5,10 +5,10 @@ In this page we go through downloading `NASAPrecipitationDataset`s and the Land-
 ## Required dependencies
 
 Since we are downloading from NASA's EOSDIS OPeNDAP servers, you need to do the following steps before NASAPrecipitation downloads will work:
-1. You need to register an account with Earthdata
-2. Create a `.netrc` file, and paste the following:
+* You need to register an account with Earthdata
+* Create a `.netrc` file, and paste the following:
   * `machine urs.earthdata.nasa.gov login <your login> password <your password>`
-3. Create a `.dodsrc` file, and paste the following:
+* Create a `.dodsrc` file, and paste the following:
   * `HTTP.COOKIEJAR=/<home directory>/.urs_cookies`
   * `HTTP.NETRC=/<home directory>/.netrc`
 
