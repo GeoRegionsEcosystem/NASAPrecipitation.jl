@@ -4,7 +4,6 @@ function save(
 	npd   :: NASAPrecipitationDataset,
 	geo   :: GeoRegion,
 	ginfo :: RegionGrid,
-	scale :: Vector{<:Real}
 )
 
 	@info "$(now()) - NASAPrecipitation.jl - Saving $(npd.lname) data in the $(geo.name) GeoRegion for $(dt)"
@@ -33,7 +32,6 @@ function save(
 
 	nclon[:] = ginfo.glon
 	nclat[:] = ginfo.glat
-	ncisp[:] = isp
 	ncvar[:] = var
 
 	close(ds)
