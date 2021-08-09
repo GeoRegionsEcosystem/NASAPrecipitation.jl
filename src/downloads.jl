@@ -59,14 +59,14 @@ function download(
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
 				mskii = msk[ilon,ilat]
-				if (varii != -9999.9f0) && !iszero(varii) && !isnan(mskii)
+				if (varii != -9999.9f0) && !isnan(mskii)
 					  var[ilon,ilat,it] = varii / 3600
 				else; var[ilon,ilat,it] = NaN32
 				end
 			end
 		end
 
-		save(var,dt,npd,geo,ginfo,[scale,offset])
+		save(var,dt,npd,geo,ginfo)
 
 	end
 
@@ -102,7 +102,7 @@ function download(
 
 	for dt in npd.dtbeg : Month(1) : npd.dtend
 
-		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(ymd2str(dt)) ..."
+		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt))-$(month(dt)) ..."
 
 		npddir = joinpath(npd.hroot,"$(yrmo2dir(dt))")
 		ndy = daysinmonth(dt)
@@ -119,7 +119,8 @@ function download(
 
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
-				if (varii != -9999.9f0) && !iszero(varii) && !isnan(mskii)
+				mskii = msk[ilon,ilat]
+				if (varii != -9999.9f0) && !isnan(mskii)
 					  var[ilon,ilat,dy] = varii / 86400
 				else; var[ilon,ilat,dy] = NaN32
 				end
@@ -127,7 +128,7 @@ function download(
 
 		end
 
-		save(view(var,:,:,1:ndy),dt,npd,geo,ginfo,[scale,offset])
+		save(view(var,:,:,1:ndy),dt,npd,geo,ginfo)
 
 	end
 
@@ -163,7 +164,7 @@ function download(
 
 	for dt in npd.dtbeg : Year(1) : npd.dtend
 
-		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(ymd2str(dt)) ..."
+		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt)) ..."
 
 		npddir = joinpath(npd.hroot,"$(year(dt))")
 
@@ -179,7 +180,8 @@ function download(
 
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
-				if (varii != -9999.9f0) && !iszero(varii) && !isnan(mskii)
+				mskii = msk[ilon,ilat]
+				if (varii != -9999.9f0) && !isnan(mskii)
 					  var[ilon,ilat,mo] = varii / 3600
 				else; var[ilon,ilat,mo] = NaN32
 				end
@@ -187,7 +189,7 @@ function download(
 
 		end
 
-		save(var,dt,npd,geo,ginfo,[scale,offset])
+		save(var,dt,npd,geo,ginfo)
 
 	end
 
@@ -207,8 +209,7 @@ function download(
 		isinGeoRegion(geo,GeoRegion("TRMM"))
 	end
 
-	fnc  = imergrawfiles()
-	lon,lat = gpmlonlat(); nlon = length(lon); nlat = length(lat)
+	lon,lat = trmmlonloat(); nlon = length(lon); nlat = length(lat)
 	ginfo = RegionGrid(geo,lon,lat)
 
 	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
@@ -245,14 +246,15 @@ function download(
 			@debug "$(now()) - NASAPrecipitation.jl - Extraction of data from temporary array for the $(geo.name) GeoRegion"
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
-				if (varii != -9999.9f0) && !iszero(varii) && !isnan(mskii)
+				mskii = msk[ilon,ilat]
+				if (varii != -9999.9f0) && !isnan(mskii)
 					  var[ilon,ilat,it] = varii / 3600
 				else; var[ilon,ilat,it] = NaN32
 				end
 			end
 		end
 
-		save(var,dt,npd,geo,ginfo,[scale,offset])
+		save(var,dt,npd,geo,ginfo)
 
 	end
 
@@ -288,7 +290,7 @@ function download(
 
 	for dt in npd.dtbeg : Month(1) : npd.dtend
 
-		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(ymd2str(dt)) ..."
+		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt))-$(month(dt)) ..."
 
 		npddir = joinpath(npd.hroot,"$(yrmo2dir(dt))")
 		ndy = daysinmonth(dt)
@@ -305,7 +307,8 @@ function download(
 
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
-				if (varii != -9999.9f0) && !iszero(varii) && !isnan(mskii)
+				mskii = msk[ilon,ilat]
+				if (varii != -9999.9f0) && !isnan(mskii)
 					  var[ilon,ilat,dy] = varii / 86400
 				else; var[ilon,ilat,dy] = NaN32
 				end
@@ -313,7 +316,7 @@ function download(
 
 		end
 
-		save(view(var,:,:,1:ndy),dt,npd,geo,ginfo,[scale,offset])
+		save(view(var,:,:,1:ndy),dt,npd,geo,ginfo)
 
 	end
 
@@ -349,7 +352,7 @@ function download(
 
 	for dt in npd.dtbeg : Year(1) : npd.dtend
 
-		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(ymd2str(dt)) ..."
+		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt)) ..."
 
 		npddir = joinpath(npd.hroot,"$(year(dt))")
 
@@ -365,7 +368,8 @@ function download(
 
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp[iglat[ilat],iglon[ilon]]
-				if (varii != -9999.9f0) && !iszero(varii) && !isnan(mskii)
+				mskii = msk[ilon,ilat]
+				if (varii != -9999.9f0) && !isnan(mskii)
 					  var[ilon,ilat,mo] = varii / 3600
 				else; var[ilon,ilat,mo] = NaN32
 				end
@@ -373,7 +377,7 @@ function download(
 
 		end
 
-		save(var,dt,npd,geo,ginfo,[scale,offset])
+		save(var,dt,npd,geo,ginfo)
 
 	end
 
