@@ -55,7 +55,7 @@ function IMERGMonthly(
 	dtbeg = Date(year(dtbeg),1,1)
 	dtend = Date(year(dtend),12,31)
 
-    return IMERGFinalMO{ST,DT}(
+    return IMERGMonthly{ST,DT}(
 		"imergmonthly", "IMERG Monthly", "10.5067/GPM/IMERG/3B-MONTH/06",
         dtbeg, dtend,
 		joinpath(sroot,"imergmonthly"),
