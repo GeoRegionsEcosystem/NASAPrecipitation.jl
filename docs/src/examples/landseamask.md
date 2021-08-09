@@ -8,9 +8,9 @@ We start first by loading the TRMM daily data
 
 ```@repl
 using NASAPrecipitation
-npd = TRMMDaily(dtbeg=Date(2012,2,1),dtend=Date(2012,2,1)) # NASAPrecipitation.jl downloads daily data month-by-month
+npd = TRMMDaily(dtbeg=Date(2012,2,1),dtend=Date(2012,2,1),sroot=joinpath(pwd(),"..","..","data")) # NASAPrecipitation.jl downloads daily data month-by-month
 geo = GeoRegion("AR6_WAF") # AR6 regions are automatically defined in GeoRegions.jl v2 and above
-download(npd,geo)
+download(npd,geo) # will fail because .netrc and .dodsrc are not provided
 ```
 
 ## 2. Loading Land-Sea Mask
@@ -20,7 +20,7 @@ Next, we download the TRMM daily data
 ```@repl
 using NASAPrecipitation
 geo = GeoRegion("AR6_WAF") # AR6 regions are automatically defined in GeoRegions.jl v2 and above
-getTRMMlsm(geo)
+getTRMMlsm(geo,sroot=joinpath(pwd(),"..","..","data"))
 ```
 
 ## 3. Read the Data using NCDatasets
@@ -31,13 +31,13 @@ We use NCDatasets to read the data
 using NCDatasets
 using Statistics
 
-ds1 = NCDataset(joinpath(homedir(),"trmmdaily","AR6_WAF","raw","2012","trmmdaily-AR6_WAF-201202.nc"));
+ds1 = NCDataset(joinpath(pwd(),"..","..","data","trmmdaily","AR6_WAF","raw","2012","trmmdaily-AR6_WAF-201202.nc"));
 ln1 = ds1["longitude"][:];
 lt1 = ds1["latitude"][:];
 prc = dropdims(mean(ds1["prcp_rate"][:],dims=3),dims=3)
 close(ds1)
 
-ds2 = NCDataset(joinpath(homedir(),"trmmlsm-AR6_WAF.nc"))
+ds2 = NCDataset(joinpath(pwd(),"..","..","data","trmmlsm-AR6_WAF.nc"))
 ln2 = ds2["longitude"][:];
 lt2 = ds2["latitude"][:];
 lsm = ds2["lsm"][:];
@@ -79,26 +79,33 @@ Finally, I do the plotting as below:
 using PyCall, LaTeXStrings
 pplt = pyimport("proplot")
 
-pplt.close(); f,a = pplt.subplots(nrows=3,aspect=9/4,axwidth=4)
+pplt.close(); f,a = pplt.subplots(nrows=2,ncols=2,aspect=9/4,axwidth=3)
 
-a[1].contourf(lon,lat,prc'*86400,cmap="Blues",levels=(0:10)*2,extend="max")
+a[1].pcolormesh(lon,lat,prc'*86400,cmap="Blues",levels=(0:10)*2,extend="max")
 a[1].plot(x,y,c="k",lw=0.5)
 a[1].plot(blon,blat,c="b",lw=1,linestyle=":")
 a[1].plot(slon,slat,c="b",lw=1)
 a[1].format(ultitle="(a) All Data")
 
-a[2].contourf(lon,lat,plnd'*86400,cmap="Blues",levels=(0:10)*2,extend="max")
+c = a[2].pcolormesh(lon,lat,lsm',cmap="delta",levels=0:0.1:1,extend="both")
 a[2].plot(x,y,c="k",lw=0.5)
 a[2].plot(blon,blat,c="b",lw=1,linestyle=":")
 a[2].plot(slon,slat,c="b",lw=1)
-a[2].format(ultitle="(b) Land Data")
+a[2].colorbar(c,loc="r")
+a[2].format(ultitle="(b) Land-Sea Mask")
 
-c = a[3].contourf(lon,lat,pocn'*86400,cmap="Blues",levels=(0:10)*2,extend="max")
+a[3].pcolormesh(lon,lat,plnd'*86400,cmap="Blues",levels=(0:10)*2,extend="max")
 a[3].plot(x,y,c="k",lw=0.5)
 a[3].plot(blon,blat,c="b",lw=1,linestyle=":")
 a[3].plot(slon,slat,c="b",lw=1)
-f.colorbar(c,loc="r")
-a[3].format(ultitle="(c) Ocean Data")
+a[3].format(ultitle="(c) Land Data")
+
+c = a[4].pcolormesh(lon,lat,pocn'*86400,cmap="Blues",levels=(0:10)*2,extend="max")
+a[4].plot(x,y,c="k",lw=0.5)
+a[4].plot(blon,blat,c="b",lw=1,linestyle=":")
+a[4].plot(slon,slat,c="b",lw=1)
+a[4].colorbar(c,loc="r")
+a[4].format(ultitle="(d) Ocean Data")
 
 for ax in a
     ax.format(

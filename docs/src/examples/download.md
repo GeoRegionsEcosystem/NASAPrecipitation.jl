@@ -7,16 +7,16 @@ We do this by specifying the `NASAPrecipitationDataset` and the `GeoRegion`:
 
 ```@repl
 using NASAPrecipitation
-npd = IMERGMonthly(dtbeg=Date(2015,1,1),dtend=Date(2015,1,1)) # NASAPrecipitation.jl downloads monthly data year-by-year
+npd = IMERGMonthly(dtbeg=Date(2015,1,1),dtend=Date(2015,1,1),sroot=joinpath(pwd(),"..","..","data")) # NASAPrecipitation.jl downloads monthly data year-by-year
 geo = GeoRegion("AR6_SAS") # AR6 regions are automatically defined in GeoRegions.jl v2 and above
-download(npd,geo)
+download(npd,geo) # will fail because .netrc and .dodsrc are not provided
 ```
 
 ## 2. Read the Data using NCDatasets
 We use NCDatasets to read the data
 ```@repl
 using NCDatasets
-ds  = NCDataset(joinpath(homedir(),"imergmonthly","AR6_SAS","raw","imergmonthly-AR6_SAS-2015.nc"))
+ds  = NCDataset(joinpath(pwd(),"..","..","data","imergmonthly","AR6_SAS","raw","imergmonthly-AR6_SAS-2015.nc"))
 lon = ds["longitude"][:];
 lat = ds["latitude"][:];
 prc = ds["prcp_rate"][:];

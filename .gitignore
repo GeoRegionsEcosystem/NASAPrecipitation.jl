@@ -14,7 +14,6 @@ docs/extra
 
 # Data Files
 *.dat
-*.nc
 *.jld2
 
 # Plots
