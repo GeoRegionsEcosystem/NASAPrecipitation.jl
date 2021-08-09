@@ -25,6 +25,12 @@ NASAPrecipitation.IMERGDaily
 NASAPrecipitation.IMERGMonthly{<:AbstractString,<:TimeType}
 ```
 
+!!! tip "Data is downloaded and saved in batches"
+    NASAPrecipitation.jl downloads and saves the data in batches as follows:
+    * `IMERGHalfHourly` is downloaded and saved in files for each day
+    * `IMERGDaily` is downloaded and saved in files for each month
+    * `IMERGMonthly` is downloaded and saved in files for each year
+
 ## Creating an `IMERGHalfHourly` dataset
 
 The `IMERGHalfHourly` dataset structure is used to contain information regarding half-hourly IMERG datasets.  There are three functions that create `IMERGHalfHourly` datasets

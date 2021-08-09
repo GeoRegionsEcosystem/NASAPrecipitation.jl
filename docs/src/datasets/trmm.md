@@ -25,6 +25,12 @@ NASAPrecipitation.TRMMDaily{<:AbstractString,<:TimeType}
 NASAPrecipitation.TRMMMonthly{<:AbstractString,<:TimeType}
 ```
 
+!!! tip "Data is downloaded and saved in batches"
+    NASAPrecipitation.jl downloads and saves the data in batches as follows:
+    * `TRMM3Hourly` is downloaded and saved in files for each day
+    * `TRMMDaily` is downloaded and saved in files for each month
+    * `TRMMMonthly` is downloaded and saved in files for each year
+
 ## Creating a `TRMM3Hourly` dataset
 
 The `TRMM3Hourly` dataset structure is used to contain information regarding 3-hourly TRMM datasets.  There are two functions that create `TRMM3Hourly` datasets
