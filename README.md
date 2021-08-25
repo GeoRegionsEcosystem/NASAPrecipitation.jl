@@ -33,9 +33,14 @@
 * basic analysis of said datasets
 * perform all the above operations innately over a given [`GeoRegion`](https://github.com/JuliaClimate/GeoRegions.jl)
 
-`NASAPrecipitation.jl` is not yet registered.  Therefore, it can only be installed via
+`NASAPrecipitation.jl` has been registered.  Install it via:
 ```
-] add https://github.com/natgeo-wong/NASAPrecipitation.jl.git
+] add NASAPrecipitation
+```
+
+To get the most recent release on the `#main` branch, do
+```
+] add NASAPrecipitation#main
 ```
 
 ## **Required Installation**
@@ -64,6 +69,6 @@ The following datasets are supported:
 	* Final runs for 3-Hourly, Daily and Monthly Data
 	* Near Real-Time runs of 3-Hourly and Daily Data
 
-Only the calibrated precipitation data is downloaded, with units of rate in log2(mm/s).
+Only the calibrated precipitation data is downloaded, with units of rate in mm/s.
 
 If there is demand, I can easily add other datasets available on the `gpm1` and `disc2` NASA OPeNDAP servers to the mix as well. Please open an issue if you want me to do so.

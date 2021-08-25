@@ -8,10 +8,16 @@
 
 ## Installation Instructions
 
-NASAPrecipitation.jl has not been officially registered as a Julia package yet.  To install it, add it directly using the GitHub link as follows:
+NASAPrecipitation.jl has  been officially registered as a Julia package yet.  To add it, just do:
 ```
 julia> ]
-(@v1.6) pkg> add https://github.com/natgeo-wong/NASAPrecipitation.jl.git
+(@v1.6) pkg> add NASAPrecipitation
+```
+
+Or if you want the latest version of NASAPrecipitation.jl, you can also install the `#main` branch.
+```
+julia> ]
+(@v1.6) pkg> add NASAPrecipitation#main
 ```
 
 ## Documentation Overview
