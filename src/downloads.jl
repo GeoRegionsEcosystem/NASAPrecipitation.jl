@@ -32,12 +32,29 @@ function download(
 	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
-	tmp  = zeros(Float32,nlat,nlon)
+	tmp0 = zeros(Float32,nlat,nlon)
 	var  = zeros(Float32,nglon,nglat,48)
 
 	if typeof(geo) <: PolyRegion
 		  msk = ginfo.mask
 	else; msk = ones(nglon,nglat)
+	end
+
+	if iglon[1] > iglon[end]
+		shift == true
+		iglon1 = iglon[1] : nlon; niglon1 = length(iglon1)
+		iglon2 = 1 : iglon[end];  niglon2 = length(iglon2)
+		tmp1 = @view tmp0[1:niglon1,:]
+		tmp2 = @view tmp0[1:niglon2,:]
+	else
+		shift = false
+		iglon = iglon[1] : iglon[end]
+	end
+
+	if iglon[1] > iglon[end]
+		iglat = iglat[1] : -1 : iglat[end]
+	else
+		iglat = iglat[1] : iglat[end]
 	end
 
 	for dt in npd.dtbeg : Day(1) : npd.dtend
@@ -52,12 +69,17 @@ function download(
 
 			npdfnc = "$(npd.fpref).$ymdfnc-$(fnc[it]).$(npd.fsuff)"
 			ds = NCDataset(joinpath(npddir,npdfnc))
-			NCDatasets.load!(ds["precipitationCal"].var,tmp,:,:,1)
+			if !shift
+				NCDatasets.load!(ds["precipitationCal"].var,tmp0,iglat,iglon,1)
+			else
+				NCDatasets.load!(ds["precipitationCal"].var,tmp1,iglat,iglon1,1)
+				NCDatasets.load!(ds["precipitationCal"].var,tmp2,iglat,iglon2,1)
+			end
 			close(ds)
 
 			@debug "$(now()) - NASAPrecipitation.jl - Extraction of data from temporary array for the $(geo.name) GeoRegion"
 			for ilat = 1 : nglat, ilon = 1 : nglon
-				varii = tmp[iglat[ilat],iglon[ilon]]
+				varii = tmp0[ilat,ilon]
 				mskii = msk[ilon,ilat]
 				if (varii != -9999.9f0) && !isnan(mskii)
 					  var[ilon,ilat,it] = varii / 3600
@@ -92,12 +114,29 @@ function download(
 	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
-	tmp  = zeros(Float32,nlat,nlon)
+	tmp0 = zeros(Float32,nlat,nlon)
 	var  = zeros(Float32,nglon,nglat,31)
 
 	if typeof(geo) <: PolyRegion
 		  msk = ginfo.mask
 	else; msk = ones(nglon,nglat)
+	end
+
+	if iglon[1] > iglon[end]
+		shift == true
+		iglon1 = iglon[1] : nlon; niglon1 = length(iglon1)
+		iglon2 = 1 : iglon[end];  niglon2 = length(iglon2)
+		tmp1 = @view tmp0[1:niglon1,:]
+		tmp2 = @view tmp0[1:niglon2,:]
+	else
+		shift = false
+		iglon = iglon[1] : iglon[end]
+	end
+
+	if iglon[1] > iglon[end]
+		iglat = iglat[1] : -1 : iglat[end]
+	else
+		iglat = iglat[1] : iglat[end]
 	end
 
 	for dt in npd.dtbeg : Month(1) : npd.dtend
@@ -112,13 +151,18 @@ function download(
 			ymdfnc = "$(ymd2str(dtii))"
 			npdfnc = "$(npd.fpref).$ymdfnc-$(npd.fsuff)"
 			ds = NCDataset(joinpath(npddir,npdfnc))
-			NCDatasets.load!(ds["precipitationCal"].var,tmp,:,:,1)
+			if !shift
+				NCDatasets.load!(ds["precipitationCal"].var,tmp0,iglat,iglon,1)
+			else
+				NCDatasets.load!(ds["precipitationCal"].var,tmp1,iglat,iglon1,1)
+				NCDatasets.load!(ds["precipitationCal"].var,tmp2,iglat,iglon2,1)
+			end
 			close(ds)
 
 			@debug "$(now()) - NASAPrecipitation.jl - Extraction of data from temporary array for the $(geo.name) GeoRegion"
 
 			for ilat = 1 : nglat, ilon = 1 : nglon
-				varii = tmp[iglat[ilat],iglon[ilon]]
+				varii = tmp0[ilat,ilon]
 				mskii = msk[ilon,ilat]
 				if (varii != -9999.9f0) && !isnan(mskii)
 					  var[ilon,ilat,dy] = varii / 86400
@@ -154,12 +198,29 @@ function download(
 	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
-	tmp  = zeros(Float32,nlat,nlon)
+	tmp0 = zeros(Float32,nlat,nlon)
 	var  = zeros(Float32,nglon,nglat,12)
 
 	if typeof(geo) <: PolyRegion
 		  msk = ginfo.mask
 	else; msk = ones(nglon,nglat)
+	end
+
+	if iglon[1] > iglon[end]
+		shift == true
+		iglon1 = iglon[1] : nlon; niglon1 = length(iglon1)
+		iglon2 = 1 : iglon[end];  niglon2 = length(iglon2)
+		tmp1 = @view tmp0[1:niglon1,:]
+		tmp2 = @view tmp0[1:niglon2,:]
+	else
+		shift = false
+		iglon = iglon[1] : iglon[end]
+	end
+
+	if iglon[1] > iglon[end]
+		iglat = iglat[1] : -1 : iglat[end]
+	else
+		iglat = iglat[1] : iglat[end]
 	end
 
 	for dt in npd.dtbeg : Year(1) : npd.dtend
@@ -173,13 +234,18 @@ function download(
 			ymdfnc = "$(ymd2str(dtii))-S000000-E235959"
 			npdfnc = "$(npd.fpref).$ymdfnc.$(@sprintf("%02d",mo)).$(npd.fsuff)"
 			ds = NCDataset(joinpath(npddir,npdfnc))
-			NCDatasets.load!(ds["precipitation"].var,tmp,:,:,1)
+			if !shift
+				NCDatasets.load!(ds["precipitationCal"].var,tmp0,iglat,iglon,1)
+			else
+				NCDatasets.load!(ds["precipitationCal"].var,tmp1,iglat,iglon1,1)
+				NCDatasets.load!(ds["precipitationCal"].var,tmp2,iglat,iglon2,1)
+			end
 			close(ds)
 
 			@debug "$(now()) - NASAPrecipitation.jl - Extraction of data from temporary array for the $(geo.name) GeoRegion"
 
 			for ilat = 1 : nglat, ilon = 1 : nglon
-				varii = tmp[iglat[ilat],iglon[ilon]]
+				varii = tmp0[ilat,ilon]
 				mskii = msk[ilon,ilat]
 				if (varii != -9999.9f0) && !isnan(mskii)
 					  var[ilon,ilat,mo] = varii / 3600
@@ -215,12 +281,29 @@ function download(
 	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
-	tmp  = zeros(Float32,nlat,nlon)
+	tmp0 = zeros(Float32,nlat,nlon)
 	var  = zeros(Float32,nglon,nglat,8)
 
 	if typeof(geo) <: PolyRegion
 		  msk = ginfo.mask
 	else; msk = ones(nglon,nglat)
+	end
+
+	if iglon[1] > iglon[end]
+		shift == true
+		iglon1 = iglon[1] : nlon; niglon1 = length(iglon1)
+		iglon2 = 1 : iglon[end];  niglon2 = length(iglon2)
+		tmp1 = @view tmp0[1:niglon1,:]
+		tmp2 = @view tmp0[1:niglon2,:]
+	else
+		shift = false
+		iglon = iglon[1] : iglon[end]
+	end
+
+	if iglon[1] > iglon[end]
+		iglat = iglat[1] : -1 : iglat[end]
+	else
+		iglat = iglat[1] : iglat[end]
 	end
 
 	for dt in npd.dtbeg : Day(1) : npd.dtend
@@ -240,12 +323,17 @@ function download(
 
 			npdfnc = "$(npd.fpref).$ymdfnc.$((it-1)*3).$(npd.fsuff)"
 			ds = NCDataset(joinpath(npddir,npdfnc))
-			NCDatasets.load!(ds["precipitation"].var,tmp,:,:,1)
+			if !shift
+				NCDatasets.load!(ds["precipitationCal"].var,tmp0,iglat,iglon,1)
+			else
+				NCDatasets.load!(ds["precipitationCal"].var,tmp1,iglat,iglon1,1)
+				NCDatasets.load!(ds["precipitationCal"].var,tmp2,iglat,iglon2,1)
+			end
 			close(ds)
 
 			@debug "$(now()) - NASAPrecipitation.jl - Extraction of data from temporary array for the $(geo.name) GeoRegion"
 			for ilat = 1 : nglat, ilon = 1 : nglon
-				varii = tmp[iglat[ilat],iglon[ilon]]
+				varii = tmp0[ilat,ilon]
 				mskii = msk[ilon,ilat]
 				if (varii != -9999.9f0) && !isnan(mskii)
 					  var[ilon,ilat,it] = varii / 3600
@@ -280,12 +368,29 @@ function download(
 	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
-	tmp  = zeros(Float32,nlat,nlon)
+	tmp0 = zeros(Float32,nlat,nlon)
 	var  = zeros(Float32,nglon,nglat,31)
 
 	if typeof(geo) <: PolyRegion
 		  msk = ginfo.mask
 	else; msk = ones(nglon,nglat)
+	end
+
+	if iglon[1] > iglon[end]
+		shift == true
+		iglon1 = iglon[1] : nlon; niglon1 = length(iglon1)
+		iglon2 = 1 : iglon[end];  niglon2 = length(iglon2)
+		tmp1 = @view tmp0[1:niglon1,:]
+		tmp2 = @view tmp0[1:niglon2,:]
+	else
+		shift = false
+		iglon = iglon[1] : iglon[end]
+	end
+
+	if iglon[1] > iglon[end]
+		iglat = iglat[1] : -1 : iglat[end]
+	else
+		iglat = iglat[1] : iglat[end]
 	end
 
 	for dt in npd.dtbeg : Month(1) : npd.dtend
@@ -300,13 +405,18 @@ function download(
 			ymdfnc = "$(ymd2str(dtii))"
 			npdfnc = "$(npd.fpref).$ymdfnc.$(npd.fsuff)"
 			ds = NCDataset(joinpath(npddir,npdfnc))
-			NCDatasets.load!(ds["precipitation"].var,tmp,:,:,1)
+			if !shift
+				NCDatasets.load!(ds["precipitationCal"].var,tmp0,iglat,iglon,1)
+			else
+				NCDatasets.load!(ds["precipitationCal"].var,tmp1,iglat,iglon1,1)
+				NCDatasets.load!(ds["precipitationCal"].var,tmp2,iglat,iglon2,1)
+			end
 			close(ds)
 
 			@debug "$(now()) - NASAPrecipitation.jl - Extraction of data from temporary array for the $(geo.name) GeoRegion"
 
 			for ilat = 1 : nglat, ilon = 1 : nglon
-				varii = tmp[iglat[ilat],iglon[ilon]]
+				varii = tmp0[ilat,ilon]
 				mskii = msk[ilon,ilat]
 				if (varii != -9999.9f0) && !isnan(mskii)
 					  var[ilon,ilat,dy] = varii / 86400
@@ -342,12 +452,29 @@ function download(
 	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
-	tmp  = zeros(Float32,nlat,nlon)
+	tmp0 = zeros(Float32,nlat,nlon)
 	var  = zeros(Float32,nglon,nglat,12)
 
 	if typeof(geo) <: PolyRegion
 		  msk = ginfo.mask
 	else; msk = ones(nglon,nglat)
+	end
+
+	if iglon[1] > iglon[end]
+		shift == true
+		iglon1 = iglon[1] : nlon; niglon1 = length(iglon1)
+		iglon2 = 1 : iglon[end];  niglon2 = length(iglon2)
+		tmp1 = @view tmp0[1:niglon1,:]
+		tmp2 = @view tmp0[1:niglon2,:]
+	else
+		shift = false
+		iglon = iglon[1] : iglon[end]
+	end
+
+	if iglon[1] > iglon[end]
+		iglat = iglat[1] : -1 : iglat[end]
+	else
+		iglat = iglat[1] : iglat[end]
 	end
 
 	for dt in npd.dtbeg : Year(1) : npd.dtend
@@ -361,13 +488,18 @@ function download(
 			ymdfnc = "$(ymd2str(dtii))"
 			npdfnc = "$(npd.fpref).$ymdfnc.$(npd.fsuff)"
 			ds = NCDataset(joinpath(npddir,npdfnc))
-			NCDatasets.load!(ds["precipitation"].var,tmp,:,:,1)
+			if !shift
+				NCDatasets.load!(ds["precipitationCal"].var,tmp0,iglat,iglon,1)
+			else
+				NCDatasets.load!(ds["precipitationCal"].var,tmp1,iglat,iglon1,1)
+				NCDatasets.load!(ds["precipitationCal"].var,tmp2,iglat,iglon2,1)
+			end
 			close(ds)
 
 			@debug "$(now()) - NASAPrecipitation.jl - Extraction of data from temporary array for the $(geo.name) GeoRegion"
 
 			for ilat = 1 : nglat, ilon = 1 : nglon
-				varii = tmp[iglat[ilat],iglon[ilon]]
+				varii = tmp0[ilat,ilon]
 				mskii = msk[ilon,ilat]
 				if (varii != -9999.9f0) && !isnan(mskii)
 					  var[ilon,ilat,mo] = varii / 3600
