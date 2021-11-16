@@ -235,10 +235,10 @@ function download(
 			npdfnc = "$(npd.fpref).$ymdfnc.$(@sprintf("%02d",mo)).$(npd.fsuff)"
 			ds = NCDataset(joinpath(npddir,npdfnc))
 			if !shift
-				NCDatasets.load!(ds["precipitationCal"].var,tmp0,iglat,iglon,1)
+				NCDatasets.load!(ds["precipitation"].var,tmp0,iglat,iglon,1)
 			else
-				NCDatasets.load!(ds["precipitationCal"].var,tmp1,iglat,iglon1,1)
-				NCDatasets.load!(ds["precipitationCal"].var,tmp2,iglat,iglon2,1)
+				NCDatasets.load!(ds["precipitation"].var,tmp1,iglat,iglon1,1)
+				NCDatasets.load!(ds["precipitation"].var,tmp2,iglat,iglon2,1)
 			end
 			close(ds)
 
@@ -324,10 +324,10 @@ function download(
 			npdfnc = "$(npd.fpref).$ymdfnc.$((it-1)*3).$(npd.fsuff)"
 			ds = NCDataset(joinpath(npddir,npdfnc))
 			if !shift
-				NCDatasets.load!(ds["precipitationCal"].var,tmp0,iglat,iglon,1)
+				NCDatasets.load!(ds["precipitation"].var,tmp0,iglat,iglon,1)
 			else
-				NCDatasets.load!(ds["precipitationCal"].var,tmp1,iglat,iglon1,1)
-				NCDatasets.load!(ds["precipitationCal"].var,tmp2,iglat,iglon2,1)
+				NCDatasets.load!(ds["precipitation"].var,tmp1,iglat,iglon1,1)
+				NCDatasets.load!(ds["precipitation"].var,tmp2,iglat,iglon2,1)
 			end
 			close(ds)
 
@@ -406,10 +406,10 @@ function download(
 			npdfnc = "$(npd.fpref).$ymdfnc.$(npd.fsuff)"
 			ds = NCDataset(joinpath(npddir,npdfnc))
 			if !shift
-				NCDatasets.load!(ds["precipitationCal"].var,tmp0,iglat,iglon,1)
+				NCDatasets.load!(ds["precipitation"].var,tmp0,iglat,iglon,1)
 			else
-				NCDatasets.load!(ds["precipitationCal"].var,tmp1,iglat,iglon1,1)
-				NCDatasets.load!(ds["precipitationCal"].var,tmp2,iglat,iglon2,1)
+				NCDatasets.load!(ds["precipitation"].var,tmp1,iglat,iglon1,1)
+				NCDatasets.load!(ds["precipitation"].var,tmp2,iglat,iglon2,1)
 			end
 			close(ds)
 
@@ -489,10 +489,10 @@ function download(
 			npdfnc = "$(npd.fpref).$ymdfnc.$(npd.fsuff)"
 			ds = NCDataset(joinpath(npddir,npdfnc))
 			if !shift
-				NCDatasets.load!(ds["precipitationCal"].var,tmp0,iglat,iglon,1)
+				NCDatasets.load!(ds["precipitation"].var,tmp0,iglat,iglon,1)
 			else
-				NCDatasets.load!(ds["precipitationCal"].var,tmp1,iglat,iglon1,1)
-				NCDatasets.load!(ds["precipitationCal"].var,tmp2,iglat,iglon2,1)
+				NCDatasets.load!(ds["precipitation"].var,tmp1,iglat,iglon1,1)
+				NCDatasets.load!(ds["precipitation"].var,tmp2,iglat,iglon2,1)
 			end
 			close(ds)
 
