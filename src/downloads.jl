@@ -32,7 +32,7 @@ function download(
 	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
-	tmp0 = zeros(Float32,nlat,nlon)
+	tmp0 = zeros(Float32,nglat,nglon)
 	var  = zeros(Float32,nglon,nglat,48)
 
 	if typeof(geo) <: PolyRegion
@@ -114,7 +114,7 @@ function download(
 	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
-	tmp0 = zeros(Float32,nlat,nlon)
+	tmp0 = zeros(Float32,nglat,nglon)
 	var  = zeros(Float32,nglon,nglat,31)
 
 	if typeof(geo) <: PolyRegion
@@ -198,7 +198,7 @@ function download(
 	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
-	tmp0 = zeros(Float32,nlat,nlon)
+	tmp0 = zeros(Float32,nglat,nglon)
 	var  = zeros(Float32,nglon,nglat,12)
 
 	if typeof(geo) <: PolyRegion
@@ -281,7 +281,7 @@ function download(
 	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
-	tmp0 = zeros(Float32,nlat,nlon)
+	tmp0 = zeros(Float32,nglat,nglon)
 	var  = zeros(Float32,nglon,nglat,8)
 
 	if typeof(geo) <: PolyRegion
@@ -368,7 +368,7 @@ function download(
 	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
-	tmp0 = zeros(Float32,nlat,nlon)
+	tmp0 = zeros(Float32,nglat,nglon)
 	var  = zeros(Float32,nglon,nglat,31)
 
 	if typeof(geo) <: PolyRegion
@@ -452,7 +452,7 @@ function download(
 	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
-	tmp0 = zeros(Float32,nlat,nlon)
+	tmp0 = zeros(Float32,nglat,nglon)
 	var  = zeros(Float32,nglon,nglat,12)
 
 	if typeof(geo) <: PolyRegion
