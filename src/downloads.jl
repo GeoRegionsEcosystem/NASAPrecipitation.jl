@@ -45,13 +45,13 @@ function download(
 		iglon1 = iglon[1] : nlon; niglon1 = length(iglon1)
 		iglon2 = 1 : iglon[end];  niglon2 = length(iglon2)
 		tmp1 = @view tmp0[1:niglon1,:]
-		tmp2 = @view tmp0[1:niglon2,:]
+		tmp2 = @view tmp0[(niglon1+1):niglon2,:]
 	else
 		shift = false
 		iglon = iglon[1] : iglon[end]
 	end
 
-	if iglon[1] > iglon[end]
+	if iglat[1] > iglat[end]
 		iglat = iglat[1] : -1 : iglat[end]
 	else
 		iglat = iglat[1] : iglat[end]
@@ -127,13 +127,13 @@ function download(
 		iglon1 = iglon[1] : nlon; niglon1 = length(iglon1)
 		iglon2 = 1 : iglon[end];  niglon2 = length(iglon2)
 		tmp1 = @view tmp0[1:niglon1,:]
-		tmp2 = @view tmp0[1:niglon2,:]
+		tmp2 = @view tmp0[(niglon1+1):niglon2,:]
 	else
 		shift = false
 		iglon = iglon[1] : iglon[end]
 	end
 
-	if iglon[1] > iglon[end]
+	if iglat[1] > iglat[end]
 		iglat = iglat[1] : -1 : iglat[end]
 	else
 		iglat = iglat[1] : iglat[end]
@@ -211,13 +211,13 @@ function download(
 		iglon1 = iglon[1] : nlon; niglon1 = length(iglon1)
 		iglon2 = 1 : iglon[end];  niglon2 = length(iglon2)
 		tmp1 = @view tmp0[1:niglon1,:]
-		tmp2 = @view tmp0[1:niglon2,:]
+		tmp2 = @view tmp0[(niglon1+1):niglon2,:]
 	else
 		shift = false
 		iglon = iglon[1] : iglon[end]
 	end
 
-	if iglon[1] > iglon[end]
+	if iglat[1] > iglat[end]
 		iglat = iglat[1] : -1 : iglat[end]
 	else
 		iglat = iglat[1] : iglat[end]
@@ -294,13 +294,13 @@ function download(
 		iglon1 = iglon[1] : nlon; niglon1 = length(iglon1)
 		iglon2 = 1 : iglon[end];  niglon2 = length(iglon2)
 		tmp1 = @view tmp0[1:niglon1,:]
-		tmp2 = @view tmp0[1:niglon2,:]
+		tmp2 = @view tmp0[(niglon1+1):niglon2,:]
 	else
 		shift = false
 		iglon = iglon[1] : iglon[end]
 	end
 
-	if iglon[1] > iglon[end]
+	if iglat[1] > iglat[end]
 		iglat = iglat[1] : -1 : iglat[end]
 	else
 		iglat = iglat[1] : iglat[end]
@@ -381,13 +381,13 @@ function download(
 		iglon1 = iglon[1] : nlon; niglon1 = length(iglon1)
 		iglon2 = 1 : iglon[end];  niglon2 = length(iglon2)
 		tmp1 = @view tmp0[1:niglon1,:]
-		tmp2 = @view tmp0[1:niglon2,:]
+		tmp2 = @view tmp0[(niglon1+1):niglon2,:]
 	else
 		shift = false
 		iglon = iglon[1] : iglon[end]
 	end
 
-	if iglon[1] > iglon[end]
+	if iglat[1] > iglat[end]
 		iglat = iglat[1] : -1 : iglat[end]
 	else
 		iglat = iglat[1] : iglat[end]
@@ -465,13 +465,13 @@ function download(
 		iglon1 = iglon[1] : nlon; niglon1 = length(iglon1)
 		iglon2 = 1 : iglon[end];  niglon2 = length(iglon2)
 		tmp1 = @view tmp0[1:niglon1,:]
-		tmp2 = @view tmp0[1:niglon2,:]
+		tmp2 = @view tmp0[(niglon1+1):niglon2,:]
 	else
 		shift = false
 		iglon = iglon[1] : iglon[end]
 	end
 
-	if iglon[1] > iglon[end]
+	if iglat[1] > iglat[end]
 		iglat = iglat[1] : -1 : iglat[end]
 	else
 		iglat = iglat[1] : iglat[end]
