@@ -16,10 +16,10 @@ function download(
 	geo :: GeoRegion = GeoRegion("GLB")
 ) where {ST<:AbstractString, DT<:TimeType}
 
-	@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
+	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
 
 	if geo.regID == "GLB"
-		@info "$(now()) - NASAPrecipitation.jl - Global dataset request has been detected, switching to the IMERG GeoRegion"
+		@info "$(modulelog()) - Global dataset request has been detected, switching to the IMERG GeoRegion"
 		addNPDGeoRegions(); geo = GeoRegion("IMERG")
 	else
 		isinGeoRegion(geo,GeoRegion("IMERG"))
@@ -29,7 +29,7 @@ function download(
 	lon,lat = gpmlonlat(); nlon = length(lon); nlat = length(lat)
 	ginfo = RegionGrid(geo,lon,lat)
 
-	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
+	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
 	tmp0 = zeros(Float32,nglat,nglon)
@@ -59,13 +59,13 @@ function download(
 
 	for dt in npd.dtbeg : Day(1) : npd.dtend
 
-		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) ..."
+		@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) ..."
 
 		ymdfnc = Dates.format(dt,dateformat"yyyymmdd")
 		npddir = joinpath(npd.hroot,"$(year(dt))",@sprintf("%03d",dayofyear(dt)))
 		for it = 1 : 48
 
-			@debug "$(now()) - NASAPrecipitation.jl - Loading data into temporary array for timestep $(fnc[it])"
+			@debug "$(modulelog()) - Loading data into temporary array for timestep $(fnc[it])"
 
 			npdfnc = "$(npd.fpref).$ymdfnc-$(fnc[it]).$(npd.fsuff)"
 			ds = NCDataset(joinpath(npddir,npdfnc))
@@ -77,7 +77,7 @@ function download(
 			end
 			close(ds)
 
-			@debug "$(now()) - NASAPrecipitation.jl - Extraction of data from temporary array for the $(geo.name) GeoRegion"
+			@debug "$(modulelog()) - Extraction of data from temporary array for the $(geo.name) GeoRegion"
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp0[ilat,ilon]
 				mskii = msk[ilon,ilat]
@@ -99,10 +99,10 @@ function download(
 	geo :: GeoRegion = GeoRegion("GLB")
 ) where {ST<:AbstractString, DT<:TimeType}
 
-	@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
+	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
 
 	if geo.regID == "GLB"
-		@info "$(now()) - NASAPrecipitation.jl - Global dataset request has been detected, switching to the IMERG GeoRegion"
+		@info "$(modulelog()) - Global dataset request has been detected, switching to the IMERG GeoRegion"
 		addNPDGeoRegions(); geo = GeoRegion("IMERG")
 	else
 		isinGeoRegion(geo,GeoRegion("IMERG"))
@@ -111,7 +111,7 @@ function download(
 	lon,lat = gpmlonlat(); nlon = length(lon); nlat = length(lat)
 	ginfo = RegionGrid(geo,lon,lat)
 
-	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
+	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
 	tmp0 = zeros(Float32,nglat,nglon)
@@ -141,7 +141,7 @@ function download(
 
 	for dt in npd.dtbeg : Month(1) : npd.dtend
 
-		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt))-$(month(dt)) ..."
+		@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt))-$(month(dt)) ..."
 
 		npddir = joinpath(npd.hroot,"$(yrmo2dir(dt))")
 		ndy = daysinmonth(dt)
@@ -159,7 +159,7 @@ function download(
 			end
 			close(ds)
 
-			@debug "$(now()) - NASAPrecipitation.jl - Extraction of data from temporary array for the $(geo.name) GeoRegion"
+			@debug "$(modulelog()) - Extraction of data from temporary array for the $(geo.name) GeoRegion"
 
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp0[ilat,ilon]
@@ -183,10 +183,10 @@ function download(
 	geo :: GeoRegion = GeoRegion("GLB")
 ) where {ST<:AbstractString, DT<:TimeType}
 
-	@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
+	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
 
 	if geo.regID == "GLB"
-		@info "$(now()) - NASAPrecipitation.jl - Global dataset request has been detected, switching to the IMERG GeoRegion"
+		@info "$(modulelog()) - Global dataset request has been detected, switching to the IMERG GeoRegion"
 		addNPDGeoRegions(); geo = GeoRegion("IMERG")
 	else
 		isinGeoRegion(geo,GeoRegion("IMERG"))
@@ -195,7 +195,7 @@ function download(
 	lon,lat = gpmlonlat(); nlon = length(lon); nlat = length(lat)
 	ginfo = RegionGrid(geo,lon,lat)
 
-	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
+	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
 	tmp0 = zeros(Float32,nglat,nglon)
@@ -225,7 +225,7 @@ function download(
 
 	for dt in npd.dtbeg : Year(1) : npd.dtend
 
-		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt)) ..."
+		@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt)) ..."
 
 		npddir = joinpath(npd.hroot,"$(year(dt))")
 
@@ -242,7 +242,7 @@ function download(
 			end
 			close(ds)
 
-			@debug "$(now()) - NASAPrecipitation.jl - Extraction of data from temporary array for the $(geo.name) GeoRegion"
+			@debug "$(modulelog()) - Extraction of data from temporary array for the $(geo.name) GeoRegion"
 
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp0[ilat,ilon]
@@ -266,10 +266,10 @@ function download(
 	geo :: GeoRegion = GeoRegion("GLB")
 ) where {ST<:AbstractString, DT<:TimeType}
 
-	@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
+	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
 
 	if geo.regID == "GLB"
-		@info "$(now()) - NASAPrecipitation.jl - Global dataset request has been detected, switching to the TRMM GeoRegion"
+		@info "$(modulelog()) - Global dataset request has been detected, switching to the TRMM GeoRegion"
 		addNPDGeoRegions(); geo = GeoRegion("TRMM")
 	else
 		isinGeoRegion(geo,GeoRegion("TRMM"))
@@ -278,7 +278,7 @@ function download(
 	lon,lat = trmmlonloat(); nlon = length(lon); nlat = length(lat)
 	ginfo = RegionGrid(geo,lon,lat)
 
-	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
+	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
 	tmp0 = zeros(Float32,nglat,nglon)
@@ -308,13 +308,13 @@ function download(
 
 	for dt in npd.dtbeg : Day(1) : npd.dtend
 
-		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) ..."
+		@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) ..."
 
 		ymdfnc = Dates.format(dt,dateformat"yyyymmdd")
 
 		for it = 1 : 8
 
-			@debug "$(now()) - NASAPrecipitation.jl - Loading data into temporary array for timestep $(fnc[it])"
+			@debug "$(modulelog()) - Loading data into temporary array for timestep $(fnc[it])"
 
 			if isone(it); di = dt-Day(1)
 				  npddir = joinpath(npd.hroot,"$(year(di))",@sprintf("%03d",dayofyear(di)))
@@ -331,7 +331,7 @@ function download(
 			end
 			close(ds)
 
-			@debug "$(now()) - NASAPrecipitation.jl - Extraction of data from temporary array for the $(geo.name) GeoRegion"
+			@debug "$(modulelog()) - Extraction of data from temporary array for the $(geo.name) GeoRegion"
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp0[ilat,ilon]
 				mskii = msk[ilon,ilat]
@@ -353,10 +353,10 @@ function download(
 	geo :: GeoRegion = GeoRegion("GLB")
 ) where {ST<:AbstractString, DT<:TimeType}
 
-	@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
+	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
 
 	if geo.regID == "GLB"
-		@info "$(now()) - NASAPrecipitation.jl - Global dataset request has been detected, switching to the TRMM GeoRegion"
+		@info "$(modulelog()) - Global dataset request has been detected, switching to the TRMM GeoRegion"
 		addNPDGeoRegions(); geo = GeoRegion("TRMM")
 	else
 		isinGeoRegion(geo,GeoRegion("TRMM"))
@@ -365,7 +365,7 @@ function download(
 	lon,lat = trmmlonlat(); nlon = length(lon); nlat = length(lat)
 	ginfo = RegionGrid(geo,lon,lat)
 
-	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
+	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
 	tmp0 = zeros(Float32,nglat,nglon)
@@ -395,7 +395,7 @@ function download(
 
 	for dt in npd.dtbeg : Month(1) : npd.dtend
 
-		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt))-$(month(dt)) ..."
+		@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt))-$(month(dt)) ..."
 
 		npddir = joinpath(npd.hroot,"$(yrmo2dir(dt))")
 		ndy = daysinmonth(dt)
@@ -413,7 +413,7 @@ function download(
 			end
 			close(ds)
 
-			@debug "$(now()) - NASAPrecipitation.jl - Extraction of data from temporary array for the $(geo.name) GeoRegion"
+			@debug "$(modulelog()) - Extraction of data from temporary array for the $(geo.name) GeoRegion"
 
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp0[ilat,ilon]
@@ -437,10 +437,10 @@ function download(
 	geo :: GeoRegion = GeoRegion("GLB")
 ) where {ST<:AbstractString, DT<:TimeType}
 
-	@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
+	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
 
 	if geo.regID == "GLB"
-		@info "$(now()) - NASAPrecipitation.jl - Global dataset request has been detected, switching to the TRMM GeoRegion"
+		@info "$(modulelog()) - Global dataset request has been detected, switching to the TRMM GeoRegion"
 		addNPDGeoRegions(); geo = GeoRegion("TRMM")
 	else
 		isinGeoRegion(geo,GeoRegion("TRMM"))
@@ -449,7 +449,7 @@ function download(
 	lon,lat = trmmlonlat(); nlon = length(lon); nlat = length(lat)
 	ginfo = RegionGrid(geo,lon,lat)
 
-	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
+	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
 	tmp0 = zeros(Float32,nglat,nglon)
@@ -479,7 +479,7 @@ function download(
 
 	for dt in npd.dtbeg : Year(1) : npd.dtend
 
-		@info "$(now()) - NASAPrecipitation.jl - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt)) ..."
+		@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt)) ..."
 
 		npddir = joinpath(npd.hroot,"$(year(dt))")
 
@@ -496,7 +496,7 @@ function download(
 			end
 			close(ds)
 
-			@debug "$(now()) - NASAPrecipitation.jl - Extraction of data from temporary array for the $(geo.name) GeoRegion"
+			@debug "$(modulelog()) - Extraction of data from temporary array for the $(geo.name) GeoRegion"
 
 			for ilat = 1 : nglat, ilon = 1 : nglon
 				varii = tmp0[ilat,ilon]

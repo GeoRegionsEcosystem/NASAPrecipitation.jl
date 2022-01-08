@@ -48,7 +48,7 @@ function IMERGEarlyHH(
     sroot :: AbstractString = homedir(),
 )
 
-	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Early IMERG Half-Hourly data to be downloaded"
+	@info "$(modulelog()) - Setting up data structure containing information on Early IMERG Half-Hourly data to be downloaded"
 
     fol = joinpath(sroot,"imergearlyhh"); if !isdir(fol); mkpath(fol) end
 
@@ -95,7 +95,7 @@ function IMERGLateHH(
     sroot :: AbstractString = homedir(),
 )
 
-	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Late IMERG Half-Hourly data to be downloaded"
+	@info "$(modulelog()) - Setting up data structure containing information on Late IMERG Half-Hourly data to be downloaded"
 
     fol = joinpath(sroot,"imerglatehh"); if !isdir(fol); mkpath(fol) end
 
@@ -142,7 +142,7 @@ function IMERGFinalHH(
     sroot :: AbstractString = homedir(),
 )
 
-	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Final IMERG Half-Hourly data to be downloaded"
+	@info "$(modulelog()) - Setting up data structure containing information on Final IMERG Half-Hourly data to be downloaded"
 
     fol = joinpath(sroot,"imergfinalhh"); if !isdir(fol); mkpath(fol) end
 

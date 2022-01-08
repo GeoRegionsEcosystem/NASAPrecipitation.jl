@@ -48,7 +48,7 @@ function TRMMMonthly(
     sroot :: AbstractString = homedir(),
 )
 
-	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on TRMM Monthly data to be downloaded"
+	@info "$(modulelog()) - Setting up data structure containing information on TRMM Monthly data to be downloaded"
 
     fol = joinpath(sroot,"trmmmonthly"); if !isdir(fol); mkpath(fol) end
 

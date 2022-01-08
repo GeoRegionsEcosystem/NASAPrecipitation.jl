@@ -4,17 +4,17 @@
 Checks for the three GeoRegions (GPM, TRMM, TRMMLSM) required by NASAPrecipitation.jl, and adds them if they do not exist.
 """
 function addNPDGeoRegions()
-	@info "$(now()) - NASAPrecipitation.jl - Checking to see if GeoRegions required by NASAPrecipitation.jl have been added to the list of available GeoRegions"
+	@info "$(modulelog()) - Checking to see if GeoRegions required by NASAPrecipitation.jl have been added to the list of available GeoRegions"
     disable_logging(Logging.Warn)
 	if !isGeoRegion("IMERG",throw=false) ||
 	    !isGeoRegion("TRMM",throw=false) ||
 	    !isGeoRegion("TRMMLSM",throw=false)
         disable_logging(Logging.Debug)
-        @info "$(now()) - NASAPrecipitation.jl - At least one of the required three GeoRegions (IMERG, TRMM, TRMMLSM) has not been added, proceeding to add them again ..."
+        @info "$(modulelog()) - At least one of the required three GeoRegions (IMERG, TRMM, TRMMLSM) has not been added, proceeding to add them again ..."
 	    addGeoRegions(joinpath(@__DIR__,"NPDGeoRegions.txt"))
     else
         disable_logging(Logging.Debug)
-        @info "$(now()) - NASAPrecipitation.jl - All of the required three GeoRegions (IMERG, TRMM, TRMMLSM) have been added"
+        @info "$(modulelog()) - All of the required three GeoRegions (IMERG, TRMM, TRMMLSM) have been added"
 	end
 	return
 end

@@ -48,7 +48,7 @@ function TRMMDaily(
     sroot :: AbstractString = homedir(),
 )
 
-	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Final TRMM Daily data to be downloaded"
+	@info "$(modulelog()) - Setting up data structure containing information on Final TRMM Daily data to be downloaded"
 
     fol = joinpath(sroot,"trmmdaily"); if !isdir(fol); mkpath(fol) end
 
@@ -98,7 +98,7 @@ function TRMMDailyNRT(
     sroot :: AbstractString = homedir(),
 )
 
-	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Near Real-Time TRMM Daily data to be downloaded"
+	@info "$(modulelog()) - Setting up data structure containing information on Near Real-Time TRMM Daily data to be downloaded"
 
     fol = joinpath(sroot,"trmmdailynrt"); if !isdir(fol); mkpath(fol) end
 

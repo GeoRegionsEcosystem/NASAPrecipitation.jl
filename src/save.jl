@@ -6,7 +6,7 @@ function save(
 	ginfo :: RegionGrid,
 )
 
-	@info "$(now()) - NASAPrecipitation.jl - Saving $(npd.lname) data in the $(geo.name) GeoRegion for $(dt)"
+	@info "$(modulelog()) - Saving $(npd.lname) data in the $(geo.name) GeoRegion for $(dt)"
 
 	ds,fnc = makenpdnc(npd,geo,dt)
 
@@ -36,7 +36,7 @@ function save(
 
 	close(ds)
 
-	@info "$(now()) - NASAPrecipitation.jl - $(npd.lname) data in the $(geo.name) GeoRegion for $(dt) has been saved into $(fnc)"
+	@info "$(modulelog()) - $(npd.lname) data in the $(geo.name) GeoRegion for $(dt) has been saved into $(fnc)"
 
 end
 
@@ -50,11 +50,11 @@ function makenpdnc(
 	if !isdir(fol); mkpath(fol) end
 	fnc = joinpath(fol,"$(npd.npdID)-$(geo.regID)-$(ymd2str(dt)).nc")
 	if isfile(fnc)
-		@info "$(now()) - NASAPrecipitation.jl - Overwrite stale NetCDF file $(fnc) ..."
+		@info "$(modulelog()) - Overwrite stale NetCDF file $(fnc) ..."
         rm(fnc);
 	end
 
-	@info "$(now()) - NASAPrecipitation.jl - Creating NetCDF file $(fnc) ..."
+	@info "$(modulelog()) - Creating NetCDF file $(fnc) ..."
 	ds = NCDataset(fnc,"c",attrib = Dict(
 		"doi"				=> npd.doi,
 		"AlgorithmID"		=> "3IMERGHH",
@@ -75,11 +75,11 @@ function makenpdnc(
 	if !isdir(fol); mkpath(fol) end
 	fnc = joinpath(fol,"$(npd.npdID)-$(geo.regID)-$(yrmo2str(dt)).nc")
 	if isfile(fnc)
-		@info "$(now()) - NASAPrecipitation.jl - Overwrite stale NetCDF file $(fnc) ..."
+		@info "$(modulelog()) - Overwrite stale NetCDF file $(fnc) ..."
 		rm(fnc);
 	end
 
-	@info "$(now()) - NASAPrecipitation.jl - Creating NetCDF file $(fnc) ..."
+	@info "$(modulelog()) - Creating NetCDF file $(fnc) ..."
 	ds = NCDataset(fnc,"c",attrib = Dict(
 		"doi"				=> npd.doi,
 		"AlgorithmID"		=> "3IMERGD",
@@ -99,11 +99,11 @@ function makenpdnc(
 	if !isdir(fol); mkpath(fol) end
 	fnc = joinpath(fol,"$(npd.npdID)-$(geo.regID)-$(year(dt)).nc")
 	if isfile(fnc)
-		@info "$(now()) - NASAPrecipitation.jl - Overwrite stale NetCDF file $(fnc) ..."
+		@info "$(modulelog()) - Overwrite stale NetCDF file $(fnc) ..."
 		rm(fnc);
 	end
 
-	@info "$(now()) - NASAPrecipitation.jl - Creating NetCDF file $(fnc) ..."
+	@info "$(modulelog()) - Creating NetCDF file $(fnc) ..."
 	ds = NCDataset(fnc,"c",attrib = Dict(
 		"doi"				=> npd.doi,
 		"AlgorithmID"		=> "3IMERGM",
@@ -124,11 +124,11 @@ function makenpdnc(
 	if !isdir(fol); mkpath(fol) end
 	fnc = joinpath(fol,"$(npd.npdID)-$(geo.regID)-$(ymd2str(dt)).nc")
 	if isfile(fnc)
-		@info "$(now()) - NASAPrecipitation.jl - Overwrite stale NetCDF file $(fnc) ..."
+		@info "$(modulelog()) - Overwrite stale NetCDF file $(fnc) ..."
         rm(fnc);
 	end
 
-	@info "$(now()) - NASAPrecipitation.jl - Creating NetCDF file $(fnc) ..."
+	@info "$(modulelog()) - Creating NetCDF file $(fnc) ..."
 	ds = NCDataset(fnc,"c",attrib = Dict(
 		"doi"				=> npd.doi,
 		"AlgorithmID"		=> "3B42",
@@ -149,11 +149,11 @@ function makenpdnc(
 	if !isdir(fol); mkpath(fol) end
 	fnc = joinpath(fol,"$(npd.npdID)-$(geo.regID)-$(yrmo2str(dt)).nc")
 	if isfile(fnc)
-		@info "$(now()) - NASAPrecipitation.jl - Overwrite stale NetCDF file $(fnc) ..."
+		@info "$(modulelog()) - Overwrite stale NetCDF file $(fnc) ..."
 		rm(fnc);
 	end
 
-	@info "$(now()) - NASAPrecipitation.jl - Creating NetCDF file $(fnc) ..."
+	@info "$(modulelog()) - Creating NetCDF file $(fnc) ..."
 	ds = NCDataset(fnc,"c",attrib = Dict(
 		"doi"				=> npd.doi,
 	))
@@ -172,11 +172,11 @@ function makenpdnc(
 	if !isdir(fol); mkpath(fol) end
 	fnc = joinpath(fol,"$(npd.npdID)-$(geo.regID)-$(year(dt)).nc")
 	if isfile(fnc)
-		@info "$(now()) - NASAPrecipitation.jl - Overwrite stale NetCDF file $(fnc) ..."
+		@info "$(modulelog()) - Overwrite stale NetCDF file $(fnc) ..."
 		rm(fnc);
 	end
 
-	@info "$(now()) - NASAPrecipitation.jl - Creating NetCDF file $(fnc) ..."
+	@info "$(modulelog()) - Creating NetCDF file $(fnc) ..."
 	ds = NCDataset(fnc,"c",attrib = Dict(
 		"doi"				=> npd.doi,
 		"AlgorithmID"		=> "3B43",

@@ -19,10 +19,10 @@ function getTRMMlsm(
     sroot :: AbstractString = homedir(),
 )
 
-    @info "$(now()) - NASAPrecipitation.jl - Retrieving Land-Sea Mask for the TRMM-TMPA dataset"
+    @info "$(modulelog()) - Retrieving Land-Sea Mask for the TRMM-TMPA dataset"
 
 	if geo.regID == "GLB"
-		@info "$(now()) - NASAPrecipitation.jl - Global dataset request has been detected, switching to the TRMM LandSea Mask GeoRegion"
+		@info "$(modulelog()) - Global dataset request has been detected, switching to the TRMM LandSea Mask GeoRegion"
 		addNPDGeoRegions(); geo = GeoRegion("TRMMLSM")
 	else
 		isinGeoRegion(geo,GeoRegion("TRMMLSM"))
@@ -31,20 +31,20 @@ function getTRMMlsm(
     lon,lat = trmmlonlat(full=true); nlon = length(lon); nlat = length(lat)
 	ginfo = RegionGrid(geo,lon,lat)
 
-	@info "$(now()) - NASAPrecipitation.jl - Preallocating temporary array for extraction of TRMM-TMPA Land-Sea Mask data for the $(geo.name) GeoRegion from the original global gridded dataset"
+	@info "$(modulelog()) - Preallocating temporary array for extraction of TRMM-TMPA Land-Sea Mask data for the $(geo.name) GeoRegion from the original global gridded dataset"
 	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
 	tmp  = zeros(Float32,nlat,nlon)
 	var  = zeros(Float32,nglon,nglat)
 
-	@info "$(now()) - NASAPrecipitation.jl - Retrieving the original TRMM-TMPA Land-Sea Mask data from NASA's EOSDIS OPeNDAP servers"
+	@info "$(modulelog()) - Retrieving the original TRMM-TMPA Land-Sea Mask data from NASA's EOSDIS OPeNDAP servers"
 	hroot = "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/AUXILIARY"
     npdnc = "TRMM_TMPA_LandSeaMask.2/TRMM_TMPA_LandSeaMask.2.nc4"
     npdds = NCDataset(joinpath(hroot,npdnc))
 	NCDatasets.load!(npdds["landseamask"].var,tmp,:,:)
 	close(npdds)
 
-	@debug "$(now()) - NASAPrecipitation.jl - Extraction of data from temporary array for the $(geo.name) GeoRegion"
+	@debug "$(modulelog()) - Extraction of data from temporary array for the $(geo.name) GeoRegion"
 
 	extractregionlsm!(var,tmp,ginfo)
 
@@ -59,16 +59,16 @@ function saveTRMMlsm(
 	sroot :: AbstractString
 )
 
-	@info "$(now()) - NASAPrecipitation.jl - Saving TRMM-TMPA Land-Sea Mask data in the $(geo.name) GeoRegion"
+	@info "$(modulelog()) - Saving TRMM-TMPA Land-Sea Mask data in the $(geo.name) GeoRegion"
 
 	if !isdir(sroot); mkpath(sroot) end
 	fnc = joinpath(sroot,"trmmlsm-$(geo.regID).nc")
 	if isfile(fnc)
-		@info "$(now()) - NASAPrecipitation.jl - Overwrite stale NetCDF file $(fnc) ..."
+		@info "$(modulelog()) - Overwrite stale NetCDF file $(fnc) ..."
 		rm(fnc);
 	end
 
-	@info "$(now()) - NASAPrecipitation.jl - Creating NetCDF file $(fnc) ..."
+	@info "$(modulelog()) - Creating NetCDF file $(fnc) ..."
 	ds = NCDataset(fnc,"c",attrib = Dict(
 		"Conventions" => "CF-1.4",
 		"NCO"         => "4.5.1",
@@ -105,6 +105,6 @@ function saveTRMMlsm(
 
 	close(ds)
 
-	@info "$(now()) - NASAPrecipitation.jl - TRMM-TMPA Land-Sea Mask data in the $(geo.name) GeoRegion has been saved into $(fnc)"
+	@info "$(modulelog()) - TRMM-TMPA Land-Sea Mask data in the $(geo.name) GeoRegion has been saved into $(fnc)"
 
 end

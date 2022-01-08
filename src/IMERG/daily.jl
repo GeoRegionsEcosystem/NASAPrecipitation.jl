@@ -48,7 +48,7 @@ function IMERGEarlyDY(
     sroot :: AbstractString = homedir(),
 )
 
-	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Early IMERG Daily data to be downloaded"
+	@info "$(modulelog()) - Setting up data structure containing information on Early IMERG Daily data to be downloaded"
 
     fol = joinpath(sroot,"imergearlydy"); if !isdir(fol); mkpath(fol) end
 
@@ -98,7 +98,7 @@ function IMERGLateDY(
     sroot :: AbstractString = homedir(),
 )
 
-	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Late IMERG Daily data to be downloaded"
+	@info "$(modulelog()) - Setting up data structure containing information on Late IMERG Daily data to be downloaded"
 
     fol = joinpath(sroot,"imerglatedy"); if !isdir(fol); mkpath(fol) end
 
@@ -148,7 +148,7 @@ function IMERGFinalDY(
     sroot :: AbstractString = homedir(),
 )
 
-	@info "$(now()) - NASAPrecipitation.jl - Setting up data structure containing information on Final IMERG Daily data to be downloaded"
+	@info "$(modulelog()) - Setting up data structure containing information on Final IMERG Daily data to be downloaded"
 
     fol = joinpath(sroot,"imergfinaldy"); if !isdir(fol); mkpath(fol) end
 
