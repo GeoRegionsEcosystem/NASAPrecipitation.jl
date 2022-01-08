@@ -11,7 +11,7 @@ using Reexport
 @reexport using Dates
 @reexport using GeoRegions
 
-import Base: download, show
+import Base: download, show, read
 
 ## Exporting the following functions:
 export
@@ -23,9 +23,9 @@ export
         TRMMDaily,   TRMMDailyNRT,
         TRMMMonthly,
 
-        getIMERGlsm, getTRMMlsm, addNPDGeoRegions
+        getIMERGlsm, getTRMMlsm, addNPDGeoRegions,
 
-        download
+        download, read, npdfnc
 
 ## Abstract types
 """
@@ -106,6 +106,7 @@ include("TRMM/landseamask.jl")
 
 include("downloads.jl")
 include("save.jl")
+include("read.jl")
 include("backend.jl")
 
 end
