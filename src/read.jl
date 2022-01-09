@@ -1,7 +1,7 @@
 """
-    download(
+    read(
         npd :: NASAPrecipitationDataset,
-        geo :: GeoRegion = GeoRegion("GLB"),
+        geo :: GeoRegion,
         dt  :: TimeType;
         lonlat :: Bool = false
     ) -> NCDataset
@@ -13,13 +13,17 @@ Arguments
 - `npd` : a `NASAPrecipitationDataset` specifying the dataset details and date download range
 - `geo` : a `GeoRegion` (see [GeoRegions.jl](https://github.com/JuliaClimate/GeoRegions.jl)) that sets the geographic bounds of the data array in lon-lat
 - `dt`  : A specified date. The NCDataset retrieved may will contain data for the date, although it may also contain data for other dates depending on the `NASAPrecipitationDataset` specified by `npd`
+
+Keyword Arguments
+=================
+- `lonlat` : if `true`, then return the longitude and latitude vectors for the dataset. Otherwise only the NCDataset type will be returned.
 """
 function read(
-	npd :: IMERGHalfHourly{ST,DT},
+	npd :: NASAPrecipitationDataset,
 	geo :: GeoRegion,
     dt  :: TimeType;
     lonlat :: Bool = false
-) where {ST<:AbstractString, DT<:TimeType}
+)
 
     pnc = npdfnc(npd,geo,dt)
     if !isfile(pnc)
@@ -35,6 +39,21 @@ function read(
 
 end
 
+"""
+    npdfnc(
+        npd :: NASAPrecipitationDataset,
+        geo :: GeoRegion,
+        dt  :: TimeType
+    ) -> String
+
+Returns of the path of the file for the NASA Precipitation dataset specified by `npd` for a GeoRegion specified by `geo` at a date specified by `dt`.
+
+Arguments
+=========
+- `npd` : a `NASAPrecipitationDataset` specifying the dataset details and date download range
+- `geo` : a `GeoRegion` (see [GeoRegions.jl](https://github.com/JuliaClimate/GeoRegions.jl)) that sets the geographic bounds of the data array in lon-lat
+- `dt`  : A specified date. The NCDataset retrieved may will contain data for the date, although it may also contain data for other dates depending on the `NASAPrecipitationDataset` specified by `npd`
+"""
 function npdfnc(
     npd :: Union{IMERGHalfHourly{ST,DT},TRMM3Hourly{ST,DT}},
 	geo :: GeoRegion,

@@ -9,14 +9,15 @@ makedocs(;
     sitename = "NASAPrecipitation.jl",
     pages    = [
         "Home"                        => "index.md",
-        "Dataset Basics" => [
-            "NASA Precipitation Datasets"    => "datasets/npd.md",
+        "NASAPrecipitation Datasets" => [
+            "The NASAPrecipitation Dataset Type" => "datasets/npd.md",
             "GPM IMERG Datasets"             => "datasets/imerg.md",
             "TRMM TMPA Datasets"             => "datasets/trmm.md",
             "Land-Sea Mask Datasets"         => "datasets/landseamask.md",
-            "A Basic Primer to `GeoRegion`s" => "datasets/georegions.md",
         ],
-        "Downloading Data" => "download.md",
+        "A Basic Primer to `GeoRegion`s" => "georegions/basics.md",
+        "Downloading Datasets" => "download.md",
+        "Reading Downloaded Data" => "read.md",
         "Examples" => [
             "Downloading IMERG Data"  => "examples/download.md",
             "Land-Sea Mask Filtering" => "examples/landseamask.md",

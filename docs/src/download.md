@@ -22,7 +22,7 @@ For a full example on downloading these datasets, look at the page *[Downloading
 NASAPrecipitation.download
 ```
 
-For a basic introduction to the concept of a `GeoRegion`, you can refer to the page *[A Basic Primer to `GeoRegion`s](datasets/georegions.md)*.  Alternatively you can refer to the [GeoRegions.jl documentation](https://juliaclimate.github.io/GeoRegions.jl/dev/index.html) for a comprehensive tutorial.
+For a basic introduction to the concept of a `GeoRegion`, you can refer to the page *[A Basic Primer to `GeoRegion`s](georegions/basics.md)*.  Alternatively you can refer to the [GeoRegions.jl documentation](https://juliaclimate.github.io/GeoRegions.jl/dev/index.html) for a comprehensive tutorial.
 
 ## Downloading Land-Sea Masks
 
