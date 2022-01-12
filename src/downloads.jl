@@ -44,8 +44,8 @@ function download(
 		shift = true
 		iglon1 = iglon[1] : nlon; niglon1 = length(iglon1)
 		iglon2 = 1 : iglon[end];  niglon2 = length(iglon2)
-		tmp1 = @view tmp0[1:niglon1,:]
-		tmp2 = @view tmp0[(niglon1+1):niglon2,:]
+		tmp1 = @view tmp0[:,1:niglon1]
+		tmp2 = @view tmp0[:,(niglon1+1):niglon2]
 	else
 		shift = false
 		iglon = iglon[1] : iglon[end]
@@ -126,8 +126,8 @@ function download(
 		shift = true
 		iglon1 = iglon[1] : nlon; niglon1 = length(iglon1)
 		iglon2 = 1 : iglon[end];  niglon2 = length(iglon2)
-		tmp1 = @view tmp0[1:niglon1,:]
-		tmp2 = @view tmp0[(niglon1+1):niglon2,:]
+		tmp1 = @view tmp0[:,1:niglon1]
+		tmp2 = @view tmp0[:,(niglon1+1):niglon2]
 	else
 		shift = false
 		iglon = iglon[1] : iglon[end]
@@ -210,8 +210,8 @@ function download(
 		shift = true
 		iglon1 = iglon[1] : nlon; niglon1 = length(iglon1)
 		iglon2 = 1 : iglon[end];  niglon2 = length(iglon2)
-		tmp1 = @view tmp0[1:niglon1,:]
-		tmp2 = @view tmp0[(niglon1+1):niglon2,:]
+		tmp1 = @view tmp0[:,1:niglon1]
+		tmp2 = @view tmp0[:,(niglon1+1):niglon2]
 	else
 		shift = false
 		iglon = iglon[1] : iglon[end]
@@ -293,8 +293,8 @@ function download(
 		shift = true
 		iglon1 = iglon[1] : nlon; niglon1 = length(iglon1)
 		iglon2 = 1 : iglon[end];  niglon2 = length(iglon2)
-		tmp1 = @view tmp0[1:niglon1,:]
-		tmp2 = @view tmp0[(niglon1+1):niglon2,:]
+		tmp1 = @view tmp0[:,1:niglon1]
+		tmp2 = @view tmp0[:,(niglon1+1):niglon2]
 	else
 		shift = false
 		iglon = iglon[1] : iglon[end]
@@ -380,8 +380,8 @@ function download(
 		shift = true
 		iglon1 = iglon[1] : nlon; niglon1 = length(iglon1)
 		iglon2 = 1 : iglon[end];  niglon2 = length(iglon2)
-		tmp1 = @view tmp0[1:niglon1,:]
-		tmp2 = @view tmp0[(niglon1+1):niglon2,:]
+		tmp1 = @view tmp0[:,1:niglon1]
+		tmp2 = @view tmp0[:,(niglon1+1):niglon2]
 	else
 		shift = false
 		iglon = iglon[1] : iglon[end]
@@ -464,8 +464,8 @@ function download(
 		shift = true
 		iglon1 = iglon[1] : nlon; niglon1 = length(iglon1)
 		iglon2 = 1 : iglon[end];  niglon2 = length(iglon2)
-		tmp1 = @view tmp0[1:niglon1,:]
-		tmp2 = @view tmp0[(niglon1+1):niglon2,:]
+		tmp1 = @view tmp0[:,1:niglon1]
+		tmp2 = @view tmp0[:,(niglon1+1):niglon2]
 	else
 		shift = false
 		iglon = iglon[1] : iglon[end]
