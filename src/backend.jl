@@ -61,6 +61,37 @@ function trmmlonlat(;full::Bool=false)
 	end
 
     return lon,lat
+
+end
+
+function trmmcheckdates(
+    dtbeg :: TimeType,
+    dtend :: TimeType
+)
+
+    if dtbeg < Date(1998,1,1)
+        error("$(modulelog()) - You have specified a date that is before the earliest available date of TRMM TMPA data, 1998-01-01.")
+    end
+
+    if dtend > Date(2019,12,31)
+        error("$(modulelog()) - You have specified a date that is after the latest available date of TRMM TMPA data, 2019-12-31.")
+    end
+
+end
+
+function imergcheckdates(
+    dtbeg :: TimeType,
+    dtend :: TimeType
+)
+
+    if dtbeg < Date(2000,6,1)
+        error("$(modulelog()) - You have specified a date that is before the earliest available date of GPM IMERG data, 2000-06-01.")
+    end
+
+    if dtend > (Dates.now() - Day(3))
+        error("$(modulelog()) - You have specified a date that is later than the latest available date of GPM IMERG Near-Realtime data, $(now() - Day(3)).")
+    end
+
 end
 
 function ncoffsetscale(data::AbstractArray{<:Real},init=0)

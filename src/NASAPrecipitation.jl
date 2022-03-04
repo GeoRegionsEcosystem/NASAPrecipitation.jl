@@ -23,7 +23,7 @@ export
         TRMMDaily,   TRMMDailyNRT,
         TRMMMonthly,
 
-        getIMERGlsm, getTRMMlsm, addNPDGeoRegions,
+        getLandSea, addNPDGeoRegions,
 
         download, read, npdfnc
 
@@ -97,12 +97,14 @@ end
 include("IMERG/halfhourly.jl")
 include("IMERG/daily.jl")
 include("IMERG/monthly.jl")
-include("IMERG/landseamask.jl")
 
 include("TRMM/3hourly.jl")
 include("TRMM/daily.jl")
 include("TRMM/monthly.jl")
-include("TRMM/landseamask.jl")
+
+include("landsea/landsea.jl")
+include("landsea/imerg.jl")
+include("landsea/trmm.jl")
 
 include("downloads.jl")
 include("save.jl")
