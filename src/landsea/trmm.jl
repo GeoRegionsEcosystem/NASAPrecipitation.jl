@@ -1,6 +1,8 @@
 function getLandSea(
 	npd :: TRMMDataset,
-	geo :: GeoRegion = GeoRegion("GLB")
+	geo :: GeoRegion = GeoRegion("GLB");
+    returnlsd = true,
+    FT = Float32
 )
 
 	if geo.regID == "GLB"
@@ -28,7 +30,7 @@ function getLandSea(
 		glsm = gds["lsm"][:]
 		close(gds)
 
-		rinfo = GeoRegionGrid(geo,glon,glat)
+		rinfo = RegionGrid(geo,glon,glat)
 		ilon  = rinfo.ilon; nlon = length(rinfo.ilon)
 		ilat  = rinfo.ilat; nlat = length(rinfo.ilat)
 		rlsm  = zeros(nlon,nlat)
@@ -90,7 +92,7 @@ function downloadLandSea(
 	NCDatasets.load!(npdds["landseamask"].var,var,:,:)
 	close(npdds)
 
-	saveLandSea(npd,GeoRegion("TRMMLSM"),lon,lat,lsm,mask)
+	saveLandSea(npd,GeoRegion("TRMMLSM"),lon,lat,var,mask)
 
 end
 
@@ -122,8 +124,6 @@ function saveLandSea(
     ds.dim["longitude"] = length(lon)
     ds.dim["latitude"]  = length(lat)
 
-    lscale,loffset = ncoffsetscale(lsm)
-
     nclon = defVar(ds,"longitude",Float32,("longitude",),attrib = Dict(
         "units"     => "degrees_east",
         "long_name" => "longitude",
@@ -138,10 +138,6 @@ function saveLandSea(
         "long_name"     => "land_sea_mask",
         "full_name"     => "Land-Sea Mask",
         "units"         => "0-1",
-        "scale_factor"  => lscale,
-        "add_offset"    => loffset,
-        "_FillValue"    => Int16(-32767),
-        "missing_value" => Int16(-32767),
     ))
 
     ncmsk = defVar(ds,"mask",Int16,("longitude","latitude",),attrib = Dict(

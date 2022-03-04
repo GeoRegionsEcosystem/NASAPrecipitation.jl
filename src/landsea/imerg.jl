@@ -1,14 +1,16 @@
 function getLandSea(
 	npd :: IMERGDataset,
-	geo :: GeoRegion = GeoRegion("GLB")
+	geo :: GeoRegion = GeoRegion("GLB");
+    returnlsd = true,
+    FT = Float32
 )
 
 	if geo.regID == "GLB"
 		@info "$(modulelog()) - Global dataset request has been detected, switching to the IMERG LandSea Mask GeoRegion"
-		addNPDGeoRegions(); geo = GeoRegion("IMERGLSM")
+		addNPDGeoRegions(); geo = GeoRegion("IMERG")
 	else
-		@info "$(modulelog()) - Checking to see if the specified GeoRegion \"$(geo.regID)\" is within the \"IMERGLSM\" GeoRegion"
-		isinGeoRegion(geo,GeoRegion("IMERGLSM"))
+		@info "$(modulelog()) - Checking to see if the specified GeoRegion \"$(geo.regID)\" is within the \"IMERG\" GeoRegion"
+		isinGeoRegion(geo,GeoRegion("IMERG"))
 	end
 	lsmfnc = joinpath(npd.smask,"imergmask-$(geo.regID).nc")
 
@@ -16,7 +18,7 @@ function getLandSea(
 
 		@info "$(modulelog()) - The IMERG Land-Sea mask dataset for the \"$(geo.regID)\" GeoRegion is not available, extracting from Global IMERG Land-Sea mask dataset ..."
 
-		glbfnc = joinpath(npd.smask,"imergmask-IMERGLSM.nc")
+		glbfnc = joinpath(npd.smask,"imergmask-IMERG.nc")
 		if !isfile(glbfnc)
 			@info "$(modulelog()) - The Global IMERG Land-Sea mask dataset for the \"$(geo.regID)\" GeoRegion is not available, downloading from the Climate Data Store ..."
 			downloadLandSea(npd)
@@ -28,7 +30,7 @@ function getLandSea(
 		glsm = gds["lsm"][:]
 		close(gds)
 
-		rinfo = GeoRegionGrid(geo,glon,glat)
+		rinfo = RegionGrid(geo,glon,glat)
 		ilon  = rinfo.ilon; nlon = length(rinfo.ilon)
 		ilat  = rinfo.ilat; nlat = length(rinfo.ilat)
 		rlsm  = zeros(nlon,nlat)
@@ -77,20 +79,20 @@ function downloadLandSea(
 	npd :: IMERGDataset
 )
 
-	lon,lat = IMERGlonlat(full=true)
+	lon,lat = gpmlonlat()
 	nlon = length(lon)
 	nlat = length(lat)
 	var  = zeros(Float32,nlon,nlat)
 	mask = ones(Int16,nlon,nlat)
 
-	@info "$(modulelog()) - Retrieving the original IMERG-TMPA Land-Sea Mask data from NASA's EOSDIS OPeNDAP servers"
+	@info "$(modulelog()) - Retrieving the original IMERG Land-Sea Mask data from NASA's EOSDIS OPeNDAP servers"
 	hroot = "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/AUXILIARY"
     npdnc = "GPM_IMERG_LandSeaMask.2/GPM_IMERG_LandSeaMask.2.nc4"
     npdds = NCDataset(joinpath(hroot,npdnc))
 	NCDatasets.load!(npdds["landseamask"].var,var,:,:)
 	close(npdds)
 
-	saveLandSea(npd,GeoRegion("IMERGLSM"),lon,lat,lsm,mask)
+	saveLandSea(npd,GeoRegion("IMERG"),lon,lat,var,mask)
 
 end
 
@@ -122,8 +124,6 @@ function saveLandSea(
     ds.dim["longitude"] = length(lon)
     ds.dim["latitude"]  = length(lat)
 
-    lscale,loffset = ncoffsetscale(lsm)
-
     nclon = defVar(ds,"longitude",Float32,("longitude",),attrib = Dict(
         "units"     => "degrees_east",
         "long_name" => "longitude",
@@ -138,10 +138,6 @@ function saveLandSea(
         "long_name"     => "land_sea_mask",
         "full_name"     => "Land-Sea Mask",
         "units"         => "0-1",
-        "scale_factor"  => lscale,
-        "add_offset"    => loffset,
-        "_FillValue"    => Int16(-32767),
-        "missing_value" => Int16(-32767),
     ))
 
     ncmsk = defVar(ds,"mask",Int16,("longitude","latitude",),attrib = Dict(
