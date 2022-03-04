@@ -11,8 +11,8 @@ function show(io::IO, lsd::LandSea)
     print(
 		io,
 		"The Land-Sea Mask Dataset has the following properties:\n",
-		"    Longitude Points   (glon) : ", lsd.lon,  '\n',
-		"    Latitude Points    (glat) : ", lsd.lat,  '\n',
+		"    Longitude Points    (lon) : ", lsd.lon,  '\n',
+		"    Latitude Points     (lat) : ", lsd.lat,  '\n',
 		"    Region Size (nlon * nlat) : $(nlon) lon points x $(nlat) lat points\n",
 	)
 end
