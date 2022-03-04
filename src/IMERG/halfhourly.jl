@@ -52,6 +52,7 @@ function IMERGEarlyHH(
 	@info "$(modulelog()) - Setting up data structure containing information on Early IMERG Half-Hourly data to be downloaded"
 
     fol = joinpath(sroot,"imergearlyhh"); if !isdir(fol); mkpath(fol) end
+    fol = joinpath(sroot,"imergmask");    if !isdir(fol); mkpath(fol) end
     imergcheckdates(dtbeg,dtend)
 
     return IMERGHalfHourly{ST,DT}(
@@ -101,6 +102,7 @@ function IMERGLateHH(
 	@info "$(modulelog()) - Setting up data structure containing information on Late IMERG Half-Hourly data to be downloaded"
 
     fol = joinpath(sroot,"imerglatehh"); if !isdir(fol); mkpath(fol) end
+    fol = joinpath(sroot,"imergmask");   if !isdir(fol); mkpath(fol) end
     imergcheckdates(dtbeg,dtend)
 
     return IMERGHalfHourly{ST,DT}(
@@ -150,6 +152,7 @@ function IMERGFinalHH(
 	@info "$(modulelog()) - Setting up data structure containing information on Final IMERG Half-Hourly data to be downloaded"
 
     fol = joinpath(sroot,"imergfinalhh"); if !isdir(fol); mkpath(fol) end
+    fol = joinpath(sroot,"imergmask");    if !isdir(fol); mkpath(fol) end
     imergcheckdates(dtbeg,dtend)
 
     return IMERGHalfHourly{ST,DT}(

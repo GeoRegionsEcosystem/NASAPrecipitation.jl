@@ -52,6 +52,7 @@ function IMERGEarlyDY(
 	@info "$(modulelog()) - Setting up data structure containing information on Early IMERG Daily data to be downloaded"
 
     fol = joinpath(sroot,"imergearlydy"); if !isdir(fol); mkpath(fol) end
+    fol = joinpath(sroot,"imergmask");    if !isdir(fol); mkpath(fol) end
 
 	dtbeg = Date(year(dtbeg),month(dtbeg),1)
 	dtend = Date(year(dtend),month(dtend),daysinmonth(dtend))
@@ -104,6 +105,7 @@ function IMERGLateDY(
 	@info "$(modulelog()) - Setting up data structure containing information on Late IMERG Daily data to be downloaded"
 
     fol = joinpath(sroot,"imerglatedy"); if !isdir(fol); mkpath(fol) end
+    fol = joinpath(sroot,"imergmask");   if !isdir(fol); mkpath(fol) end
 
 	dtbeg = Date(year(dtbeg),month(dtbeg),1)
 	dtend = Date(year(dtend),month(dtend),daysinmonth(dtend))
@@ -156,6 +158,7 @@ function IMERGFinalDY(
 	@info "$(modulelog()) - Setting up data structure containing information on Final IMERG Daily data to be downloaded"
 
     fol = joinpath(sroot,"imergfinaldy"); if !isdir(fol); mkpath(fol) end
+    fol = joinpath(sroot,"imergmask");    if !isdir(fol); mkpath(fol) end
 
 	dtbeg = Date(year(dtbeg),month(dtbeg),1)
 	dtend = Date(year(dtend),month(dtend),daysinmonth(dtend))

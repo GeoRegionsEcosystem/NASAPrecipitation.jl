@@ -52,6 +52,7 @@ function IMERGMonthly(
 	@info "$(modulelog()) - Setting up data structure containing information on IMERG Monthly data to be downloaded"
 
     fol = joinpath(sroot,"imergmonthly"); if !isdir(fol); mkpath(fol) end
+    fol = joinpath(sroot,"imergmask");    if !isdir(fol); mkpath(fol) end
 
 	dtbeg = Date(year(dtbeg),1,1)
 	dtend = Date(year(dtend),12,31)

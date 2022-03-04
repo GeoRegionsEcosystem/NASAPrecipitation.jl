@@ -52,6 +52,7 @@ function TRMM3Hourly(
 	@info "$(modulelog()) - Setting up data structure containing information on Final TRMM 3-Hourly data to be downloaded"
 
     fol = joinpath(sroot,"trmm3hourly"); if !isdir(fol); mkpath(fol) end
+    fol = joinpath(sroot,"trmmmask");    if !isdir(fol); mkpath(fol) end
 
 	dtbeg = Date(year(dtbeg),month(dtbeg),1)
 	dtend = Date(year(dtend),month(dtend),daysinmonth(dtend))
@@ -104,6 +105,7 @@ function TRMM3HourlyNRT(
 	@info "$(modulelog()) - Setting up data structure containing information on Near Real-Time TRMM 3-Hourly data to be downloaded"
 
     fol = joinpath(sroot,"trmm3hourlynrt"); if !isdir(fol); mkpath(fol) end
+    fol = joinpath(sroot,"trmmmask");       if !isdir(fol); mkpath(fol) end
 
 	dtbeg = Date(year(dtbeg),month(dtbeg),1)
 	dtend = Date(year(dtend),month(dtend),daysinmonth(dtend))

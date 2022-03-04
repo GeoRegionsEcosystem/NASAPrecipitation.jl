@@ -52,6 +52,7 @@ function TRMMDaily(
 	@info "$(modulelog()) - Setting up data structure containing information on Final TRMM Daily data to be downloaded"
 
     fol = joinpath(sroot,"trmmdaily"); if !isdir(fol); mkpath(fol) end
+    fol = joinpath(sroot,"trmmmask");  if !isdir(fol); mkpath(fol) end
 
 	dtbeg = Date(year(dtbeg),month(dtbeg),1)
 	dtend = Date(year(dtend),month(dtend),daysinmonth(dtend))
@@ -104,6 +105,7 @@ function TRMMDailyNRT(
 	@info "$(modulelog()) - Setting up data structure containing information on Near Real-Time TRMM Daily data to be downloaded"
 
     fol = joinpath(sroot,"trmmdailynrt"); if !isdir(fol); mkpath(fol) end
+    fol = joinpath(sroot,"trmmmask");     if !isdir(fol); mkpath(fol) end
 
 	dtbeg = Date(year(dtbeg),month(dtbeg),1)
 	dtend = Date(year(dtend),month(dtend),daysinmonth(dtend))

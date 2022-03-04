@@ -52,6 +52,7 @@ function TRMMMonthly(
 	@info "$(modulelog()) - Setting up data structure containing information on TRMM Monthly data to be downloaded"
 
     fol = joinpath(sroot,"trmmmonthly"); if !isdir(fol); mkpath(fol) end
+    fol = joinpath(sroot,"trmmmask");    if !isdir(fol); mkpath(fol) end
 
 	dtbeg = Date(year(dtbeg),1,1)
 	dtend = Date(year(dtend),12,31)
