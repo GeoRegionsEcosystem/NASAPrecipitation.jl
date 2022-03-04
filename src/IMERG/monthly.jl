@@ -10,6 +10,7 @@ struct IMERGMonthly{ST<:AbstractString, DT<:TimeType} <: IMERGDataset
     dtbeg :: DT
     dtend :: DT
     sroot :: ST
+    smask :: ST
     hroot :: ST
     fpref :: ST
     fsuff :: ST
@@ -43,8 +44,8 @@ The following fields in `npd` will be fixed as below:
 function IMERGMonthly(
     ST = String,
     DT = Date;
-    dtbeg :: TimeType,
-    dtend :: TimeType,
+    dtbeg :: TimeType = Date(2001),
+    dtend :: TimeType = Dates.now() - Year(2),
     sroot :: AbstractString = homedir(),
 )
 
@@ -54,11 +55,13 @@ function IMERGMonthly(
 
 	dtbeg = Date(year(dtbeg),1,1)
 	dtend = Date(year(dtend),12,31)
+    imergcheckdates(dtbeg,dtend)
 
     return IMERGMonthly{ST,DT}(
 		"imergmonthly", "IMERG Monthly", "10.5067/GPM/IMERG/3B-MONTH/06",
         dtbeg, dtend,
 		joinpath(sroot,"imergmonthly"),
+		joinpath(sroot,"imergmask"),
         "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.06",
         "3B-MO.MS.MRG.3IMERG", "V06B.HDF5",
     )
@@ -73,6 +76,7 @@ function show(io::IO, npd::IMERGMonthly{ST,DT}) where {ST<:AbstractString, DT<:T
 		"    Logging Name    (lname) : ", npd.lname, '\n',
 		"    DOI URL          (doi)  : ", npd.doi,   '\n',
 		"    Data Directory  (sroot) : ", npd.sroot, '\n',
+		"    Mask Directory  (smask) : ", npd.smask, '\n',
 		"    Date Begin      (dtbeg) : ", npd.dtbeg, '\n',
 		"    Date End        (dtend) : ", npd.dtend, '\n',
 		"    Timestep                : 1 Month\n",

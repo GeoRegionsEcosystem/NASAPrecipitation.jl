@@ -10,6 +10,7 @@ struct TRMMDaily{ST<:AbstractString, DT<:TimeType} <: TRMMDataset
     dtbeg :: DT
     dtend :: DT
     sroot :: ST
+    smask :: ST
     hroot :: ST
     fpref :: ST
     fsuff :: ST
@@ -43,8 +44,8 @@ The following fields in `npd` will be fixed as below:
 function TRMMDaily(
     ST = String,
     DT = Date;
-    dtbeg :: TimeType,
-    dtend :: TimeType,
+    dtbeg :: TimeType = Date(1998,1),
+    dtend :: TimeType = Date(2019,12),
     sroot :: AbstractString = homedir(),
 )
 
@@ -54,11 +55,13 @@ function TRMMDaily(
 
 	dtbeg = Date(year(dtbeg),month(dtbeg),1)
 	dtend = Date(year(dtend),month(dtend),daysinmonth(dtend))
+    trmmcheckdates(dtbeg,dtend)
 
     return TRMMDaily{ST,DT}(
 		"trmmdaily", "Final TRMM Daily", "10.5067/TRMM/TMPA/DAY/7",
         dtbeg, dtend,
 		joinpath(sroot,"trmmdaily"),
+		joinpath(sroot,"trmmmask"),
         "https://disc2.gesdisc.eosdis.nasa.gov/opendap/TRMM_L3/TRMM_3B42_Daily.7",
         "3B42_Daily", "7.nc4",
     )
@@ -93,8 +96,8 @@ The following fields in `npd` will be fixed as below:
 function TRMMDailyNRT(
     ST = String,
     DT = Date;
-    dtbeg :: TimeType,
-    dtend :: TimeType,
+    dtbeg :: TimeType = Date(1998,1),
+    dtend :: TimeType = Date(2019,12),
     sroot :: AbstractString = homedir(),
 )
 
@@ -104,11 +107,13 @@ function TRMMDailyNRT(
 
 	dtbeg = Date(year(dtbeg),month(dtbeg),1)
 	dtend = Date(year(dtend),month(dtend),daysinmonth(dtend))
+    trmmcheckdates(dtbeg,dtend)
 
     return TRMMDaily{ST,DT}(
 		"trmmdailynrt", "Near Real-Time TRMM Daily", "10.5067/TRMM/TMPA/DAY-E/7",
         dtbeg, dtend,
 		joinpath(sroot,"trmmdailynrt"),
+		joinpath(sroot,"trmmmask"),
         "https://disc2.gesdisc.eosdis.nasa.gov/opendap/TRMM_RT/TRMM_3B42RT_Daily.7",
         "3B42RT_Daily", "7.nc4",
     )
@@ -123,6 +128,7 @@ function show(io::IO, npd::TRMMDaily{ST,DT}) where {ST<:AbstractString, DT<:Time
 		"    Logging Name    (lname) : ", npd.lname, '\n',
 		"    DOI URL          (doi)  : ", npd.doi,   '\n',
 		"    Data Directory  (sroot) : ", npd.sroot, '\n',
+		"    Mask Directory  (smask) : ", npd.smask, '\n',
 		"    Date Begin      (dtbeg) : ", npd.dtbeg, '\n',
 		"    Date End        (dtend) : ", npd.dtend, '\n',
 		"    Timestep                : 1 Day\n",

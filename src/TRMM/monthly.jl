@@ -10,6 +10,7 @@ struct TRMMMonthly{ST<:AbstractString, DT<:TimeType} <: TRMMDataset
     dtbeg :: DT
     dtend :: DT
     sroot :: ST
+    smask :: ST
     hroot :: ST
     fpref :: ST
     fsuff :: ST
@@ -43,8 +44,8 @@ The following fields in `npd` will be fixed as below:
 function TRMMMonthly(
     ST = String,
     DT = Date;
-    dtbeg :: TimeType,
-    dtend :: TimeType,
+    dtbeg :: TimeType = Date(1998),
+    dtend :: TimeType = Date(2019),
     sroot :: AbstractString = homedir(),
 )
 
@@ -54,11 +55,13 @@ function TRMMMonthly(
 
 	dtbeg = Date(year(dtbeg),1,1)
 	dtend = Date(year(dtend),12,31)
+    trmmcheckdates(dtbeg,dtend)
 
     return TRMMMonthly{ST,DT}(
 		"trmmmonthly", "TRMM Monthly (TMPA 3B43)", "10.5067/TRMM/TMPA/MONTH/7",
         dtbeg, dtend,
 		joinpath(sroot,"trmmmonthly"),
+		joinpath(sroot,"trmmmask"),
         "https://disc2.gesdisc.eosdis.nasa.gov/opendap/TRMM_L3/TRMM_3B43.7",
         "3B43", "7.HDF",
     )
@@ -73,6 +76,7 @@ function show(io::IO, npd::TRMMMonthly{ST,DT}) where {ST<:AbstractString, DT<:Ti
 		"    Logging Name    (lname) : ", npd.lname, '\n',
 		"    DOI URL          (doi)  : ", npd.doi,   '\n',
 		"    Data Directory  (sroot) : ", npd.sroot, '\n',
+		"    Mask Directory  (smask) : ", npd.smask, '\n',
 		"    Date Begin      (dtbeg) : ", npd.dtbeg, '\n',
 		"    Date End        (dtend) : ", npd.dtend, '\n',
 		"    Timestep                : 1 Month\n",

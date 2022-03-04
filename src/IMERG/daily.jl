@@ -10,6 +10,7 @@ struct IMERGDaily{ST<:AbstractString, DT<:TimeType} <: IMERGDataset
     dtbeg :: DT
     dtend :: DT
     sroot :: ST
+    smask :: ST
     hroot :: ST
     fpref :: ST
     fsuff :: ST
@@ -43,8 +44,8 @@ The following fields in `npd` will be fixed as below:
 function IMERGEarlyDY(
     ST = String,
     DT = Date;
-    dtbeg :: TimeType,
-    dtend :: TimeType,
+    dtbeg :: TimeType = Date(2000,6),
+    dtend :: TimeType = Dates.now() - Month(2),
     sroot :: AbstractString = homedir(),
 )
 
@@ -54,11 +55,13 @@ function IMERGEarlyDY(
 
 	dtbeg = Date(year(dtbeg),month(dtbeg),1)
 	dtend = Date(year(dtend),month(dtend),daysinmonth(dtend))
+    imergcheckdates(dtbeg,dtend)
 
     return IMERGDaily{ST,DT}(
 		"imergearlydy", "Early IMERG Daily", "10.5067/GPM/IMERGDE/DAY/06",
         dtbeg, dtend,
 		joinpath(sroot,"imergearlydy"),
+		joinpath(sroot,"imergmask"),
         "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDE.06",
         "3B-DAY-E.MS.MRG.3IMERG", "S000000-E235959.V06.nc4",
     )
@@ -93,8 +96,8 @@ The following fields in `npd` will be fixed as below:
 function IMERGLateDY(
     ST = String,
     DT = Date;
-    dtbeg :: TimeType,
-    dtend :: TimeType,
+    dtbeg :: TimeType = Date(2000,6),
+    dtend :: TimeType = Dates.now() - Month(2),
     sroot :: AbstractString = homedir(),
 )
 
@@ -104,11 +107,13 @@ function IMERGLateDY(
 
 	dtbeg = Date(year(dtbeg),month(dtbeg),1)
 	dtend = Date(year(dtend),month(dtend),daysinmonth(dtend))
+    imergcheckdates(dtbeg,dtend)
 
     return IMERGDaily{ST,DT}(
 		"imerglatedy", "Late IMERG Daily", "10.5067/GPM/IMERGDL/DAY/06",
         dtbeg, dtend,
 		joinpath(sroot,"imerglatedy"),
+		joinpath(sroot,"imergmask"),
         "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDL.06",
         "3B-DAY-L.MS.MRG.3IMERG", "S000000-E235959.V06.nc4",
     )
@@ -143,8 +148,8 @@ The following fields in `npd` will be fixed as below:
 function IMERGFinalDY(
     ST = String,
     DT = Date;
-    dtbeg :: TimeType,
-    dtend :: TimeType,
+    dtbeg :: TimeType = Date(2000,6),
+    dtend :: TimeType = Dates.now() - Month(6),
     sroot :: AbstractString = homedir(),
 )
 
@@ -154,11 +159,13 @@ function IMERGFinalDY(
 
 	dtbeg = Date(year(dtbeg),month(dtbeg),1)
 	dtend = Date(year(dtend),month(dtend),daysinmonth(dtend))
+    imergcheckdates(dtbeg,dtend)
 
     return IMERGDaily{ST,DT}(
 		"imergfinaldy", "Final IMERG Daily", "10.5067/GPM/IMERGDF/DAY/06",
         dtbeg, dtend,
 		joinpath(sroot,"imergfinaldy"),
+		joinpath(sroot,"imergmask"),
         "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06",
         "3B-DAY.MS.MRG.3IMERG", "S000000-E235959.V06.nc4",
     )
@@ -173,6 +180,7 @@ function show(io::IO, npd::IMERGDaily{ST,DT}) where {ST<:AbstractString, DT<:Tim
 		"    Logging Name    (lname) : ", npd.lname, '\n',
 		"    DOI URL          (doi)  : ", npd.doi,   '\n',
 		"    Data Directory  (sroot) : ", npd.sroot, '\n',
+		"    Mask Directory  (smask) : ", npd.smask, '\n',
 		"    Date Begin      (dtbeg) : ", npd.dtbeg, '\n',
 		"    Date End        (dtend) : ", npd.dtend, '\n',
 		"    Timestep                : 1 Day\n",

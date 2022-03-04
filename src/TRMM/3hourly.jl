@@ -10,6 +10,7 @@ struct TRMM3Hourly{ST<:AbstractString, DT<:TimeType} <: TRMMDataset
     dtbeg :: DT
     dtend :: DT
     sroot :: ST
+    smask :: ST
     hroot :: ST
     fpref :: ST
     fsuff :: ST
@@ -54,11 +55,13 @@ function TRMM3Hourly(
 
 	dtbeg = Date(year(dtbeg),month(dtbeg),1)
 	dtend = Date(year(dtend),month(dtend),daysinmonth(dtend))
+    trmmcheckdates(dtbeg,dtend)
 
     return TRMM3Hourly{ST,DT}(
 		"trmm3hourly", "Final TRMM 3-Hourly", "10.5067/TRMM/TMPA/3H/7",
         dtbeg, dtend,
 		joinpath(sroot,"trmm3hourly"),
+		joinpath(sroot,"trmmmask"),
         "https://disc2.gesdisc.eosdis.nasa.gov/opendap/TRMM_L3/TRMM_3B42.7",
         "3B42", "7.HDF",
     )
@@ -93,8 +96,8 @@ The following fields in `npd` will be fixed as below:
 function TRMM3HourlyNRT(
     ST = String,
     DT = Date;
-    dtbeg :: TimeType,
-    dtend :: TimeType,
+    dtbeg :: TimeType = Date(1998,1,1),
+    dtend :: TimeType = Date(2019,12,31),
     sroot :: AbstractString = homedir(),
 )
 
@@ -104,11 +107,13 @@ function TRMM3HourlyNRT(
 
 	dtbeg = Date(year(dtbeg),month(dtbeg),1)
 	dtend = Date(year(dtend),month(dtend),daysinmonth(dtend))
+    trmmcheckdates(dtbeg,dtend)
 
     return TRMM3Hourly{ST,DT}(
 		"trmm3hourlynrt", "Near Real-Time TRMM 3-Hourly", "10.5067/TRMM/TMPA/3H-E/7",
         dtbeg, dtend,
 		joinpath(sroot,"trmm3hourlynrt"),
+		joinpath(sroot,"trmmmask"),
         "https://disc2.gesdisc.eosdis.nasa.gov/opendap/TRMM_RT/TRMM_3B42RT.7",
         "3B42RT", "7R2.nc4",
     )
@@ -123,6 +128,7 @@ function show(io::IO, npd::TRMM3Hourly{ST,DT}) where {ST<:AbstractString, DT<:Ti
 		"    Logging Name    (lname) : ", npd.lname, '\n',
 		"    DOI URL          (doi)  : ", npd.doi,   '\n',
 		"    Data Directory  (sroot) : ", npd.sroot, '\n',
+		"    Mask Directory  (smask) : ", npd.smask, '\n',
 		"    Date Begin      (dtbeg) : ", npd.dtbeg, '\n',
 		"    Date End        (dtend) : ", npd.dtend, '\n',
 		"    Timestep                : 3 Hourly\n",

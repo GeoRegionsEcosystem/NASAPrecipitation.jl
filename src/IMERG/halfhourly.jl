@@ -10,6 +10,7 @@ struct IMERGHalfHourly{ST<:AbstractString, DT<:TimeType} <: IMERGDataset
     dtbeg :: DT
     dtend :: DT
     sroot :: ST
+    smask :: ST
     hroot :: ST
     fpref :: ST
     fsuff :: ST
@@ -43,19 +44,21 @@ The following fields in `npd` will be fixed as below:
 function IMERGEarlyHH(
     ST = String,
     DT = Date;
-    dtbeg :: TimeType,
-    dtend :: TimeType,
+    dtbeg :: TimeType = Date(2000,6,1),
+    dtend :: TimeType = Dates.now() - Day(3),
     sroot :: AbstractString = homedir(),
 )
 
 	@info "$(modulelog()) - Setting up data structure containing information on Early IMERG Half-Hourly data to be downloaded"
 
     fol = joinpath(sroot,"imergearlyhh"); if !isdir(fol); mkpath(fol) end
+    imergcheckdates(dtbeg,dtend)
 
     return IMERGHalfHourly{ST,DT}(
 		"imergearlyhh", "Early IMERG Half-Hourly", "10.5067/GPM/IMERG/3B-HH-E/06",
         dtbeg, dtend,
 		joinpath(sroot,"imergearlyhh"),
+		joinpath(sroot,"imergmask"),
         "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHHE.06",
         "3B-HHR-E.MS.MRG.3IMERG", "V06B.HDF5",
     )
@@ -90,19 +93,21 @@ The following fields in `npd` will be fixed as below:
 function IMERGLateHH(
     ST = String,
     DT = Date;
-    dtbeg :: TimeType,
-    dtend :: TimeType,
+    dtbeg :: TimeType = Date(2000,6,1),
+    dtend :: TimeType = Dates.now() - Day(3),
     sroot :: AbstractString = homedir(),
 )
 
 	@info "$(modulelog()) - Setting up data structure containing information on Late IMERG Half-Hourly data to be downloaded"
 
     fol = joinpath(sroot,"imerglatehh"); if !isdir(fol); mkpath(fol) end
+    imergcheckdates(dtbeg,dtend)
 
     return IMERGHalfHourly{ST,DT}(
 		"imerglatehh", "Late IMERG Half-Hourly", "10.5067/GPM/IMERG/3B-HH-L/06",
         dtbeg, dtend,
 		joinpath(sroot,"imerglatehh"),
+		joinpath(sroot,"imergmask"),
         "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHHL.06",
         "3B-HHR-L.MS.MRG.3IMERG", "V06B.HDF5",
     )
@@ -137,19 +142,21 @@ The following fields in `npd` will be fixed as below:
 function IMERGFinalHH(
     ST = String,
     DT = Date;
-    dtbeg :: TimeType,
-    dtend :: TimeType,
+    dtbeg :: TimeType = Date(2000,6,1),
+    dtend :: TimeType = Dates.now() - Month(6),
     sroot :: AbstractString = homedir(),
 )
 
 	@info "$(modulelog()) - Setting up data structure containing information on Final IMERG Half-Hourly data to be downloaded"
 
     fol = joinpath(sroot,"imergfinalhh"); if !isdir(fol); mkpath(fol) end
+    imergcheckdates(dtbeg,dtend)
 
     return IMERGHalfHourly{ST,DT}(
 		"imergfinalhh", "Final IMERG Half-Hourly", "10.5067/GPM/IMERG/3B-HH/06",
         dtbeg, dtend,
 		joinpath(sroot,"imergfinalhh"),
+		joinpath(sroot,"imergmask"),
         "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHH.06",
         "3B-HHR.MS.MRG.3IMERG", "V06B.HDF5",
     )
@@ -164,6 +171,7 @@ function show(io::IO, npd::IMERGHalfHourly{ST,DT}) where {ST<:AbstractString, DT
 		"    Logging Name    (lname) : ", npd.lname, '\n',
 		"    DOI URL          (doi)  : ", npd.doi,   '\n',
 		"    Data Directory  (sroot) : ", npd.sroot, '\n',
+		"    Mask Directory  (smask) : ", npd.smask, '\n',
 		"    Date Begin      (dtbeg) : ", npd.dtbeg, '\n',
 		"    Date End        (dtend) : ", npd.dtend, '\n',
 		"    Timestep                : 30 minutes\n",
