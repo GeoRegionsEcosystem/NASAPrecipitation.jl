@@ -3,7 +3,7 @@ uuid = "a018b980-0677-41c0-b9a4-7f34595c2b14"
 keywords = ["meteorology", "climate", "precipitation", "nasa", "satellite"]
 desc = "Download and analyze data from the NASA GPM/TRMM missions"
 authors = ["Nathanael Wong <natgeo.wong@outlook.com>"]
-version = "0.1.1"
+version = "0.1.2"
 
 [deps]
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
