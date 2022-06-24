@@ -3,6 +3,7 @@ module NASAPrecipitation
 ## Modules Used
 using Logging
 using NCDatasets
+using NetRC
 using Printf
 using Statistics
 
@@ -25,7 +26,7 @@ export
 
         getLandSea, addNPDGeoRegions,
 
-        download, read, npdfnc
+        download, read, npdfnc, setup
 
 ## Abstract types
 """
@@ -75,6 +76,7 @@ abstract type TRMMDataset  <: NASAPrecipitationDataset end
 modulelog() = "$(now()) - NASAPrecipitation.jl"
 
 function __init__()
+    setup()
     @info "$(modulelog()) - Checking to see if GeoRegions required by NASAPrecipitation.jl have been added to the list of available GeoRegions"
     disable_logging(Logging.Warn)
 	if !isGeoRegion("IMERG",throw=false) ||
@@ -93,6 +95,8 @@ function __init__()
 end
 
 ## Including Relevant Files
+
+include("setup.jl")
 
 include("IMERG/halfhourly.jl")
 include("IMERG/daily.jl")
