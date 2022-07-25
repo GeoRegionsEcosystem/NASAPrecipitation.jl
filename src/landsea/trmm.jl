@@ -158,8 +158,8 @@ end
 ##############################################################################
 
 function getLandSea(
-	geo   :: GeoRegion = GeoRegion("GLB"),
-	sroot :: AbstractString;
+	geo  :: GeoRegion = GeoRegion("GLB");
+	path :: AbstractString,
     returnlsd = true,
     FT = Float32
 )
@@ -171,16 +171,16 @@ function getLandSea(
 		@info "$(modulelog()) - Checking to see if the specified GeoRegion \"$(geo.regID)\" is within the \"TRMMLSM\" GeoRegion"
 		isinGeoRegion(geo,GeoRegion("TRMMLSM"))
 	end
-	lsmfnc = joinpath(sroot,"trmmmask-$(geo.regID).nc")
+	lsmfnc = joinpath(path,"trmmmask-$(geo.regID).nc")
 
 	if !isfile(lsmfnc)
 
 		@info "$(modulelog()) - The TRMM Land-Sea mask dataset for the \"$(geo.regID)\" GeoRegion is not available, extracting from Global TRMM Land-Sea mask dataset ..."
 
-		glbfnc = joinpath(sroot,"trmmmask-TRMMLSM.nc")
+		glbfnc = joinpath(path,"trmmmask-TRMMLSM.nc")
 		if !isfile(glbfnc)
 			@info "$(modulelog()) - The Global TRMM Land-Sea mask dataset for the \"$(geo.regID)\" GeoRegion is not available, downloading from the Climate Data Store ..."
-			downloadTRMMlsd(sroot)
+			downloadTRMMlsd(path)
 		end
 
 		gds  = NCDataset(glbfnc)
@@ -209,7 +209,7 @@ function getLandSea(
 			end
 		end
 
-		saveTRMMlsd(npd,geo,rinfo.glon,rinfo.glat,rlsm,Int16.(mask))
+		saveTRMMlsd(geo,rinfo.glon,rinfo.glat,rlsm,Int16.(mask),path)
 
 	end
 
@@ -235,7 +235,7 @@ function getLandSea(
 end
 
 function downloadTRMMlsd(
-	sroot :: AbstractString
+	path :: AbstractString
 )
 
 	lon,lat = trmmlonlat(full=true)
@@ -251,7 +251,7 @@ function downloadTRMMlsd(
 	NCDatasets.load!(npdds["landseamask"].var,var,:,:)
 	close(npdds)
 
-	saveTRMMlsd(GeoRegion("TRMMLSM"),lon,lat,var,mask,sroot)
+	saveTRMMlsd(GeoRegion("TRMMLSM"),lon,lat,var,mask,path)
 
 end
 
@@ -261,10 +261,10 @@ function saveTRMMlsd(
     lat  :: Vector{<:Real},
     lsm  :: Array{<:Real,2},
     mask :: Array{Int16,2},
-	sroot:: AbstractString
+	path :: AbstractString
 )
 
-    fnc = joinpath(sroot,"trmmmask-$(geo.regID).nc")
+    fnc = joinpath(path,"trmmmask-$(geo.regID).nc")
     if isfile(fnc)
         rm(fnc,force=true)
     end

@@ -158,8 +158,8 @@ end
 ##############################################################################
 
 function getIMERGlsd(
-	geo   :: GeoRegion = GeoRegion("GLB"),
-	sroot :: AbstractString;
+	geo  :: GeoRegion = GeoRegion("GLB");
+	path :: AbstractString,
     returnlsd = true,
     FT = Float32
 )
@@ -171,16 +171,16 @@ function getIMERGlsd(
 		@info "$(modulelog()) - Checking to see if the specified GeoRegion \"$(geo.regID)\" is within the \"IMERG\" GeoRegion"
 		isinGeoRegion(geo,GeoRegion("IMERG"))
 	end
-	lsmfnc = joinpath(sroot,"imergmask-$(geo.regID).nc")
+	lsmfnc = joinpath(path,"imergmask-$(geo.regID).nc")
 
 	if !isfile(lsmfnc)
 
 		@info "$(modulelog()) - The IMERG Land-Sea mask dataset for the \"$(geo.regID)\" GeoRegion is not available, extracting from Global IMERG Land-Sea mask dataset ..."
 
-		glbfnc = joinpath(sroot,"imergmask-IMERG.nc")
+		glbfnc = joinpath(path,"imergmask-IMERG.nc")
 		if !isfile(glbfnc)
 			@info "$(modulelog()) - The Global IMERG Land-Sea mask dataset for the \"$(geo.regID)\" GeoRegion is not available, downloading from the Climate Data Store ..."
-			downloadIMERGlsd(sroot)
+			downloadIMERGlsd(path)
 		end
 
 		gds  = NCDataset(glbfnc)
@@ -235,7 +235,7 @@ function getIMERGlsd(
 end
 
 function downloadIMERGlsd(
-	sroot :: AbstractString
+	path :: AbstractString
 )
 
 	lon,lat = gpmlonlat()
@@ -251,7 +251,7 @@ function downloadIMERGlsd(
 	NCDatasets.load!(npdds["landseamask"].var,var,:,:)
 	close(npdds)
 
-	saveIMERGlsd(GeoRegion("IMERG"),lon,lat,var,mask,sroot)
+	saveIMERGlsd(GeoRegion("IMERG"),lon,lat,var,mask,path)
 
 end
 
@@ -261,10 +261,10 @@ function saveIMERGlsd(
     lat  :: Vector{<:Real},
     lsm  :: Array{<:Real,2},
     mask :: Array{Int16,2},
-    sroot:: AbstractString
+    path :: AbstractString
 )
 
-    fnc = joinpath(sroot,"imergmask-$(geo.regID).nc")
+    fnc = joinpath(path,"imergmask-$(geo.regID).nc")
     if isfile(fnc)
         rm(fnc,force=true)
     end
