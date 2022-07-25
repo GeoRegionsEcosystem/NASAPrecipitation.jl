@@ -113,6 +113,7 @@ include("landsea/trmm.jl")
 include("downloads.jl")
 include("save.jl")
 include("read.jl")
+include("extract.jl")
 include("filesystem.jl")
 include("backend.jl")
 
