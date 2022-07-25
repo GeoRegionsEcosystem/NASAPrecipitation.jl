@@ -48,3 +48,17 @@ function npdfnc(
     return joinpath(fol,fnc)
 
 end
+
+####
+
+function npdanc(
+    npd :: Union{IMERGHalfHourly{ST,DT},TRMM3Hourly{ST,DT},IMERGDaily{ST,DT},TRMMDaily{ST,DT}},
+	geo :: GeoRegion,
+    dt  :: TimeType
+) where {ST<:AbstractString, DT<:TimeType}
+
+    fol = joinpath(npd.sroot,geo.regID)
+    fnc = npd.npdID * "-" * geo.regID * "-" * yr2str(dt) * ".nc"
+    return joinpath(fol,fnc)
+
+end
