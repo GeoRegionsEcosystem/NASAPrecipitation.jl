@@ -28,7 +28,7 @@ function read(
 
     pnc = npdfnc(npd,geo,dt)
     if !isfile(pnc)
-        error("$(modulelog()) - The $(npd.lname) Dataset for the $(geo.regID) GeoRegion at Date $dt does not exist at $(pnc).  Check if files exist at $(npd.sroot) or download the files here")
+        error("$(modulelog()) - The $(npd.lname) Dataset for the $(geo.regID) GeoRegion at Date $dt does not exist at $(pnc).  Check if files exist at $(npd.datapath) or download the files here")
     end
     @info "$(modulelog()) - Opening the $(npd.lname) NCDataset in the $(geo.regID) GeoRegion for $dt"
     pds = NCDataset(pnc)

@@ -12,13 +12,13 @@ function getLandSea(
 		@info "$(modulelog()) - Checking to see if the specified GeoRegion \"$(geo.regID)\" is within the \"IMERG\" GeoRegion"
 		isinGeoRegion(geo,GeoRegion("IMERG"))
 	end
-	lsmfnc = joinpath(npd.smask,"imergmask-$(geo.regID).nc")
+	lsmfnc = joinpath(npd.maskpath,"imergmask-$(geo.regID).nc")
 
 	if !isfile(lsmfnc)
 
 		@info "$(modulelog()) - The IMERG Land-Sea mask dataset for the \"$(geo.regID)\" GeoRegion is not available, extracting from Global IMERG Land-Sea mask dataset ..."
 
-		glbfnc = joinpath(npd.smask,"imergmask-IMERG.nc")
+		glbfnc = joinpath(npd.maskpath,"imergmask-IMERG.nc")
 		if !isfile(glbfnc)
 			@info "$(modulelog()) - The Global IMERG Land-Sea mask dataset for the \"$(geo.regID)\" GeoRegion is not available, downloading from the Climate Data Store ..."
 			downloadLandSea(npd)
@@ -105,7 +105,7 @@ function saveLandSea(
     mask :: Array{Int16,2},
 )
 
-    fnc = joinpath(npd.smask,"imergmask-$(geo.regID).nc")
+    fnc = joinpath(npd.maskpath,"imergmask-$(geo.regID).nc")
     if isfile(fnc)
         rm(fnc,force=true)
     end

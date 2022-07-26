@@ -16,7 +16,7 @@ function download(
 	geo :: GeoRegion = GeoRegion("GLB")
 ) where {ST<:AbstractString, DT<:TimeType}
 
-	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
+	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.regID == "GLB"
 		@info "$(modulelog()) - Global dataset request has been detected, switching to the IMERG GeoRegion"
@@ -57,7 +57,7 @@ function download(
 		iglat = iglat[1] : iglat[end]
 	end
 
-	for dt in npd.dtbeg : Day(1) : npd.dtend
+	for dt in npd.start : Day(1) : npd.stop
 
 		@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) ..."
 
@@ -99,7 +99,7 @@ function download(
 	geo :: GeoRegion = GeoRegion("GLB")
 ) where {ST<:AbstractString, DT<:TimeType}
 
-	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
+	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.regID == "GLB"
 		@info "$(modulelog()) - Global dataset request has been detected, switching to the IMERG GeoRegion"
@@ -139,7 +139,7 @@ function download(
 		iglat = iglat[1] : iglat[end]
 	end
 
-	for dt in npd.dtbeg : Month(1) : npd.dtend
+	for dt in npd.start : Month(1) : npd.stop
 
 		@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt))-$(month(dt)) ..."
 
@@ -183,7 +183,7 @@ function download(
 	geo :: GeoRegion = GeoRegion("GLB")
 ) where {ST<:AbstractString, DT<:TimeType}
 
-	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
+	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.regID == "GLB"
 		@info "$(modulelog()) - Global dataset request has been detected, switching to the IMERG GeoRegion"
@@ -223,7 +223,7 @@ function download(
 		iglat = iglat[1] : iglat[end]
 	end
 
-	for dt in npd.dtbeg : Year(1) : npd.dtend
+	for dt in npd.start : Year(1) : npd.stop
 
 		@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt)) ..."
 
@@ -266,7 +266,7 @@ function download(
 	geo :: GeoRegion = GeoRegion("GLB")
 ) where {ST<:AbstractString, DT<:TimeType}
 
-	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
+	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.regID == "GLB"
 		@info "$(modulelog()) - Global dataset request has been detected, switching to the TRMM GeoRegion"
@@ -306,7 +306,7 @@ function download(
 		iglat = iglat[1] : iglat[end]
 	end
 
-	for dt in npd.dtbeg : Day(1) : npd.dtend
+	for dt in npd.start : Day(1) : npd.stop
 
 		@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) ..."
 
@@ -353,7 +353,7 @@ function download(
 	geo :: GeoRegion = GeoRegion("GLB")
 ) where {ST<:AbstractString, DT<:TimeType}
 
-	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
+	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.regID == "GLB"
 		@info "$(modulelog()) - Global dataset request has been detected, switching to the TRMM GeoRegion"
@@ -393,7 +393,7 @@ function download(
 		iglat = iglat[1] : iglat[end]
 	end
 
-	for dt in npd.dtbeg : Month(1) : npd.dtend
+	for dt in npd.start : Month(1) : npd.stop
 
 		@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt))-$(month(dt)) ..."
 
@@ -437,7 +437,7 @@ function download(
 	geo :: GeoRegion = GeoRegion("GLB")
 ) where {ST<:AbstractString, DT<:TimeType}
 
-	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.dtbeg) to $(npd.dtend)"
+	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.regID == "GLB"
 		@info "$(modulelog()) - Global dataset request has been detected, switching to the TRMM GeoRegion"
@@ -477,7 +477,7 @@ function download(
 		iglat = iglat[1] : iglat[end]
 	end
 
-	for dt in npd.dtbeg : Year(1) : npd.dtend
+	for dt in npd.start : Year(1) : npd.stop
 
 		@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt)) ..."
 

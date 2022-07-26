@@ -47,9 +47,9 @@ function extract(
 
 end
 
-extract_time(npd::Union{IMERGHalfHourly,TRMM3Hourly}) = npd.dtbeg :  Day(1)  : npd.dtend
-extract_time(npd::Union{IMERGDaily,TRMMDaily})        = npd.dtbeg : Month(1) : npd.dtend
-extract_time(npd::Union{IMERGMonthly,TRMMMonthly})    = npd.dtbeg : Year(1)  : npd.dtend
+extract_time(npd::Union{IMERGHalfHourly,TRMM3Hourly}) = npd.start :  Day(1)  : npd.stop
+extract_time(npd::Union{IMERGDaily,TRMMDaily})        = npd.start : Month(1) : npd.stop
+extract_time(npd::Union{IMERGMonthly,TRMMMonthly})    = npd.start : Year(1)  : npd.stop
 
 function extract_mat(
     nlon :: Int, nlat :: Int, nplon :: Int, nplat :: Int,
@@ -87,5 +87,5 @@ function extract_mat(
 
 end
 
-extract_LandSea(geo::GeoRegion, npd::IMERGDataset) = getIMERGlsd(geo,path=npd.smask)
-extract_LandSea(geo::GeoRegion, npd::TRMMDataset)  = getTRMMlsd( geo,path=npd.smask)
+extract_LandSea(geo::GeoRegion, npd::IMERGDataset) = getIMERGlsd(geo,path=npd.maskpath)
+extract_LandSea(geo::GeoRegion, npd::TRMMDataset)  = getTRMMlsd( geo,path=npd.maskpath)

@@ -7,10 +7,10 @@ struct TRMMMonthly{ST<:AbstractString, DT<:TimeType} <: TRMMDataset
 	npdID :: ST
 	lname :: ST
 	doi   :: ST
-    dtbeg :: DT
-    dtend :: DT
-    sroot :: ST
-    smask :: ST
+    start :: DT
+    stop  :: DT
+    datapath :: ST
+    maskpath :: ST
     hroot :: ST
     fpref :: ST
     fsuff :: ST
@@ -20,18 +20,18 @@ end
     TRMMMonthly(
         ST = String,
         DT = Date;
-        dtbeg :: TimeType,
-        dtend :: TimeType,
-        sroot :: AbstractString = homedir(),
+        start :: TimeType,
+        stop  :: TimeType,
+        path  :: AbstractString = homedir(),
     ) -> npd :: TRMMMonthly{ST,DT}
 
 Creates a `TRMMMonthly` dataset `npd` to retrieve datasets from the Final post-processing runs for Monthly output
 
 Keyword Arguments
 =================
-- `dtbeg` : Date at which download / analysis of the dataset begins
-- `dtend` : Date at which download / analysis of the dataset ends
-- `sroot` : The directory in which the folder `trmmmonthly` will be created for data downloads, storage and analysis, default is the home directoy called by `homedir()`
+- `start` : Date at which download / analysis of the dataset begins
+- `stop` : Date at which download / analysis of the dataset ends
+- `path` : The directory in which the folder `trmmmonthly` will be created for data downloads, storage and analysis, default is the home directoy called by `homedir()`
 
 The following fields in `npd` will be fixed as below:
 - `npdID` : trmmmonthly
@@ -44,25 +44,25 @@ The following fields in `npd` will be fixed as below:
 function TRMMMonthly(
     ST = String,
     DT = Date;
-    dtbeg :: TimeType = Date(1998),
-    dtend :: TimeType = Date(2019),
-    sroot :: AbstractString = homedir(),
+    start :: TimeType = Date(1998),
+    stop  :: TimeType = Date(2019),
+    path  :: AbstractString = homedir(),
 )
 
 	@info "$(modulelog()) - Setting up data structure containing information on TRMM Monthly data to be downloaded"
 
-    fol = joinpath(sroot,"trmmmonthly"); if !isdir(fol); mkpath(fol) end
-    fol = joinpath(sroot,"trmmmask");    if !isdir(fol); mkpath(fol) end
+    fol = joinpath(path,"trmmmonthly"); if !isdir(fol); mkpath(fol) end
+    fol = joinpath(path,"trmmmask");    if !isdir(fol); mkpath(fol) end
 
-	dtbeg = Date(year(dtbeg),1,1)
-	dtend = Date(year(dtend),12,31)
-    trmmcheckdates(dtbeg,dtend)
+	start = Date(year(start),1,1)
+	stop = Date(year(stop),12,31)
+    trmmcheckdates(start,stop)
 
     return TRMMMonthly{ST,DT}(
 		"trmmmonthly", "TRMM Monthly (TMPA 3B43)", "10.5067/TRMM/TMPA/MONTH/7",
-        dtbeg, dtend,
-		joinpath(sroot,"trmmmonthly"),
-		joinpath(sroot,"trmmmask"),
+        start, stop,
+		joinpath(path,"trmmmonthly"),
+		joinpath(path,"trmmmask"),
         "https://disc2.gesdisc.eosdis.nasa.gov/opendap/TRMM_L3/TRMM_3B43.7",
         "3B43", "7.HDF",
     )
@@ -73,15 +73,15 @@ function show(io::IO, npd::TRMMMonthly{ST,DT}) where {ST<:AbstractString, DT<:Ti
     print(
 		io,
 		"The NASA Precipitation Dataset {$ST,$DT} has the following properties:\n",
-		"    Dataset ID      (npdID) : ", npd.npdID, '\n',
-		"    Logging Name    (lname) : ", npd.lname, '\n',
-		"    DOI URL          (doi)  : ", npd.doi,   '\n',
-		"    Data Directory  (sroot) : ", npd.sroot, '\n',
-		"    Mask Directory  (smask) : ", npd.smask, '\n',
-		"    Date Begin      (dtbeg) : ", npd.dtbeg, '\n',
-		"    Date End        (dtend) : ", npd.dtend, '\n',
-		"    Timestep                : 1 Month\n",
-        "    Data Resolution         : 0.25º\n",
-        "    Data Server     (hroot) : ", npd.hroot, '\n',
+		"    Dataset ID         (npdID) : ", npd.npdID, '\n',
+		"    Logging Name       (lname) : ", npd.lname, '\n',
+		"    DOI URL              (doi) : ", npd.doi,   '\n',
+		"    Data Directory  (datapath) : ", npd.path, '\n',
+		"    Mask Directory  (maskpath) : ", npd.maskpath, '\n',
+		"    Date Begin         (start) : ", npd.start, '\n',
+		"    Date End            (stop) : ", npd.stop, '\n',
+		"    Timestep                   : 1 Month\n",
+        "    Data Resolution            : 0.25º\n",
+        "    Data Server        (hroot) : ", npd.hroot, '\n',
 	)
 end

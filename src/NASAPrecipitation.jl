@@ -34,9 +34,10 @@ export
         npdID :: ST
         lname :: ST
         doi   :: ST
-        dtbeg :: DT
-        dtend :: DT
-        sroot :: ST
+        start :: DT
+        stop  :: DT
+        datapath :: ST
+        maskpath :: ST
         hroot :: ST
         fpref :: ST
         fsuff :: ST
@@ -48,14 +49,15 @@ Fields:
 * `npdID` : ID for the `NASAPrecipitationDataset`, used in determining containing folders and filenames of the NetCDF
 * `lname` : The name describing the `NASAPrecipitationDataset`, used mostly in Logging
 * `doi`   : The DOI identifier, to be saved into the NetCDF
-* `dtbeg` : The start date (Y,M,D) of our download / analysis
-* `dtend` : The end date (Y,M,D) of our download / analysis
-* `sroot` : The directory in which to save our downloads and analysis files to
+* `start` : The start date (Y,M,D) of our download / analysis
+* `stop`  : The end date (Y,M,D) of our download / analysis
+* `datapath` : The directory in which to save our downloads and analysis files to
+* `maskpath` : The directory in which to save our corresponding landsea mask datasets
 * `hroot` : The URL of the NASA's EOSDIS OPeNDAP server for which this dataset is stored
 * `fpref` : The prefix component of the NetCDF files to be downloaded
 * `fsuff` : The suffix component of the NetCDF files to be downloaded
 
-Of these fields, only `dtbeg`, `dtend` and `sroot` are user-defined.  All other fields are predetermined depending on the type of NASA Precipitation Dataset called.
+Of these fields, only `start`, `stop`, `datapath` and `maskpath` are user-defined.  All other fields are predetermined depending on the type of NASA Precipitation Dataset called.
 """
 abstract type NASAPrecipitationDataset end
 
