@@ -5,8 +5,8 @@ function extract(
 
     @info "$(modulelog()) - Retrieving GeoRegion and LandSea Dataset information for the parent GeoRegion of \"$(geo.regID)\", \"$(geo.parID)\""
     pgeo = GeoRegion(geo.parID)
-    plsd = getLandSea(npd,pgeo);
-    rlsd = getLandSea(npd,geo);
+    plsd = getLandSea(npd,pgeo)
+    rlsd = getLandSea(npd,geo)
     plon = plsd.lon
     plat = plsd.lat
 

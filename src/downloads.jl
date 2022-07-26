@@ -26,7 +26,7 @@ function download(
 	end
 
 	fnc  = imergrawfiles()
-	lon,lat = gpmlonlat(); nlon = length(lon); nlat = length(lat)
+	lon,lat = gpmlonlat(); nlon = length(lon)
 	ginfo = RegionGrid(geo,lon,lat)
 
 	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
@@ -56,6 +56,8 @@ function download(
 	else
 		iglat = iglat[1] : iglat[end]
 	end
+
+	getLandSea(npd,geo)
 
 	for dt in npd.dtbeg : Day(1) : npd.dtend
 
@@ -108,7 +110,7 @@ function download(
 		isinGeoRegion(geo,GeoRegion("IMERG"))
 	end
 
-	lon,lat = gpmlonlat(); nlon = length(lon); nlat = length(lat)
+	lon,lat = gpmlonlat(); nlon = length(lon)
 	ginfo = RegionGrid(geo,lon,lat)
 
 	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
@@ -138,6 +140,8 @@ function download(
 	else
 		iglat = iglat[1] : iglat[end]
 	end
+
+	getLandSea(npd,geo)
 
 	for dt in npd.dtbeg : Month(1) : npd.dtend
 
@@ -192,7 +196,7 @@ function download(
 		isinGeoRegion(geo,GeoRegion("IMERG"))
 	end
 
-	lon,lat = gpmlonlat(); nlon = length(lon); nlat = length(lat)
+	lon,lat = gpmlonlat(); nlon = length(lon)
 	ginfo = RegionGrid(geo,lon,lat)
 
 	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
@@ -222,6 +226,8 @@ function download(
 	else
 		iglat = iglat[1] : iglat[end]
 	end
+
+	getLandSea(npd,geo)
 
 	for dt in npd.dtbeg : Year(1) : npd.dtend
 
@@ -275,7 +281,7 @@ function download(
 		isinGeoRegion(geo,GeoRegion("TRMM"))
 	end
 
-	lon,lat = trmmlonloat(); nlon = length(lon); nlat = length(lat)
+	lon,lat = trmmlonloat(); nlon = length(lon)
 	ginfo = RegionGrid(geo,lon,lat)
 
 	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
@@ -305,6 +311,8 @@ function download(
 	else
 		iglat = iglat[1] : iglat[end]
 	end
+
+	getLandSea(npd,geo)
 
 	for dt in npd.dtbeg : Day(1) : npd.dtend
 
@@ -362,7 +370,7 @@ function download(
 		isinGeoRegion(geo,GeoRegion("TRMM"))
 	end
 
-	lon,lat = trmmlonlat(); nlon = length(lon); nlat = length(lat)
+	lon,lat = trmmlonlat(); nlon = length(lon)
 	ginfo = RegionGrid(geo,lon,lat)
 
 	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
@@ -392,6 +400,8 @@ function download(
 	else
 		iglat = iglat[1] : iglat[end]
 	end
+
+	getLandSea(npd,geo)
 
 	for dt in npd.dtbeg : Month(1) : npd.dtend
 
@@ -446,7 +456,7 @@ function download(
 		isinGeoRegion(geo,GeoRegion("TRMM"))
 	end
 
-	lon,lat = trmmlonlat(); nlon = length(lon); nlat = length(lat)
+	lon,lat = trmmlonlat(); nlon = length(lon)
 	ginfo = RegionGrid(geo,lon,lat)
 
 	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
@@ -476,6 +486,8 @@ function download(
 	else
 		iglat = iglat[1] : iglat[end]
 	end
+
+	getLandSea(npd,geo)
 
 	for dt in npd.dtbeg : Year(1) : npd.dtend
 
