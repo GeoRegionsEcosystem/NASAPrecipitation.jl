@@ -31,7 +31,7 @@ function save(
 	    "long_name" => "latitude",
 	))
 
-	ncvar = defVar(pds,"prcp_rate",Float32,("longitude","latitude","time"),attrib = Dict(
+	ncvar = defVar(pds,"precipitation",Float32,("longitude","latitude","time"),attrib = Dict(
 	    "units"     => "kg m**-2 s**-1",
 	    "long_name" => "precipitation_rate",
 		"full_name" => "Precipitation Rate",
