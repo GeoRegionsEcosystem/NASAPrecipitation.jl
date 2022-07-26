@@ -57,7 +57,7 @@ function download(
 		iglat = iglat[1] : iglat[end]
 	end
 
-	getLandSea(npd,geo)
+	getLandSea(npd,geo,returnlsd=false)
 
 	for dt in npd.dtbeg : Day(1) : npd.dtend
 
@@ -141,7 +141,7 @@ function download(
 		iglat = iglat[1] : iglat[end]
 	end
 
-	getLandSea(npd,geo)
+	getLandSea(npd,geo,returnlsd=false)
 
 	for dt in npd.dtbeg : Month(1) : npd.dtend
 
@@ -227,7 +227,7 @@ function download(
 		iglat = iglat[1] : iglat[end]
 	end
 
-	getLandSea(npd,geo)
+	getLandSea(npd,geo,returnlsd=false)
 
 	for dt in npd.dtbeg : Year(1) : npd.dtend
 
@@ -312,7 +312,7 @@ function download(
 		iglat = iglat[1] : iglat[end]
 	end
 
-	getLandSea(npd,geo)
+	getLandSea(npd,geo,returnlsd=false)
 
 	for dt in npd.dtbeg : Day(1) : npd.dtend
 
@@ -401,7 +401,7 @@ function download(
 		iglat = iglat[1] : iglat[end]
 	end
 
-	getLandSea(npd,geo)
+	getLandSea(npd,geo,returnlsd=false)
 
 	for dt in npd.dtbeg : Month(1) : npd.dtend
 
@@ -487,7 +487,7 @@ function download(
 		iglat = iglat[1] : iglat[end]
 	end
 
-	getLandSea(npd,geo)
+	getLandSea(npd,geo,returnlsd=false)
 
 	for dt in npd.dtbeg : Year(1) : npd.dtend
 
