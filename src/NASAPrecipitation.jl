@@ -24,7 +24,7 @@ export
         TRMMDaily,   TRMMDailyNRT,
         TRMMMonthly,
 
-        getLandSea, addNPDGeoRegions,
+        getLandSea, getIMERGlsd, getTRMMlsd, addNPDGeoRegions,
 
         download, read, npdfnc, setup
 

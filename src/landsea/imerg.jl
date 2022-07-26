@@ -209,7 +209,7 @@ function getIMERGlsd(
 			end
 		end
 
-		saveIMERGlsd(npd,geo,rinfo.glon,rinfo.glat,rlsm,Int16.(mask))
+		saveIMERGlsd(geo,rinfo.glon,rinfo.glat,rlsm,Int16.(mask),path)
 
 	end
 
