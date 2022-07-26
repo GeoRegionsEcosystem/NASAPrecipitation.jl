@@ -100,13 +100,12 @@ end
 
 include("setup.jl")
 
-include("IMERG/halfhourly.jl")
-include("IMERG/daily.jl")
-include("IMERG/monthly.jl")
-
-include("TRMM/3hourly.jl")
-include("TRMM/daily.jl")
-include("TRMM/monthly.jl")
+include("datasets/imerghh.jl")
+include("datasets/imergdy.jl")
+include("datasets/imergmo.jl")
+include("datasets/trmm3hr.jl")
+include("datasets/trmmdy.jl")
+include("datasets/trmmmo.jl")
 
 include("landsea/landsea.jl")
 include("landsea/imerg.jl")
