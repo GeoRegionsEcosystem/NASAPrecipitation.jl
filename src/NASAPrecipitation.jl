@@ -26,7 +26,7 @@ export
 
         getLandSea, getIMERGlsd, getTRMMlsd, addNPDGeoRegions,
 
-        download, read, npdfnc, setup
+        download, read, npdfnc, setup, extract
 
 ## Abstract types
 """
