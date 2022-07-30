@@ -17,8 +17,8 @@ function save(
 	@info "$(modulelog()) - Creating NetCDF file $(fnc) ..."
 	pds = makenpdnc(npd,fnc)
 
-	pds.dim["longitude"] = length(ginfo.glon)
-	pds.dim["latitude"]  = length(ginfo.glat)
+	pds.dim["longitude"] = length(ginfo.lon)
+	pds.dim["latitude"]  = length(ginfo.lat)
 	pds.dim["time"]      = size(var,3)
 
 	nclon = defVar(pds,"longitude",Float32,("longitude",),attrib = Dict(
@@ -37,8 +37,8 @@ function save(
 		"full_name" => "Precipitation Rate",
 	))
 
-	nclon[:] = ginfo.glon
-	nclat[:] = ginfo.glat
+	nclon[:] = ginfo.lon
+	nclat[:] = ginfo.lat
 	ncvar[:] = var
 
 	close(pds)

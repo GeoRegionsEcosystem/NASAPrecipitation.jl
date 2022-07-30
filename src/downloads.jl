@@ -30,8 +30,8 @@ function download(
 	ginfo = RegionGrid(geo,lon,lat)
 
 	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
-	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
-	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
+	glon = ginfo.lon; nglon = length(glon); iglon = ginfo.ilon
+	glat = ginfo.lat; nglat = length(glat); iglat = ginfo.ilat
 	tmp0 = zeros(Float32,nglat,nglon)
 	var  = zeros(Float32,nglon,nglat,48)
 
@@ -112,8 +112,8 @@ function download(
 	ginfo = RegionGrid(geo,lon,lat)
 
 	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
-	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
-	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
+	glon = ginfo.lon; nglon = length(glon); iglon = ginfo.ilon
+	glat = ginfo.lat; nglat = length(glat); iglat = ginfo.ilat
 	tmp0 = zeros(Float32,nglat,nglon)
 	var  = zeros(Float32,nglon,nglat,31)
 
@@ -196,8 +196,8 @@ function download(
 	ginfo = RegionGrid(geo,lon,lat)
 
 	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
-	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
-	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
+	glon = ginfo.lon; nglon = length(glon); iglon = ginfo.ilon
+	glat = ginfo.lat; nglat = length(glat); iglat = ginfo.ilat
 	tmp0 = zeros(Float32,nglat,nglon)
 	var  = zeros(Float32,nglon,nglat,12)
 
@@ -279,8 +279,8 @@ function download(
 	ginfo = RegionGrid(geo,lon,lat)
 
 	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
-	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
-	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
+	glon = ginfo.lon; nglon = length(glon); iglon = ginfo.ilon
+	glat = ginfo.lat; nglat = length(glat); iglat = ginfo.ilat
 	tmp0 = zeros(Float32,nglat,nglon)
 	var  = zeros(Float32,nglon,nglat,8)
 
@@ -366,8 +366,8 @@ function download(
 	ginfo = RegionGrid(geo,lon,lat)
 
 	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
-	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
-	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
+	glon = ginfo.lon; nglon = length(glon); iglon = ginfo.ilon
+	glat = ginfo.lat; nglat = length(glat); iglat = ginfo.ilat
 	tmp0 = zeros(Float32,nglat,nglon)
 	var  = zeros(Float32,nglon,nglat,31)
 
@@ -450,8 +450,8 @@ function download(
 	ginfo = RegionGrid(geo,lon,lat)
 
 	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
-	glon = ginfo.glon; nglon = length(glon); iglon = ginfo.ilon
-	glat = ginfo.glat; nglat = length(glat); iglat = ginfo.ilat
+	glon = ginfo.lon; nglon = length(glon); iglon = ginfo.ilon
+	glat = ginfo.lat; nglat = length(glat); iglat = ginfo.ilat
 	tmp0 = zeros(Float32,nglat,nglon)
 	var  = zeros(Float32,nglon,nglat,12)
 
