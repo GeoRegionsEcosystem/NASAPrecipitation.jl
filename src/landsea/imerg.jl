@@ -101,8 +101,8 @@ function saveLandSea(
     geo  :: GeoRegion,
     lon  :: Vector{<:Real},
     lat  :: Vector{<:Real},
-    lsm  :: Array{<:Real,2},
-    mask :: Array{Int16,2},
+    lsm  :: AbstractArray{<:Real,2},
+    mask :: AbstractArray{Int16,2},
 )
 
     fnc = joinpath(npd.maskpath,"imergmask-$(geo.regID).nc")
@@ -259,8 +259,8 @@ function saveIMERGlsd(
     geo  :: GeoRegion,
     lon  :: Vector{<:Real},
     lat  :: Vector{<:Real},
-    lsm  :: Array{<:Real,2},
-    mask :: Array{Int16,2},
+    lsm  :: AbstractArray{<:Real,2},
+    mask :: AbstractArray{Int16,2},
     path :: AbstractString
 )
 
