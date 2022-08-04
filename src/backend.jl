@@ -94,11 +94,12 @@ function imergcheckdates(
 
 end
 
-function ncoffsetscale(data::AbstractArray{<:Real},init=0)
+function ncoffsetscale(data::AbstractArray{<:Real})
 
+    init = data[findfirst(!isnan,data)]
     dmax = init
     dmin = init
-    for ii = 1 : length(data)
+    for ii in eachindex(data)
         dataii = data[ii]
         if !isnan(dataii)
             if dataii > dmax; dmax = dataii end
@@ -120,7 +121,7 @@ function real2int16!(
     offset   :: Real
 )
 
-    for ii = 1 : length(inarray)
+    for ii in eachindex(inarray)
 
         idata = (inarray[ii] - offset) / scale
         if isnan(idata)
@@ -140,9 +141,9 @@ function extractregionlsm!(
 	ginfo	 :: RectGrid
 )
 
-	iglon = ginfo.ilon; nglon = length(iglon)
-	iglat = ginfo.ilat; nglat = length(iglat)
-	for ilat = 1 : nglat, ilon = 1 : nglon
+    iglon = ginfo.ilon
+    iglat = ginfo.ilat
+    for ilat in eachindex(iglat), ilon in eachindex(iglon)
 		outarray[ilon,ilat] = inarray[iglat[ilat],iglon[ilon]]
 	end
 
@@ -154,9 +155,9 @@ function extractregionlsm!(
 	ginfo	 :: PolyGrid
 )
 
-	iglon = ginfo.ilon; nglon = length(iglon)
-	iglat = ginfo.ilat; nglat = length(iglat)
-	for ilat = 1 : nglat, ilon = 1 : nglon
+	iglon = ginfo.ilon
+	iglat = ginfo.ilat
+	for ilat in eachindex(iglat), ilon in eachindex(iglon)
 		outarray[ilon,ilat] = inarray[iglat[ilat],iglon[ilon]] * ginfo.mask[ilon,ilat]
 	end
 
