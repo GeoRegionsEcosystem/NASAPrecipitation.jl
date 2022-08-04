@@ -50,7 +50,7 @@ function getLandSea(
 			end
 		end
 
-		saveLandSea(npd,geo,rinfo.glon,rinfo.glat,rlsm,Int16.(mask))
+		saveLandSea(npd,geo,rinfo.lon,rinfo.lat,rlsm,Int16.(mask))
 
 	end
 
@@ -82,7 +82,7 @@ function downloadLandSea(
 	lon,lat = trmmlonlat(full=true)
 	nlon = length(lon)
 	nlat = length(lat)
-	var  = zeros(Float32,nlon,nlat)
+	var  = zeros(Float32,nlat,nlon)
 	mask = ones(Int16,nlon,nlat)
 
 	@info "$(modulelog()) - Retrieving the original TRMM-TMPA Land-Sea Mask data from NASA's EOSDIS OPeNDAP servers"
@@ -92,7 +92,7 @@ function downloadLandSea(
 	NCDatasets.load!(npdds["landseamask"].var,var,:,:)
 	close(npdds)
 
-	saveLandSea(npd,GeoRegion("TRMMLSM"),lon,lat,var,mask)
+	saveLandSea(npd,GeoRegion("TRMMLSM"),lon,lat,var',mask)
 
 end
 
@@ -209,7 +209,7 @@ function getLandSea(
 			end
 		end
 
-		saveTRMMlsd(geo,rinfo.glon,rinfo.glat,rlsm,Int16.(mask),path)
+		saveTRMMlsd(geo,rinfo.lon,rinfo.lat,rlsm,Int16.(mask),path)
 
 	end
 
@@ -241,7 +241,7 @@ function downloadTRMMlsd(
 	lon,lat = trmmlonlat(full=true)
 	nlon = length(lon)
 	nlat = length(lat)
-	var  = zeros(Float32,nlon,nlat)
+	var  = zeros(Float32,nlat,nlon)
 	mask = ones(Int16,nlon,nlat)
 
 	@info "$(modulelog()) - Retrieving the original TRMM-TMPA Land-Sea Mask data from NASA's EOSDIS OPeNDAP servers"
@@ -251,7 +251,7 @@ function downloadTRMMlsd(
 	NCDatasets.load!(npdds["landseamask"].var,var,:,:)
 	close(npdds)
 
-	saveTRMMlsd(GeoRegion("TRMMLSM"),lon,lat,var,mask,path)
+	saveTRMMlsd(GeoRegion("TRMMLSM"),lon,lat,var',mask,path)
 
 end
 
