@@ -13,6 +13,7 @@ using Reexport
 @reexport using GeoRegions
 
 import Base: download, show, read
+import GeoRegions: getLandSea
 
 ## Exporting the following functions:
 export
