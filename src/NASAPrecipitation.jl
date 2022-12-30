@@ -7,13 +7,13 @@ using NetRC
 using Printf
 using Statistics
 
+import Base: download, show, read
+import GeoRegions: getLandSea
+
 ## Reexporting exported functions within these modules
 using Reexport
 @reexport using Dates
 @reexport using GeoRegions
-
-import Base: download, show, read
-import GeoRegions: getLandSea
 
 ## Exporting the following functions:
 export

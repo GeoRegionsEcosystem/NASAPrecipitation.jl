@@ -157,7 +157,7 @@ end
 
 ##############################################################################
 
-function getLandSea(
+function getTRMMlsd(
 	geo  :: GeoRegion = GeoRegion("GLB");
 	path :: AbstractString,
     returnlsd = true,
