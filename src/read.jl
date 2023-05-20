@@ -23,8 +23,13 @@ function read(
 	npd :: NASAPrecipitationDataset,
 	geo :: GeoRegion,
     dt  :: TimeType;
-    lonlat :: Bool = false
+    lonlat :: Bool = false,
+    quiet  :: Bool = false
 )
+
+    if quiet
+        disable_logging(Logging.Warn)
+    end
 
     pnc = npdfnc(npd,geo,dt)
     if !isfile(pnc)
@@ -32,6 +37,12 @@ function read(
     end
     @info "$(modulelog()) - Opening the $(npd.lname) NCDataset in the $(geo.regID) GeoRegion for $dt"
     pds = NCDataset(pnc)
+
+    if quiet
+        disable_logging(Logging.Debug)
+    end
+
+    flush(stderr)
     
     if !lonlat
           return pds

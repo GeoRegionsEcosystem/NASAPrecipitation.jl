@@ -43,6 +43,8 @@ function extract(
 
         save(view(rmat,:,:,1:nt),dt,npd,geo,rinfo)
 
+        flush(stderr)
+
     end
 
 end
@@ -93,6 +95,8 @@ function extract(
         close(pds)
 
         save(view(rmat,:,:,1:nt),dt,npd,sgeo,rinfo)
+
+        flush(stderr)
 
     end
 

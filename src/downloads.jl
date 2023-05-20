@@ -90,6 +90,8 @@ function download(
 
 		save(var,dt,npd,geo,ginfo)
 
+        flush(stderr)
+
 	end
 
 end
@@ -174,6 +176,8 @@ function download(
 
 		save(view(var,:,:,1:ndy),dt,npd,geo,ginfo)
 
+        flush(stderr)
+
 	end
 
 end
@@ -256,6 +260,8 @@ function download(
 		end
 
 		save(var,dt,npd,geo,ginfo)
+
+        flush(stderr)
 
 	end
 
@@ -344,6 +350,8 @@ function download(
 
 		save(var,dt,npd,geo,ginfo)
 
+        flush(stderr)
+
 	end
 
 end
@@ -428,6 +436,8 @@ function download(
 
 		save(view(var,:,:,1:ndy),dt,npd,geo,ginfo)
 
+        flush(stderr)
+
 	end
 
 end
@@ -510,6 +520,8 @@ function download(
 		end
 
 		save(var,dt,npd,geo,ginfo)
+
+        flush(stderr)
 
 	end
 
