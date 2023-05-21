@@ -13,7 +13,8 @@ Arguments
 """
 function download(
 	npd :: IMERGHalfHourly{ST,DT},
-	geo :: GeoRegion = GeoRegion("GLB")
+	geo :: GeoRegion = GeoRegion("GLB");
+	overwrite :: Bool = false
 ) where {ST<:AbstractString, DT<:TimeType}
 
 	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
@@ -59,38 +60,48 @@ function download(
 
 	for dt in npd.start : Day(1) : npd.stop
 
-		@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) ..."
+		fnc = npdfnc(npd,geo,dt)
+		if overwrite || !isfile(fnc)
 
-		ymdfnc = Dates.format(dt,dateformat"yyyymmdd")
-		npddir = joinpath(npd.hroot,"$(year(dt))",@sprintf("%03d",dayofyear(dt)))
-		for it = 1 : 48
+			@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) ..."
 
-			@debug "$(modulelog()) - Loading data into temporary array for timestep $(fnc[it])"
+			ymdfnc = Dates.format(dt,dateformat"yyyymmdd")
+			npddir = joinpath(npd.hroot,"$(year(dt))",@sprintf("%03d",dayofyear(dt)))
+			
+			for it = 1 : 48
 
-			npdfnc = "$(npd.fpref).$ymdfnc-$(fnc[it]).$(npd.fsuff)"
-			ds = NCDataset(joinpath(npddir,npdfnc))
-			if !shift
-				NCDatasets.load!(ds["precipitationCal"].var,tmp0,iglat,iglon,1)
-			else
-				NCDatasets.load!(ds["precipitationCal"].var,tmp1,iglat,iglon1,1)
-				NCDatasets.load!(ds["precipitationCal"].var,tmp2,iglat,iglon2,1)
-			end
-			close(ds)
+				@debug "$(modulelog()) - Loading data into temporary array for timestep $(fnc[it])"
 
-			@debug "$(modulelog()) - Extraction of data from temporary array for the $(geo.name) GeoRegion"
-			for ilat = 1 : nglat, ilon = 1 : nglon
-				varii = tmp0[ilat,ilon]
-				mskii = msk[ilon,ilat]
-				if (varii != -9999.9f0) && !isnan(mskii)
-					  var[ilon,ilat,it] = varii / 3600
-				else; var[ilon,ilat,it] = NaN32
+				npdfnc = "$(npd.fpref).$ymdfnc-$(fnc[it]).$(npd.fsuff)"
+				ds = NCDataset(joinpath(npddir,npdfnc))
+				if !shift
+					NCDatasets.load!(ds["precipitationCal"].var,tmp0,iglat,iglon,1)
+				else
+					NCDatasets.load!(ds["precipitationCal"].var,tmp1,iglat,iglon1,1)
+					NCDatasets.load!(ds["precipitationCal"].var,tmp2,iglat,iglon2,1)
+				end
+				close(ds)
+
+				@debug "$(modulelog()) - Extraction of data from temporary array for the $(geo.name) GeoRegion"
+				for ilat = 1 : nglat, ilon = 1 : nglon
+					varii = tmp0[ilat,ilon]
+					mskii = msk[ilon,ilat]
+					if (varii != -9999.9f0) && !isnan(mskii)
+						var[ilon,ilat,it] = varii / 3600
+					else; var[ilon,ilat,it] = NaN32
+					end
 				end
 			end
+
+			save(var,dt,npd,geo,ginfo)
+
+		else
+
+			@info "$(modulelog()) - $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) exists in $(fnc), and we are not overwriting, skipping to next timestep ..."
+
 		end
 
-		save(var,dt,npd,geo,ginfo)
-
-        flush(stderr)
+		flush(stderr)
 
 	end
 
@@ -98,7 +109,8 @@ end
 
 function download(
 	npd :: IMERGDaily{ST,DT},
-	geo :: GeoRegion = GeoRegion("GLB")
+	geo :: GeoRegion = GeoRegion("GLB");
+	overwrite :: Bool = false
 ) where {ST<:AbstractString, DT<:TimeType}
 
 	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
@@ -143,38 +155,47 @@ function download(
 
 	for dt in npd.start : Month(1) : npd.stop
 
-		@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt))-$(month(dt)) ..."
+		fnc = npdfnc(npd,geo,dt)
+		if overwrite || !isfile(fnc)
 
-		npddir = joinpath(npd.hroot,"$(yrmo2dir(dt))")
-		ndy = daysinmonth(dt)
+			@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt))-$(month(dt)) ..."
 
-		for dy in 1 : ndy
-			dtii   = Date(year(dt),month(dt),dy)
-			ymdfnc = "$(ymd2str(dtii))"
-			npdfnc = "$(npd.fpref).$ymdfnc-$(npd.fsuff)"
-			ds = NCDataset(joinpath(npddir,npdfnc))
-			if !shift
-				NCDatasets.load!(ds["precipitationCal"].var,tmp0,iglat,iglon,1)
-			else
-				NCDatasets.load!(ds["precipitationCal"].var,tmp1,iglat,iglon1,1)
-				NCDatasets.load!(ds["precipitationCal"].var,tmp2,iglat,iglon2,1)
-			end
-			close(ds)
+			npddir = joinpath(npd.hroot,"$(yrmo2dir(dt))")
+			ndy = daysinmonth(dt)
 
-			@debug "$(modulelog()) - Extraction of data from temporary array for the $(geo.name) GeoRegion"
-
-			for ilat = 1 : nglat, ilon = 1 : nglon
-				varii = tmp0[ilat,ilon]
-				mskii = msk[ilon,ilat]
-				if (varii != -9999.9f0) && !isnan(mskii)
-					  var[ilon,ilat,dy] = varii / 86400
-				else; var[ilon,ilat,dy] = NaN32
+			for dy in 1 : ndy
+				dtii   = Date(year(dt),month(dt),dy)
+				ymdfnc = "$(ymd2str(dtii))"
+				npdfnc = "$(npd.fpref).$ymdfnc-$(npd.fsuff)"
+				ds = NCDataset(joinpath(npddir,npdfnc))
+				if !shift
+					NCDatasets.load!(ds["precipitationCal"].var,tmp0,iglat,iglon,1)
+				else
+					NCDatasets.load!(ds["precipitationCal"].var,tmp1,iglat,iglon1,1)
+					NCDatasets.load!(ds["precipitationCal"].var,tmp2,iglat,iglon2,1)
 				end
+				close(ds)
+
+				@debug "$(modulelog()) - Extraction of data from temporary array for the $(geo.name) GeoRegion"
+
+				for ilat = 1 : nglat, ilon = 1 : nglon
+					varii = tmp0[ilat,ilon]
+					mskii = msk[ilon,ilat]
+					if (varii != -9999.9f0) && !isnan(mskii)
+						var[ilon,ilat,dy] = varii / 86400
+					else; var[ilon,ilat,dy] = NaN32
+					end
+				end
+
 			end
+
+			save(view(var,:,:,1:ndy),dt,npd,geo,ginfo)
+
+		else
+
+			@info "$(modulelog()) - $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) exists in $(fnc), and we are not overwriting, skipping to next timestep ..."
 
 		end
-
-		save(view(var,:,:,1:ndy),dt,npd,geo,ginfo)
 
         flush(stderr)
 
@@ -184,7 +205,8 @@ end
 
 function download(
 	npd :: IMERGMonthly{ST,DT},
-	geo :: GeoRegion = GeoRegion("GLB")
+	geo :: GeoRegion = GeoRegion("GLB");
+	overwrite :: Bool = false
 ) where {ST<:AbstractString, DT<:TimeType}
 
 	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
@@ -229,37 +251,46 @@ function download(
 
 	for dt in npd.start : Year(1) : npd.stop
 
-		@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt)) ..."
+		fnc = npdfnc(npd,geo,dt)
+		if overwrite || !isfile(fnc)
 
-		npddir = joinpath(npd.hroot,"$(year(dt))")
+			@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt)) ..."
 
-		for mo in 1 : 12
-			dtii   = Date(year(dt),mo,1)
-			ymdfnc = "$(ymd2str(dtii))-S000000-E235959"
-			npdfnc = "$(npd.fpref).$ymdfnc.$(@sprintf("%02d",mo)).$(npd.fsuff)"
-			ds = NCDataset(joinpath(npddir,npdfnc))
-			if !shift
-				NCDatasets.load!(ds["precipitation"].var,tmp0,iglat,iglon,1)
-			else
-				NCDatasets.load!(ds["precipitation"].var,tmp1,iglat,iglon1,1)
-				NCDatasets.load!(ds["precipitation"].var,tmp2,iglat,iglon2,1)
-			end
-			close(ds)
+			npddir = joinpath(npd.hroot,"$(year(dt))")
 
-			@debug "$(modulelog()) - Extraction of data from temporary array for the $(geo.name) GeoRegion"
-
-			for ilat = 1 : nglat, ilon = 1 : nglon
-				varii = tmp0[ilat,ilon]
-				mskii = msk[ilon,ilat]
-				if (varii != -9999.9f0) && !isnan(mskii)
-					  var[ilon,ilat,mo] = varii / 3600
-				else; var[ilon,ilat,mo] = NaN32
+			for mo in 1 : 12
+				dtii   = Date(year(dt),mo,1)
+				ymdfnc = "$(ymd2str(dtii))-S000000-E235959"
+				npdfnc = "$(npd.fpref).$ymdfnc.$(@sprintf("%02d",mo)).$(npd.fsuff)"
+				ds = NCDataset(joinpath(npddir,npdfnc))
+				if !shift
+					NCDatasets.load!(ds["precipitation"].var,tmp0,iglat,iglon,1)
+				else
+					NCDatasets.load!(ds["precipitation"].var,tmp1,iglat,iglon1,1)
+					NCDatasets.load!(ds["precipitation"].var,tmp2,iglat,iglon2,1)
 				end
+				close(ds)
+
+				@debug "$(modulelog()) - Extraction of data from temporary array for the $(geo.name) GeoRegion"
+
+				for ilat = 1 : nglat, ilon = 1 : nglon
+					varii = tmp0[ilat,ilon]
+					mskii = msk[ilon,ilat]
+					if (varii != -9999.9f0) && !isnan(mskii)
+						var[ilon,ilat,mo] = varii / 3600
+					else; var[ilon,ilat,mo] = NaN32
+					end
+				end
+
 			end
+
+			save(var,dt,npd,geo,ginfo)
+
+		else
+
+			@info "$(modulelog()) - $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) exists in $(fnc), and we are not overwriting, skipping to next timestep ..."
 
 		end
-
-		save(var,dt,npd,geo,ginfo)
 
         flush(stderr)
 
@@ -269,7 +300,8 @@ end
 
 function download(
 	npd :: TRMM3Hourly{ST,DT},
-	geo :: GeoRegion = GeoRegion("GLB")
+	geo :: GeoRegion = GeoRegion("GLB");
+	overwrite :: Bool = false
 ) where {ST<:AbstractString, DT<:TimeType}
 
 	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
@@ -314,41 +346,50 @@ function download(
 
 	for dt in npd.start : Day(1) : npd.stop
 
-		@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) ..."
+		fnc = npdfnc(npd,geo,dt)
+		if overwrite || !isfile(fnc)
 
-		ymdfnc = Dates.format(dt,dateformat"yyyymmdd")
+			@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) ..."
 
-		for it = 1 : 8
+			ymdfnc = Dates.format(dt,dateformat"yyyymmdd")
 
-			@debug "$(modulelog()) - Loading data into temporary array for timestep $(fnc[it])"
+			for it = 1 : 8
 
-			if isone(it); di = dt-Day(1)
-				  npddir = joinpath(npd.hroot,"$(year(di))",@sprintf("%03d",dayofyear(di)))
-			else; npddir = joinpath(npd.hroot,"$(year(dt))",@sprintf("%03d",dayofyear(dt)))
-			end
+				@debug "$(modulelog()) - Loading data into temporary array for timestep $(fnc[it])"
 
-			npdfnc = "$(npd.fpref).$ymdfnc.$((it-1)*3).$(npd.fsuff)"
-			ds = NCDataset(joinpath(npddir,npdfnc))
-			if !shift
-				NCDatasets.load!(ds["precipitation"].var,tmp0,iglat,iglon,1)
-			else
-				NCDatasets.load!(ds["precipitation"].var,tmp1,iglat,iglon1,1)
-				NCDatasets.load!(ds["precipitation"].var,tmp2,iglat,iglon2,1)
-			end
-			close(ds)
+				if isone(it); di = dt-Day(1)
+					npddir = joinpath(npd.hroot,"$(year(di))",@sprintf("%03d",dayofyear(di)))
+				else; npddir = joinpath(npd.hroot,"$(year(dt))",@sprintf("%03d",dayofyear(dt)))
+				end
 
-			@debug "$(modulelog()) - Extraction of data from temporary array for the $(geo.name) GeoRegion"
-			for ilat = 1 : nglat, ilon = 1 : nglon
-				varii = tmp0[ilat,ilon]
-				mskii = msk[ilon,ilat]
-				if (varii != -9999.9f0) && !isnan(mskii)
-					  var[ilon,ilat,it] = varii / 3600
-				else; var[ilon,ilat,it] = NaN32
+				npdfnc = "$(npd.fpref).$ymdfnc.$((it-1)*3).$(npd.fsuff)"
+				ds = NCDataset(joinpath(npddir,npdfnc))
+				if !shift
+					NCDatasets.load!(ds["precipitation"].var,tmp0,iglat,iglon,1)
+				else
+					NCDatasets.load!(ds["precipitation"].var,tmp1,iglat,iglon1,1)
+					NCDatasets.load!(ds["precipitation"].var,tmp2,iglat,iglon2,1)
+				end
+				close(ds)
+
+				@debug "$(modulelog()) - Extraction of data from temporary array for the $(geo.name) GeoRegion"
+				for ilat = 1 : nglat, ilon = 1 : nglon
+					varii = tmp0[ilat,ilon]
+					mskii = msk[ilon,ilat]
+					if (varii != -9999.9f0) && !isnan(mskii)
+						var[ilon,ilat,it] = varii / 3600
+					else; var[ilon,ilat,it] = NaN32
+					end
 				end
 			end
-		end
 
-		save(var,dt,npd,geo,ginfo)
+			save(var,dt,npd,geo,ginfo)
+
+		else
+
+			@info "$(modulelog()) - $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) exists in $(fnc), and we are not overwriting, skipping to next timestep ..."
+
+		end
 
         flush(stderr)
 
@@ -358,7 +399,8 @@ end
 
 function download(
 	npd :: TRMMDaily{ST,DT},
-	geo :: GeoRegion = GeoRegion("GLB")
+	geo :: GeoRegion = GeoRegion("GLB");
+	overwrite :: Bool = false
 ) where {ST<:AbstractString, DT<:TimeType}
 
 	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
@@ -403,38 +445,47 @@ function download(
 
 	for dt in npd.start : Month(1) : npd.stop
 
-		@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt))-$(month(dt)) ..."
+		fnc = npdfnc(npd,geo,dt)
+		if overwrite || !isfile(fnc)
 
-		npddir = joinpath(npd.hroot,"$(yrmo2dir(dt))")
-		ndy = daysinmonth(dt)
+			@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt))-$(month(dt)) ..."
 
-		for dy in 1 : ndy
-			dtii   = Date(year(dt),month(dt),dy)
-			ymdfnc = "$(ymd2str(dtii))"
-			npdfnc = "$(npd.fpref).$ymdfnc.$(npd.fsuff)"
-			ds = NCDataset(joinpath(npddir,npdfnc))
-			if !shift
-				NCDatasets.load!(ds["precipitation"].var,tmp0,iglat,iglon,1)
-			else
-				NCDatasets.load!(ds["precipitation"].var,tmp1,iglat,iglon1,1)
-				NCDatasets.load!(ds["precipitation"].var,tmp2,iglat,iglon2,1)
-			end
-			close(ds)
+			npddir = joinpath(npd.hroot,"$(yrmo2dir(dt))")
+			ndy = daysinmonth(dt)
 
-			@debug "$(modulelog()) - Extraction of data from temporary array for the $(geo.name) GeoRegion"
-
-			for ilat = 1 : nglat, ilon = 1 : nglon
-				varii = tmp0[ilat,ilon]
-				mskii = msk[ilon,ilat]
-				if (varii != -9999.9f0) && !isnan(mskii)
-					  var[ilon,ilat,dy] = varii / 86400
-				else; var[ilon,ilat,dy] = NaN32
+			for dy in 1 : ndy
+				dtii   = Date(year(dt),month(dt),dy)
+				ymdfnc = "$(ymd2str(dtii))"
+				npdfnc = "$(npd.fpref).$ymdfnc.$(npd.fsuff)"
+				ds = NCDataset(joinpath(npddir,npdfnc))
+				if !shift
+					NCDatasets.load!(ds["precipitation"].var,tmp0,iglat,iglon,1)
+				else
+					NCDatasets.load!(ds["precipitation"].var,tmp1,iglat,iglon1,1)
+					NCDatasets.load!(ds["precipitation"].var,tmp2,iglat,iglon2,1)
 				end
+				close(ds)
+
+				@debug "$(modulelog()) - Extraction of data from temporary array for the $(geo.name) GeoRegion"
+
+				for ilat = 1 : nglat, ilon = 1 : nglon
+					varii = tmp0[ilat,ilon]
+					mskii = msk[ilon,ilat]
+					if (varii != -9999.9f0) && !isnan(mskii)
+						var[ilon,ilat,dy] = varii / 86400
+					else; var[ilon,ilat,dy] = NaN32
+					end
+				end
+
 			end
+
+			save(view(var,:,:,1:ndy),dt,npd,geo,ginfo)
+
+		else
+
+			@info "$(modulelog()) - $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) exists in $(fnc), and we are not overwriting, skipping to next timestep ..."
 
 		end
-
-		save(view(var,:,:,1:ndy),dt,npd,geo,ginfo)
 
         flush(stderr)
 
@@ -444,7 +495,8 @@ end
 
 function download(
 	npd :: TRMMMonthly{ST,DT},
-	geo :: GeoRegion = GeoRegion("GLB")
+	geo :: GeoRegion = GeoRegion("GLB");
+	overwrite :: Bool = false
 ) where {ST<:AbstractString, DT<:TimeType}
 
 	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
@@ -489,37 +541,46 @@ function download(
 
 	for dt in npd.start : Year(1) : npd.stop
 
-		@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt)) ..."
+		fnc = npdfnc(npd,geo,dt)
+		if overwrite || !isfile(fnc)
 
-		npddir = joinpath(npd.hroot,"$(year(dt))")
+			@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt)) ..."
 
-		for mo in 1 : 12
-			dtii   = Date(year(dt),mo,1)
-			ymdfnc = "$(ymd2str(dtii))"
-			npdfnc = "$(npd.fpref).$ymdfnc.$(npd.fsuff)"
-			ds = NCDataset(joinpath(npddir,npdfnc))
-			if !shift
-				NCDatasets.load!(ds["precipitation"].var,tmp0,iglat,iglon,1)
-			else
-				NCDatasets.load!(ds["precipitation"].var,tmp1,iglat,iglon1,1)
-				NCDatasets.load!(ds["precipitation"].var,tmp2,iglat,iglon2,1)
-			end
-			close(ds)
+			npddir = joinpath(npd.hroot,"$(year(dt))")
 
-			@debug "$(modulelog()) - Extraction of data from temporary array for the $(geo.name) GeoRegion"
-
-			for ilat = 1 : nglat, ilon = 1 : nglon
-				varii = tmp0[ilat,ilon]
-				mskii = msk[ilon,ilat]
-				if (varii != -9999.9f0) && !isnan(mskii)
-					  var[ilon,ilat,mo] = varii / 3600
-				else; var[ilon,ilat,mo] = NaN32
+			for mo in 1 : 12
+				dtii   = Date(year(dt),mo,1)
+				ymdfnc = "$(ymd2str(dtii))"
+				npdfnc = "$(npd.fpref).$ymdfnc.$(npd.fsuff)"
+				ds = NCDataset(joinpath(npddir,npdfnc))
+				if !shift
+					NCDatasets.load!(ds["precipitation"].var,tmp0,iglat,iglon,1)
+				else
+					NCDatasets.load!(ds["precipitation"].var,tmp1,iglat,iglon1,1)
+					NCDatasets.load!(ds["precipitation"].var,tmp2,iglat,iglon2,1)
 				end
+				close(ds)
+
+				@debug "$(modulelog()) - Extraction of data from temporary array for the $(geo.name) GeoRegion"
+
+				for ilat = 1 : nglat, ilon = 1 : nglon
+					varii = tmp0[ilat,ilon]
+					mskii = msk[ilon,ilat]
+					if (varii != -9999.9f0) && !isnan(mskii)
+						var[ilon,ilat,mo] = varii / 3600
+					else; var[ilon,ilat,mo] = NaN32
+					end
+				end
+
 			end
+
+			save(var,dt,npd,geo,ginfo)
+
+		else
+
+			@info "$(modulelog()) - $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) exists in $(fnc), and we are not overwriting, skipping to next timestep ..."
 
 		end
-
-		save(var,dt,npd,geo,ginfo)
 
         flush(stderr)
 
