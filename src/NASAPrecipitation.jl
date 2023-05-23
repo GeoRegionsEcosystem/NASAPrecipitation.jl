@@ -25,6 +25,8 @@ export
         TRMMDaily,   TRMMDailyNRT,
         TRMMMonthly,
 
+        IMERGDummy, TRMMDummy,
+
         getLandSea, getIMERGlsd, getTRMMlsd, addNPDGeoRegions,
 
         download, read, npdfnc, setup, extract
@@ -107,6 +109,7 @@ include("datasets/imergmo.jl")
 include("datasets/trmm3hr.jl")
 include("datasets/trmmdy.jl")
 include("datasets/trmmmo.jl")
+include("datasets/dummy.jl")
 
 include("landsea/landsea.jl")
 include("landsea/imerg.jl")
