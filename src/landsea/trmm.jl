@@ -5,22 +5,22 @@ function getLandSea(
     FT = Float32
 )
 
-	if geo.regID == "GLB"
+	if geo.ID == "GLB"
 		@info "$(modulelog()) - Global dataset request has been detected, switching to the TRMM LandSea Mask GeoRegion"
 		addNPDGeoRegions(); geo = GeoRegion("TRMMLSM")
 	else
-		@info "$(modulelog()) - Checking to see if the specified GeoRegion \"$(geo.regID)\" is within the \"TRMMLSM\" GeoRegion"
+		@info "$(modulelog()) - Checking to see if the specified GeoRegion \"$(geo.ID)\" is within the \"TRMMLSM\" GeoRegion"
 		isinGeoRegion(geo,GeoRegion("TRMMLSM"))
 	end
-	lsmfnc = joinpath(npd.maskpath,"trmmmask-$(geo.regID).nc")
+	lsmfnc = joinpath(npd.maskpath,"trmmmask-$(geo.ID).nc")
 
 	if !isfile(lsmfnc)
 
-		@info "$(modulelog()) - The TRMM Land-Sea mask dataset for the \"$(geo.regID)\" GeoRegion is not available, extracting from Global TRMM Land-Sea mask dataset ..."
+		@info "$(modulelog()) - The TRMM Land-Sea mask dataset for the \"$(geo.ID)\" GeoRegion is not available, extracting from Global TRMM Land-Sea mask dataset ..."
 
 		glbfnc = joinpath(npd.maskpath,"trmmmask-TRMMLSM.nc")
 		if !isfile(glbfnc)
-			@info "$(modulelog()) - The Global TRMM Land-Sea mask dataset for the \"$(geo.regID)\" GeoRegion is not available, downloading from the Climate Data Store ..."
+			@info "$(modulelog()) - The Global TRMM Land-Sea mask dataset for the \"$(geo.ID)\" GeoRegion is not available, downloading from the Climate Data Store ..."
 			downloadLandSea(npd)
 		end
 
@@ -40,7 +40,7 @@ function getLandSea(
 		else; mask = ones(Int16,nlon,nlat)
 		end
 
-		@info "$(modulelog()) - Extracting regional TRMM Land-Sea mask for the \"$(geo.regID)\" GeoRegion from the Global TRMM Land-Sea mask dataset ..."
+		@info "$(modulelog()) - Extracting regional TRMM Land-Sea mask for the \"$(geo.ID)\" GeoRegion from the Global TRMM Land-Sea mask dataset ..."
 
 		for iglat = 1 : nlat, iglon = 1 : nlon
 			if isone(mask[iglon,iglat])
@@ -63,7 +63,7 @@ function getLandSea(
 		msk = lds["mask"][:]
 		close(lds)
 
-		@info "$(modulelog()) - Retrieving the regional TRMM Land-Sea mask for the \"$(geo.regID)\" GeoRegion ..."
+		@info "$(modulelog()) - Retrieving the regional TRMM Land-Sea mask for the \"$(geo.ID)\" GeoRegion ..."
 
 		return LandSea{FT}(lon,lat,lsm,msk)
 
@@ -105,7 +105,7 @@ function saveLandSea(
     mask :: AbstractArray{Int16,2},
 )
 
-    fnc = joinpath(npd.maskpath,"trmmmask-$(geo.regID).nc")
+    fnc = joinpath(npd.maskpath,"trmmmask-$(geo.ID).nc")
     if isfile(fnc)
         rm(fnc,force=true)
     end
@@ -164,22 +164,22 @@ function getTRMMlsd(
     FT = Float32
 )
 
-	if geo.regID == "GLB"
+	if geo.ID == "GLB"
 		@info "$(modulelog()) - Global dataset request has been detected, switching to the TRMM LandSea Mask GeoRegion"
 		addNPDGeoRegions(); geo = GeoRegion("TRMMLSM")
 	else
-		@info "$(modulelog()) - Checking to see if the specified GeoRegion \"$(geo.regID)\" is within the \"TRMMLSM\" GeoRegion"
+		@info "$(modulelog()) - Checking to see if the specified GeoRegion \"$(geo.ID)\" is within the \"TRMMLSM\" GeoRegion"
 		isinGeoRegion(geo,GeoRegion("TRMMLSM"))
 	end
-	lsmfnc = joinpath(path,"trmmmask-$(geo.regID).nc")
+	lsmfnc = joinpath(path,"trmmmask-$(geo.ID).nc")
 
 	if !isfile(lsmfnc)
 
-		@info "$(modulelog()) - The TRMM Land-Sea mask dataset for the \"$(geo.regID)\" GeoRegion is not available, extracting from Global TRMM Land-Sea mask dataset ..."
+		@info "$(modulelog()) - The TRMM Land-Sea mask dataset for the \"$(geo.ID)\" GeoRegion is not available, extracting from Global TRMM Land-Sea mask dataset ..."
 
 		glbfnc = joinpath(path,"trmmmask-TRMMLSM.nc")
 		if !isfile(glbfnc)
-			@info "$(modulelog()) - The Global TRMM Land-Sea mask dataset for the \"$(geo.regID)\" GeoRegion is not available, downloading from the Climate Data Store ..."
+			@info "$(modulelog()) - The Global TRMM Land-Sea mask dataset for the \"$(geo.ID)\" GeoRegion is not available, downloading from the Climate Data Store ..."
 			downloadTRMMlsd(path)
 		end
 
@@ -199,7 +199,7 @@ function getTRMMlsd(
 		else; mask = ones(Int16,nlon,nlat)
 		end
 
-		@info "$(modulelog()) - Extracting regional TRMM Land-Sea mask for the \"$(geo.regID)\" GeoRegion from the Global TRMM Land-Sea mask dataset ..."
+		@info "$(modulelog()) - Extracting regional TRMM Land-Sea mask for the \"$(geo.ID)\" GeoRegion from the Global TRMM Land-Sea mask dataset ..."
 
 		for iglat = 1 : nlat, iglon = 1 : nlon
 			if isone(mask[iglon,iglat])
@@ -222,7 +222,7 @@ function getTRMMlsd(
 		msk = lds["mask"][:]
 		close(lds)
 
-		@info "$(modulelog()) - Retrieving the regional TRMM Land-Sea mask for the \"$(geo.regID)\" GeoRegion ..."
+		@info "$(modulelog()) - Retrieving the regional TRMM Land-Sea mask for the \"$(geo.ID)\" GeoRegion ..."
 
 		return LandSea{FT}(lon,lat,lsm,msk)
 
@@ -264,7 +264,7 @@ function saveTRMMlsd(
 	path :: AbstractString
 )
 
-    fnc = joinpath(path,"trmmmask-$(geo.regID).nc")
+    fnc = joinpath(path,"trmmmask-$(geo.ID).nc")
     if isfile(fnc)
         rm(fnc,force=true)
     end

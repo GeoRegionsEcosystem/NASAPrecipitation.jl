@@ -5,22 +5,22 @@ function getLandSea(
     FT = Float32
 )
 
-	if geo.regID == "GLB"
+	if geo.ID == "GLB"
 		@info "$(modulelog()) - Global dataset request has been detected, switching to the IMERG LandSea Mask GeoRegion"
 		addNPDGeoRegions(); geo = GeoRegion("IMERG")
 	else
-		@info "$(modulelog()) - Checking to see if the specified GeoRegion \"$(geo.regID)\" is within the \"IMERG\" GeoRegion"
+		@info "$(modulelog()) - Checking to see if the specified GeoRegion \"$(geo.ID)\" is within the \"IMERG\" GeoRegion"
 		isinGeoRegion(geo,GeoRegion("IMERG"))
 	end
-	lsmfnc = joinpath(npd.maskpath,"imergmask-$(geo.regID).nc")
+	lsmfnc = joinpath(npd.maskpath,"imergmask-$(geo.ID).nc")
 
 	if !isfile(lsmfnc)
 
-		@info "$(modulelog()) - The IMERG Land-Sea mask dataset for the \"$(geo.regID)\" GeoRegion is not available, extracting from Global IMERG Land-Sea mask dataset ..."
+		@info "$(modulelog()) - The IMERG Land-Sea mask dataset for the \"$(geo.ID)\" GeoRegion is not available, extracting from Global IMERG Land-Sea mask dataset ..."
 
 		glbfnc = joinpath(npd.maskpath,"imergmask-IMERG.nc")
 		if !isfile(glbfnc)
-			@info "$(modulelog()) - The Global IMERG Land-Sea mask dataset for the \"$(geo.regID)\" GeoRegion is not available, downloading from the Climate Data Store ..."
+			@info "$(modulelog()) - The Global IMERG Land-Sea mask dataset for the \"$(geo.ID)\" GeoRegion is not available, downloading from the NASA OPeNDAP servers ..."
 			downloadLandSea(npd)
 		end
 
@@ -40,7 +40,7 @@ function getLandSea(
 		else; mask = ones(Int16,nlon,nlat)
 		end
 
-		@info "$(modulelog()) - Extracting regional IMERG Land-Sea mask for the \"$(geo.regID)\" GeoRegion from the Global IMERG Land-Sea mask dataset ..."
+		@info "$(modulelog()) - Extracting regional IMERG Land-Sea mask for the \"$(geo.ID)\" GeoRegion from the Global IMERG Land-Sea mask dataset ..."
 
 		for iglat = 1 : nlat, iglon = 1 : nlon
 			if isone(mask[iglon,iglat])
@@ -63,7 +63,7 @@ function getLandSea(
 		msk = lds["mask"][:]
 		close(lds)
 
-		@info "$(modulelog()) - Retrieving the regional IMERG Land-Sea mask for the \"$(geo.regID)\" GeoRegion ..."
+		@info "$(modulelog()) - Retrieving the regional IMERG Land-Sea mask for the \"$(geo.ID)\" GeoRegion ..."
 
 		return LandSea{FT}(lon,lat,lsm,msk)
 
@@ -105,7 +105,7 @@ function saveLandSea(
     mask :: AbstractArray{Int16,2},
 )
 
-    fnc = joinpath(npd.maskpath,"imergmask-$(geo.regID).nc")
+    fnc = joinpath(npd.maskpath,"imergmask-$(geo.ID).nc")
     if isfile(fnc)
         rm(fnc,force=true)
     end
@@ -164,22 +164,22 @@ function getIMERGlsd(
     FT = Float32
 )
 
-	if geo.regID == "GLB"
+	if geo.ID == "GLB"
 		@info "$(modulelog()) - Global dataset request has been detected, switching to the IMERG LandSea Mask GeoRegion"
 		addNPDGeoRegions(); geo = GeoRegion("IMERG")
 	else
-		@info "$(modulelog()) - Checking to see if the specified GeoRegion \"$(geo.regID)\" is within the \"IMERG\" GeoRegion"
+		@info "$(modulelog()) - Checking to see if the specified GeoRegion \"$(geo.ID)\" is within the \"IMERG\" GeoRegion"
 		isinGeoRegion(geo,GeoRegion("IMERG"))
 	end
-	lsmfnc = joinpath(path,"imergmask-$(geo.regID).nc")
+	lsmfnc = joinpath(path,"imergmask-$(geo.ID).nc")
 
 	if !isfile(lsmfnc)
 
-		@info "$(modulelog()) - The IMERG Land-Sea mask dataset for the \"$(geo.regID)\" GeoRegion is not available, extracting from Global IMERG Land-Sea mask dataset ..."
+		@info "$(modulelog()) - The IMERG Land-Sea mask dataset for the \"$(geo.ID)\" GeoRegion is not available, extracting from Global IMERG Land-Sea mask dataset ..."
 
 		glbfnc = joinpath(path,"imergmask-IMERG.nc")
 		if !isfile(glbfnc)
-			@info "$(modulelog()) - The Global IMERG Land-Sea mask dataset for the \"$(geo.regID)\" GeoRegion is not available, downloading from the Climate Data Store ..."
+			@info "$(modulelog()) - The Global IMERG Land-Sea mask dataset for the \"$(geo.ID)\" GeoRegion is not available, downloading from the Climate Data Store ..."
 			downloadIMERGlsd(path)
 		end
 
@@ -199,7 +199,7 @@ function getIMERGlsd(
 		else; mask = ones(Int16,nlon,nlat)
 		end
 
-		@info "$(modulelog()) - Extracting regional IMERG Land-Sea mask for the \"$(geo.regID)\" GeoRegion from the Global IMERG Land-Sea mask dataset ..."
+		@info "$(modulelog()) - Extracting regional IMERG Land-Sea mask for the \"$(geo.ID)\" GeoRegion from the Global IMERG Land-Sea mask dataset ..."
 
 		for iglat = 1 : nlat, iglon = 1 : nlon
 			if isone(mask[iglon,iglat])
@@ -222,7 +222,7 @@ function getIMERGlsd(
 		msk = lds["mask"][:]
 		close(lds)
 
-		@info "$(modulelog()) - Retrieving the regional IMERG Land-Sea mask for the \"$(geo.regID)\" GeoRegion ..."
+		@info "$(modulelog()) - Retrieving the regional IMERG Land-Sea mask for the \"$(geo.ID)\" GeoRegion ..."
 
 		return LandSea{FT}(lon,lat,lsm,msk)
 
@@ -264,7 +264,7 @@ function saveIMERGlsd(
     path :: AbstractString
 )
 
-    fnc = joinpath(path,"imergmask-$(geo.regID).nc")
+    fnc = joinpath(path,"imergmask-$(geo.ID).nc")
     if isfile(fnc)
         rm(fnc,force=true)
     end

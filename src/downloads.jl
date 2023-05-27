@@ -19,7 +19,7 @@ function download(
 
 	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
-	if geo.regID == "GLB"
+	if geo.ID == "GLB"
 		@info "$(modulelog()) - Global dataset request has been detected, switching to the IMERG GeoRegion"
 		addNPDGeoRegions(); geo = GeoRegion("IMERG")
 	else
@@ -115,7 +115,7 @@ function download(
 
 	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
-	if geo.regID == "GLB"
+	if geo.ID == "GLB"
 		@info "$(modulelog()) - Global dataset request has been detected, switching to the IMERG GeoRegion"
 		addNPDGeoRegions(); geo = GeoRegion("IMERG")
 	else
@@ -211,7 +211,7 @@ function download(
 
 	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
-	if geo.regID == "GLB"
+	if geo.ID == "GLB"
 		@info "$(modulelog()) - Global dataset request has been detected, switching to the IMERG GeoRegion"
 		addNPDGeoRegions(); geo = GeoRegion("IMERG")
 	else
@@ -306,7 +306,7 @@ function download(
 
 	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
-	if geo.regID == "GLB"
+	if geo.ID == "GLB"
 		@info "$(modulelog()) - Global dataset request has been detected, switching to the TRMM GeoRegion"
 		addNPDGeoRegions(); geo = GeoRegion("TRMM")
 	else
@@ -405,7 +405,7 @@ function download(
 
 	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
-	if geo.regID == "GLB"
+	if geo.ID == "GLB"
 		@info "$(modulelog()) - Global dataset request has been detected, switching to the TRMM GeoRegion"
 		addNPDGeoRegions(); geo = GeoRegion("TRMM")
 	else
@@ -501,7 +501,7 @@ function download(
 
 	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
-	if geo.regID == "GLB"
+	if geo.ID == "GLB"
 		@info "$(modulelog()) - Global dataset request has been detected, switching to the TRMM GeoRegion"
 		addNPDGeoRegions(); geo = GeoRegion("TRMM")
 	else

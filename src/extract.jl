@@ -3,13 +3,13 @@ function extract(
 	geo :: GeoRegion,
 )
 
-    @info "$(modulelog()) - Retrieving GeoRegion and LandSea Dataset information for the parent GeoRegion of \"$(geo.regID)\", \"$(geo.parID)\""
-    pgeo = GeoRegion(geo.parID)
+    @info "$(modulelog()) - Retrieving GeoRegion and LandSea Dataset information for the parent GeoRegion of \"$(geo.ID)\", \"$(geo.pID)\""
+    pgeo = GeoRegion(geo.pID)
     plsd = extract_LandSea(pgeo,npd)
     plon = plsd.lon
     plat = plsd.lat
 
-    @info "$(modulelog()) - Creating RegionGrid for \"$(geo.regID)\" based on the longitude and latitude vectors of the parent GeoRegion \"$(geo.parID)\""
+    @info "$(modulelog()) - Creating RegionGrid for \"$(geo.ID)\" based on the longitude and latitude vectors of the parent GeoRegion \"$(geo.pID)\""
 
     rinfo = RegionGrid(geo,plon,plat)
     ilon  = rinfo.ilon; nlon = length(ilon)
@@ -57,12 +57,12 @@ function extract(
 
     isinGeoRegion(sgeo,pgeo)
 
-    @info "$(modulelog()) - Retrieving GeoRegion and LandSea Dataset information for the parent GeoRegion of \"$(pgeo.regID)\", \"$(pgeo.parID)\""
+    @info "$(modulelog()) - Retrieving GeoRegion and LandSea Dataset information for the parent GeoRegion of \"$(pgeo.ID)\", \"$(pgeo.pID)\""
     plsd = extract_LandSea(pgeo,npd)
     plon = plsd.lon
     plat = plsd.lat
 
-    @info "$(modulelog()) - Creating RegionGrid for \"$(sgeo.regID)\" based on the longitude and latitude vectors of the parent GeoRegion \"$(pgeo.parID)\""
+    @info "$(modulelog()) - Creating RegionGrid for \"$(sgeo.ID)\" based on the longitude and latitude vectors of the parent GeoRegion \"$(pgeo.pID)\""
 
     rinfo = RegionGrid(sgeo,plon,plat)
     ilon  = rinfo.ilon; nlon = length(ilon)
