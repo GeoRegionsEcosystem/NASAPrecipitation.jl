@@ -76,7 +76,7 @@ function show(io::IO, npd::TRMMMonthly{ST,DT}) where {ST<:AbstractString, DT<:Ti
 		"    Dataset ID         (npdID) : ", npd.npdID, '\n',
 		"    Logging Name       (lname) : ", npd.lname, '\n',
 		"    DOI URL              (doi) : ", npd.doi,   '\n',
-		"    Data Directory  (datapath) : ", npd.path, '\n',
+		"    Data Directory  (datapath) : ", npd.datapath, '\n',
 		"    Mask Directory  (maskpath) : ", npd.maskpath, '\n',
 		"    Date Begin         (start) : ", npd.start, '\n',
 		"    Date End            (stop) : ", npd.stop, '\n',
