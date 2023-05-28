@@ -26,9 +26,8 @@ makedocs(;
             "Dummy Datasets"     => "nasaprecipitation/dummy.md",
         ],
         "Using NASAPrecipitation.jl" => [
-            "Integration with GeoRegions.jl"  => "using/georegions.md",
-            "Downloading and Saving Datasets" => "using/download.md",
-            # "Reading a Dataset"               => "using/read.md",
+            "Integration with GeoRegions.jl"   => "using/georegions.md",
+            "Downloading and Reading Datasets" => "using/download.md",
             # "Extraction of subGeoRegions"     => "using/extract.md",
         ],
         "LandSea Datasets: GPM and TRMM" => [

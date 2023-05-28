@@ -1,6 +1,20 @@
-# Downloading and Saving NASA Precipitation Datasets
+# Downloading and Reading NASA Precipitation Datasets
 
 In this page we go through downloading `NASAPrecipitationDataset`s and the Land-Sea Masks for both IMERG and TRMM data.
+
+
+### Setup
+```@example download
+using NASAPrecipitation
+using CairoMakie
+using DelimitedFiles
+
+download("https://raw.githubusercontent.com/natgeo-wong/GeoPlottingData/main/coastline_resl.txt","coast.cst")
+coast = readdlm("coast.cst",comments=true)
+clon  = coast[:,1]
+clat  = coast[:,2]
+nothing
+```
 
 ## Required dependencies
 
@@ -20,13 +34,74 @@ setup(
 
 ## Downloading `NASAPrecipitationDataset`s
 
-Downloading datasets from NASA's EOSDIS OPeNDAP servers requires us to specify a `NASAPrecipitationDataset` `npd` to download, and a `GeoRegion` `geo` to specify the geographic area of interest.  This is passed to the download function `download(npd,geo)`.
+Downloading NASA Precipitation data is as simple as
+```julia
+npd = NASAPrecipitationDataset(args...)
+geo = GeoRegion(args...)
+download(npd,geo)
+```
 
-For a full example on downloading these datasets, look at the page *[Downloading IMERG Data](examples/download.md)*.
+Let us download the `IMERGMonthly` Dataset for 2020 over the Caribbean (as defined by the AR6 IPCC), for example
+
+```@example download
+npd = IMERGMonthly(start=Date(2020),stop=Date(2020))
+geo = GeoRegion("AR6_CAR")
+lsd = getLandSea(npd,geo)
+download(npd,geo)
+```
+
+## Reading data for a downloaded `NASAPrecipitationDataset`
+
+And now that you have downloaded the data, you can use the function `read()` to call the `NCDataset` that points towards the downloaded data.
+
+```@example download
+ds = read(npd,geo,Date(2020))
+```
+
+As shown in the printout of the `NCDataset`, the precipitation data is saved under the field name `precipitation`, and is in units of `kg m**-1 s**-2`, or alternatively `mm s**-2`.
+
+```@example download
+prcp = ds["precipitation"][:] * 3600
+close(ds)
+
+fig = Figure()
+_,_,slon,slat = coordGeoRegion(geo)
+aspect = (maximum(slon)-minimum(slon))/(maximum(slat)-minimum(slat))
+
+ax = Axis(
+    fig[1,1],width=350,height=350/aspect,
+    title="February 2020",xlabel="Longitude / º",ylabel="Latitude / º",
+    limits=(minimum(slon)-2,maximum(slon)+2,minimum(slat)-2,maximum(slat)+2)
+)
+contourf!(
+    ax,lsd.lon,lsd.lat,prcp[:,:,2],colormap=:Blues,
+    levels=range(0,0.5,length=11),extendlow=:auto,extendhigh=:auto
+)
+lines!(ax,clon,clat,color=:black)
+lines!(ax,slon,slat,color=:red,linewidth=5)
+
+ax = Axis(
+    fig[1,2],width=350,height=350/aspect,
+    title="August 2020",xlabel="Longitude / º",
+    limits=(minimum(slon)-2,maximum(slon)+2,minimum(slat)-2,maximum(slat)+2)
+)
+contourf!(
+    ax,lsd.lon,lsd.lat,prcp[:,:,8],colormap=:Blues,
+    levels=range(0,0.5,length=11),extendlow=:auto,extendhigh=:auto
+)
+lines!(ax,clon,clat,color=:black)
+lines!(ax,slon,slat,color=:red,linewidth=5)
+
+hideydecorations!(ax, ticks = false,grid=false)
+
+resize_to_layout!(fig)
+fig
+```
 
 ## API
 
 ```@docs
 NASAPrecipitation.setup
 NASAPrecipitation.download
+NASAPrecipitation.read
 ```
