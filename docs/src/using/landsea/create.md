@@ -1,16 +1,6 @@
 # Loading and Saving Land-Sea Mask Datasets
 
-The Land-Sea Dataset can be obtained using the function `getLandSea()`.  There are two options:
-1. Saving the `LandSea` dataset as a local NetCDF file
-2. Extract the `LandSea` dataset directly from the OPeNDAP servers
-
-Option (1) has a longer initial cost, because you have to download the global file, and then use the data from the global file to extract out the information for the GeoRegion of interest.  However, once the data has been downloaded once, you don't need to download the data again and this greatly speeds up latency time.
-
-Option (2) however, is much faster for smaller GeoRegions when loading the data directly from OPeNDAP is much easier than downloading the entire dataset.  However, loading data directly from OPeNDAP comes with its own noticeable latency, which can add up if done iteratively.
-
-You can toggle between the two options using the keyword argument `savelsd` - `true` sets the function to option 1, and `false` is option 2.
-
-See end of the page for the API
+The Land-Sea Dataset can be obtained using the function `getLandSea()`.  See end of the page for the API
 
 ### Setup
 

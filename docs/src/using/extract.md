@@ -1,6 +1,6 @@
 # Extracting data from existing data into a subGeoRegion
 
-One of the drawbacks of retrieving data from the OPeNDAP server is that the connection is slower than doing a direct download from the https url.  This cost can become especially noticeable when we are attempting to retrieve data for smaller regions of interest, where the lag caused by opening and closing remote datasets can add up and even take a longer time than doing a direct download.
+One of the drawbacks of retrieving data from the OPeNDAP server is that the connection is slower than using the direct-download method.  This cost can become especially noticeable when we are attempting to retrieve data for smaller regions of interest, where the lag caused by opening and closing remote datasets can add up and even take a longer time than doing a direct download.
 
 Thus, drawing upon the functionality of `extractGrid()` in GeoRegions.jl, we have added in the ability to extract data for a smaller GeoRegion, provided that data for a larger GeoRegion has already been downloaded.
 

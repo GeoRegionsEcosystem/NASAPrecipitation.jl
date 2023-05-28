@@ -1,6 +1,6 @@
 # Downloading and Reading NASA Precipitation Datasets
 
-In this page we go through downloading `NASAPrecipitationDataset`s and the Land-Sea Masks for both IMERG and TRMM data.
+In this page we show how you can download data for a given `NASAPrecipitation` dataset.
 
 
 ### Setup
@@ -19,7 +19,7 @@ nothing
 ## Required dependencies
 
 Since we are downloading from NASA's EOSDIS OPeNDAP servers, you are required to perform the following:
-1. You need to register an account with Earthdata
+1. You need to register an account with Earthdata and allow access to the NASA EOSDISC on it.
 2. Create a `.netrc` file with the following information: `machine urs.earthdata.nasa.gov login <your login> password <your password>`
 3. Create a `.dodsrc` file with the following lines: (1) `HTTP.COOKIEJAR=/<home directory>/.urs_cookies` and (2) `HTTP.NETRC=/<home directory>/.netrc`
 
@@ -58,7 +58,7 @@ And now that you have downloaded the data, you can use the function `read()` to 
 ds = read(npd,geo,Date(2020))
 ```
 
-As shown in the printout of the `NCDataset`, the precipitation data is saved under the field name `precipitation`, and is in units of `kg m**-1 s**-2`, or alternatively `mm s**-2`.
+As shown in the printout of the `NCDataset`, the precipitation data is saved under the field name `precipitation`, and is in units of `kg m**-2 s**-1`, or alternatively `mm s**-1`.
 
 ```@example download
 prcp = ds["precipitation"][:] * 3600
