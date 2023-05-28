@@ -44,7 +44,7 @@ function extract(
         tmat = @view pmat[:,:,1:nt]
         NCDatasets.load!(pds["precipitation"].var,tmat,:,:,1:nt)
 
-        @info "$(modulelog()) - Extracting the $(npd.lname) precipitation data in $(geo.name) GeoRegion from the $(pgeo.name) GeoRegion for $(year(dt)) $(Dates.monthname(dt))"
+        @info "$(modulelog()) - Extracting the $(npd.name) precipitation data in $(geo.name) GeoRegion from the $(pgeo.name) GeoRegion for $(year(dt)) $(Dates.monthname(dt))"
 
         for it = 1 : nt, i_ilat = 1 : nlat, i_ilon = 1 : nlon
 
@@ -115,7 +115,7 @@ function extract(
         tmat = @view pmat[:,:,1:nt]
         NCDatasets.load!(pds["precipitation"].var,tmat,:,:,1:nt)
 
-        @info "$(modulelog()) - Extracting the $(npd.lname) precipitation data in $(sgeo.name) GeoRegion from the $(pgeo.name) GeoRegion for $(year(dt)) $(Dates.monthname(dt))"
+        @info "$(modulelog()) - Extracting the $(npd.name) precipitation data in $(sgeo.name) GeoRegion from the $(pgeo.name) GeoRegion for $(year(dt)) $(Dates.monthname(dt))"
 
         for it = 1 : nt, i_ilat = 1 : nlat, i_ilon = 1 : nlon
 

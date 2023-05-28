@@ -4,8 +4,8 @@
 Object containing information on Montly IMERG datasets to be downloaded
 """
 struct IMERGMonthly{ST<:AbstractString, DT<:TimeType} <: IMERGDataset
-	npdID :: ST
-	lname :: ST
+	ID    :: ST
+	name  :: ST
 	doi   :: ST
     start :: DT
     stop  :: DT
@@ -34,9 +34,9 @@ Keyword Arguments
 - `path` : The directory in which the folder `imergmonthly` will be created for data downloads, storage and analysis, default is the home directoy called by `homedir()`
 
 The following fields in `npd` will be fixed as below:
-- `npdID` : imergmonthly
-- `lname` : IMERG Monthly
-- `doi`   : 10.5067/GPM/IMERG/3B-MONTH/06
+- `ID` : imergmonthly
+- `name` : IMERG Monthly
+- `doi` : 10.5067/GPM/IMERG/3B-MONTH/06
 - `hroot` : https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.06
 - `fpref` : 3B-MO.MS.MRG.3IMERG
 - `fsuff` : V06B.HDF5
@@ -73,8 +73,8 @@ function show(io::IO, npd::IMERGMonthly{ST,DT}) where {ST<:AbstractString, DT<:T
     print(
 		io,
 		"The NASA Precipitation Dataset {$ST,$DT} has the following properties:\n",
-		"    Dataset ID         (npdID) : ", npd.npdID, '\n',
-		"    Logging Name       (lname) : ", npd.lname, '\n',
+		"    Dataset ID         (ID) : ", npd.ID, '\n',
+		"    Logging Name       (name) : ", npd.name, '\n',
 		"    DOI URL              (doi) : ", npd.doi,   '\n',
 		"    Data Directory  (datapath) : ", npd.datapath, '\n',
 		"    Mask Directory  (maskpath) : ", npd.maskpath, '\n',

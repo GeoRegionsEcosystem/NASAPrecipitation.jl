@@ -4,8 +4,8 @@
 Object containing information on Monthly TRMM datasets to be downloaded
 """
 struct TRMMMonthly{ST<:AbstractString, DT<:TimeType} <: TRMMDataset
-	npdID :: ST
-	lname :: ST
+	ID    :: ST
+	name  :: ST
 	doi   :: ST
     start :: DT
     stop  :: DT
@@ -34,9 +34,9 @@ Keyword Arguments
 - `path` : The directory in which the folder `trmmmonthly` will be created for data downloads, storage and analysis, default is the home directoy called by `homedir()`
 
 The following fields in `npd` will be fixed as below:
-- `npdID` : trmmmonthly
-- `lname` : TRMM Monthly (TMPA 3B43)
-- `doi`   : 10.5067/TRMM/TMPA/MONTH/7
+- `ID` : trmmmonthly
+- `name` : TRMM Monthly (TMPA 3B43)
+- `doi` : 10.5067/TRMM/TMPA/MONTH/7
 - `hroot` : https://disc2.gesdisc.eosdis.nasa.gov/opendap/TRMM_L3/TRMM_3B43.7
 - `fpref` : 3B43
 - `fsuff` : 7.HDF
@@ -73,8 +73,8 @@ function show(io::IO, npd::TRMMMonthly{ST,DT}) where {ST<:AbstractString, DT<:Ti
     print(
 		io,
 		"The NASA Precipitation Dataset {$ST,$DT} has the following properties:\n",
-		"    Dataset ID         (npdID) : ", npd.npdID, '\n',
-		"    Logging Name       (lname) : ", npd.lname, '\n',
+		"    Dataset ID         (ID) : ", npd.ID, '\n',
+		"    Logging Name       (name) : ", npd.name, '\n',
 		"    DOI URL              (doi) : ", npd.doi,   '\n',
 		"    Data Directory  (datapath) : ", npd.datapath, '\n',
 		"    Mask Directory  (maskpath) : ", npd.maskpath, '\n',

@@ -6,7 +6,7 @@ function save(
 	ginfo :: RegionGrid,
 )
 
-	@info "$(modulelog()) - Saving $(npd.lname) data in the $(geo.name) GeoRegion for $(dt)"
+	@info "$(modulelog()) - Saving $(npd.name) data in the $(geo.name) GeoRegion for $(dt)"
 
 	fnc = npdfnc(npd,geo,dt)
 	if !isdir(dirname(fnc)); mkpath(dirname(fnc)) end
@@ -43,7 +43,7 @@ function save(
 
 	close(pds)
 
-	@info "$(modulelog()) - $(npd.lname) data in the $(geo.name) GeoRegion for $(dt) has been saved into $(fnc)"
+	@info "$(modulelog()) - $(npd.name) data in the $(geo.name) GeoRegion for $(dt) has been saved into $(fnc)"
 
 end
 

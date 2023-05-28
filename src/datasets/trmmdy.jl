@@ -4,8 +4,8 @@
 Object containing information on Daily TRMM datasets to be downloaded
 """
 struct TRMMDaily{ST<:AbstractString, DT<:TimeType} <: TRMMDataset
-	npdID :: ST
-	lname :: ST
+	ID    :: ST
+	name  :: ST
 	doi   :: ST
     start :: DT
     stop  :: DT
@@ -34,9 +34,9 @@ Keyword Arguments
 - `path` : The directory in which the folder `trmmdaily` will be created for data downloads, storage and analysis, default is the home directoy called by `homedir()`
 
 The following fields in `npd` will be fixed as below:
-- `npdID` : trmmdaily
-- `lname` : Final TRMM Daily
-- `doi`   : 10.5067/TRMM/TMPA/DAY/7
+- `ID` : trmmdaily
+- `name` : Final TRMM Daily
+- `doi` : 10.5067/TRMM/TMPA/DAY/7
 - `hroot` : https://disc2.gesdisc.eosdis.nasa.gov/opendap/TRMM_L3/TRMM_3B42_Daily.7
 - `fpref` : 3B42_Daily
 - `fsuff` : 7.nc4
@@ -87,8 +87,8 @@ Keyword Arguments
 - `path` : The directory in which the folder `trmmdailynrt` will be created for data downloads, storage and analysis, default is the home directoy called by `homedir()`
 
 The following fields in `npd` will be fixed as below:
-- `npdID` : trmmdailynrt
-- `lname` : Near Real-Time TRMM Daily
+- `ID` : trmmdailynrt
+- `name` : Near Real-Time TRMM Daily
 - `doi`   : 10.5067/TRMM/TMPA/DAY-E/7
 - `hroot` : https://disc2.gesdisc.eosdis.nasa.gov/opendap/TRMM_RT/TRMM_3B42RT_Daily.7
 - `fpref` : 3B42RT_Daily
@@ -126,8 +126,8 @@ function show(io::IO, npd::TRMMDaily{ST,DT}) where {ST<:AbstractString, DT<:Time
     print(
 		io,
 		"The NASA Precipitation Dataset {$ST,$DT} has the following properties:\n",
-		"    Dataset ID         (npdID) : ", npd.npdID, '\n',
-		"    Logging Name        (lname): ", npd.lname, '\n',
+		"    Dataset ID         (ID) : ", npd.ID, '\n',
+		"    Logging Name        (name): ", npd.name, '\n',
 		"    DOI URL              (doi) : ", npd.doi,   '\n',
 		"    Data Directory  (datapath) : ", npd.datapath, '\n',
 		"    Mask Directory  (maskpath) : ", npd.maskpath, '\n',

@@ -4,8 +4,8 @@
 Object containing information on Half-Hourly IMERG datasets to be downloaded
 """
 struct IMERGHalfHourly{ST<:AbstractString, DT<:TimeType} <: IMERGDataset
-	npdID :: ST
-	lname :: ST
+	ID    :: ST
+	name  :: ST
 	doi   :: ST
     start :: DT
     stop  :: DT
@@ -34,9 +34,9 @@ Keyword Arguments
 - `path` : The directory in which the folder `imergearlyhh` will be created for data downloads, storage and analysis, default is the home directoy called by `homedir()`
 
 The following fields in `npd` will be fixed as below:
-- `npdID` : imergearlyhh
-- `lname` : Early IMERG Half-Hourly
-- `doi`   : 10.5067/GPM/IMERG/3B-HH-E/06
+- `ID` : imergearlyhh
+- `name` : Early IMERG Half-Hourly
+- `doi` : 10.5067/GPM/IMERG/3B-HH-E/06
 - `hroot` : https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHHE.06
 - `fpref` : 3B-HHR-E.MS.MRG.3IMERG
 - `fsuff` : V06B.HDF5
@@ -84,8 +84,8 @@ Keyword Arguments
 - `path` : The directory in which the folder `imerglatehh` will be created for data downloads, storage and analysis, default is the home directoy called by `homedir()`
 
 The following fields in `npd` will be fixed as below:
-- `npdID` : imerglatehh
-- `lname` : Late IMERG Half-Hourly
+- `ID` : imerglatehh
+- `name` : Late IMERG Half-Hourly
 - `doi`   : 10.5067/GPM/IMERG/3B-HH-L/06
 - `hroot` : https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHHL.06
 - `fpref` : 3B-HHR-L.MS.MRG.3IMERG
@@ -134,8 +134,8 @@ Keyword Arguments
 - `path` : The directory in which the folder `imergfinalhh` will be created for data downloads, storage and analysis, default is the home directoy called by `homedir()`
 
 The following fields in `npd` will be fixed as below:
-- `npdID` : imergfinalhh
-- `lname` : Final IMERG Half-Hourly
+- `ID` : imergfinalhh
+- `name` : Final IMERG Half-Hourly
 - `doi`   : 10.5067/GPM/IMERG/3B-HH/06
 - `hroot` : https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHH.06
 - `fpref` : 3B-HHR.MS.MRG.3IMERG
@@ -170,8 +170,8 @@ function show(io::IO, npd::IMERGHalfHourly{ST,DT}) where {ST<:AbstractString, DT
     print(
 		io,
 		"The NASA Precipitation Dataset {$ST,$DT} has the following properties:\n",
-		"    Dataset ID         (npdID) : ", npd.npdID, '\n',
-		"    Logging Name       (lname) : ", npd.lname, '\n',
+		"    Dataset ID         (ID) : ", npd.ID, '\n',
+		"    Logging Name       (name) : ", npd.name, '\n',
 		"    DOI URL              (doi) : ", npd.doi,   '\n',
 		"    Data Directory  (datapath) : ", npd.datapath, '\n',
 		"    Mask Directory  (maskpath) : ", npd.maskpath, '\n',

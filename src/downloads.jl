@@ -22,7 +22,7 @@ function download(
 	overwrite :: Bool = false
 ) where {ST<:AbstractString, DT<:TimeType}
 
-	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
+	@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.ID == "GLB"
 		@info "$(modulelog()) - Global dataset request has been detected, switching to the IMERG GeoRegion"
@@ -35,7 +35,7 @@ function download(
 	lon,lat = gpmlonlat(); nlon = length(lon)
 	ginfo = RegionGrid(geo,lon,lat)
 
-	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
+	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.name) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.lon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.lat; nglat = length(glat); iglat = ginfo.ilat
 	tmp0 = zeros(Float32,nglat,nglon)
@@ -68,7 +68,7 @@ function download(
 		fnc = npdfnc(npd,geo,dt)
 		if overwrite || !isfile(fnc)
 
-			@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) ..."
+			@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) ..."
 
 			ymdfnc = Dates.format(dt,dateformat"yyyymmdd")
 			npddir = joinpath(npd.hroot,"$(year(dt))",@sprintf("%03d",dayofyear(dt)))
@@ -102,7 +102,7 @@ function download(
 
 		else
 
-			@info "$(modulelog()) - $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) exists in $(fnc), and we are not overwriting, skipping to next timestep ..."
+			@info "$(modulelog()) - $(npd.name) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) exists in $(fnc), and we are not overwriting, skipping to next timestep ..."
 
 		end
 
@@ -118,7 +118,7 @@ function download(
 	overwrite :: Bool = false
 ) where {ST<:AbstractString, DT<:TimeType}
 
-	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
+	@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.ID == "GLB"
 		@info "$(modulelog()) - Global dataset request has been detected, switching to the IMERG GeoRegion"
@@ -130,7 +130,7 @@ function download(
 	lon,lat = gpmlonlat(); nlon = length(lon)
 	ginfo = RegionGrid(geo,lon,lat)
 
-	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
+	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.name) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.lon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.lat; nglat = length(glat); iglat = ginfo.ilat
 	tmp0 = zeros(Float32,nglat,nglon)
@@ -163,7 +163,7 @@ function download(
 		fnc = npdfnc(npd,geo,dt)
 		if overwrite || !isfile(fnc)
 
-			@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt))-$(month(dt)) ..."
+			@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt))-$(month(dt)) ..."
 
 			npddir = joinpath(npd.hroot,"$(yrmo2dir(dt))")
 			ndy = daysinmonth(dt)
@@ -198,7 +198,7 @@ function download(
 
 		else
 
-			@info "$(modulelog()) - $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) exists in $(fnc), and we are not overwriting, skipping to next timestep ..."
+			@info "$(modulelog()) - $(npd.name) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) exists in $(fnc), and we are not overwriting, skipping to next timestep ..."
 
 		end
 
@@ -214,7 +214,7 @@ function download(
 	overwrite :: Bool = false
 ) where {ST<:AbstractString, DT<:TimeType}
 
-	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
+	@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.ID == "GLB"
 		@info "$(modulelog()) - Global dataset request has been detected, switching to the IMERG GeoRegion"
@@ -226,7 +226,7 @@ function download(
 	lon,lat = gpmlonlat(); nlon = length(lon)
 	ginfo = RegionGrid(geo,lon,lat)
 
-	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
+	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.name) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.lon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.lat; nglat = length(glat); iglat = ginfo.ilat
 	tmp0 = zeros(Float32,nglat,nglon)
@@ -259,7 +259,7 @@ function download(
 		fnc = npdfnc(npd,geo,dt)
 		if overwrite || !isfile(fnc)
 
-			@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt)) ..."
+			@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt)) ..."
 
 			npddir = joinpath(npd.hroot,"$(year(dt))")
 
@@ -293,7 +293,7 @@ function download(
 
 		else
 
-			@info "$(modulelog()) - $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) exists in $(fnc), and we are not overwriting, skipping to next timestep ..."
+			@info "$(modulelog()) - $(npd.name) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) exists in $(fnc), and we are not overwriting, skipping to next timestep ..."
 
 		end
 
@@ -309,7 +309,7 @@ function download(
 	overwrite :: Bool = false
 ) where {ST<:AbstractString, DT<:TimeType}
 
-	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
+	@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.ID == "GLB"
 		@info "$(modulelog()) - Global dataset request has been detected, switching to the TRMM GeoRegion"
@@ -321,7 +321,7 @@ function download(
 	lon,lat = trmmlonloat(); nlon = length(lon)
 	ginfo = RegionGrid(geo,lon,lat)
 
-	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
+	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.name) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.lon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.lat; nglat = length(glat); iglat = ginfo.ilat
 	tmp0 = zeros(Float32,nglat,nglon)
@@ -354,7 +354,7 @@ function download(
 		fnc = npdfnc(npd,geo,dt)
 		if overwrite || !isfile(fnc)
 
-			@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) ..."
+			@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) ..."
 
 			ymdfnc = Dates.format(dt,dateformat"yyyymmdd")
 
@@ -392,7 +392,7 @@ function download(
 
 		else
 
-			@info "$(modulelog()) - $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) exists in $(fnc), and we are not overwriting, skipping to next timestep ..."
+			@info "$(modulelog()) - $(npd.name) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) exists in $(fnc), and we are not overwriting, skipping to next timestep ..."
 
 		end
 
@@ -408,7 +408,7 @@ function download(
 	overwrite :: Bool = false
 ) where {ST<:AbstractString, DT<:TimeType}
 
-	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
+	@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.ID == "GLB"
 		@info "$(modulelog()) - Global dataset request has been detected, switching to the TRMM GeoRegion"
@@ -420,7 +420,7 @@ function download(
 	lon,lat = trmmlonlat(); nlon = length(lon)
 	ginfo = RegionGrid(geo,lon,lat)
 
-	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
+	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.name) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.lon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.lat; nglat = length(glat); iglat = ginfo.ilat
 	tmp0 = zeros(Float32,nglat,nglon)
@@ -453,7 +453,7 @@ function download(
 		fnc = npdfnc(npd,geo,dt)
 		if overwrite || !isfile(fnc)
 
-			@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt))-$(month(dt)) ..."
+			@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt))-$(month(dt)) ..."
 
 			npddir = joinpath(npd.hroot,"$(yrmo2dir(dt))")
 			ndy = daysinmonth(dt)
@@ -488,7 +488,7 @@ function download(
 
 		else
 
-			@info "$(modulelog()) - $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) exists in $(fnc), and we are not overwriting, skipping to next timestep ..."
+			@info "$(modulelog()) - $(npd.name) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) exists in $(fnc), and we are not overwriting, skipping to next timestep ..."
 
 		end
 
@@ -504,7 +504,7 @@ function download(
 	overwrite :: Bool = false
 ) where {ST<:AbstractString, DT<:TimeType}
 
-	@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
+	@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.ID == "GLB"
 		@info "$(modulelog()) - Global dataset request has been detected, switching to the TRMM GeoRegion"
@@ -516,7 +516,7 @@ function download(
 	lon,lat = trmmlonlat(); nlon = length(lon)
 	ginfo = RegionGrid(geo,lon,lat)
 
-	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.lname) data for the $(geo.name) GeoRegion from the original gridded dataset"
+	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.name) data for the $(geo.name) GeoRegion from the original gridded dataset"
 	glon = ginfo.lon; nglon = length(glon); iglon = ginfo.ilon
 	glat = ginfo.lat; nglat = length(glat); iglat = ginfo.ilat
 	tmp0 = zeros(Float32,nglat,nglon)
@@ -549,7 +549,7 @@ function download(
 		fnc = npdfnc(npd,geo,dt)
 		if overwrite || !isfile(fnc)
 
-			@info "$(modulelog()) - Downloading $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt)) ..."
+			@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(year(dt)) ..."
 
 			npddir = joinpath(npd.hroot,"$(year(dt))")
 
@@ -583,7 +583,7 @@ function download(
 
 		else
 
-			@info "$(modulelog()) - $(npd.lname) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) exists in $(fnc), and we are not overwriting, skipping to next timestep ..."
+			@info "$(modulelog()) - $(npd.name) data for the $(geo.name) GeoRegion from the NASA Earthdata servers using OPeNDAP protocols for $(dt) exists in $(fnc), and we are not overwriting, skipping to next timestep ..."
 
 		end
 

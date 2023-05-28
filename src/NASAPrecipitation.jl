@@ -34,8 +34,8 @@ export
 ## Abstract types
 """
     NASAPrecipitationDataset{ST<:AbstractString, DT<:TimeType}
-        npdID :: ST
-        lname :: ST
+        ID    :: ST
+        name  :: ST
         doi   :: ST
         start :: DT
         stop  :: DT
@@ -49,8 +49,8 @@ export
 Abstract supertype for NASA Precipitation datasets on NASA OPeNDAP Servers.
 
 Fields:
-* `npdID` : ID for the `NASAPrecipitationDataset`, used in determining containing folders and filenames of the NetCDF
-* `lname` : The name describing the `NASAPrecipitationDataset`, used mostly in Logging
+* `ID`    : ID for the `NASAPrecipitationDataset`, used in determining containing folders and filenames of the NetCDF
+* `name`  : The name describing the `NASAPrecipitationDataset`, used mostly in Logging
 * `doi`   : The DOI identifier, to be saved into the NetCDF
 * `start` : The start date (Y,M,D) of our download / analysis
 * `stop`  : The end date (Y,M,D) of our download / analysis

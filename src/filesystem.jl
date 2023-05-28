@@ -20,7 +20,7 @@ function npdfnc(
 ) where {ST<:AbstractString, DT<:TimeType}
 
     fol = joinpath(npd.datapath,geo.ID,yrmo2dir(dt))
-    fnc = npd.npdID * "-" * geo.ID * "-" * ymd2str(dt) * ".nc"
+    fnc = npd.ID * "-" * geo.ID * "-" * ymd2str(dt) * ".nc"
     return joinpath(fol,fnc)
 
 end
@@ -32,7 +32,7 @@ function npdfnc(
 ) where {ST<:AbstractString, DT<:TimeType}
 
     fol = joinpath(npd.datapath,geo.ID,yr2str(dt))
-    fnc = npd.npdID * "-" * geo.ID * "-" * yrmo2str(dt) * ".nc"
+    fnc = npd.ID * "-" * geo.ID * "-" * yrmo2str(dt) * ".nc"
     return joinpath(fol,fnc)
 
 end
@@ -44,7 +44,7 @@ function npdfnc(
 ) where {ST<:AbstractString, DT<:TimeType}
 
     fol = joinpath(npd.datapath,geo.ID)
-    fnc = npd.npdID * "-" * geo.ID * "-" * yr2str(dt) * ".nc"
+    fnc = npd.ID * "-" * geo.ID * "-" * yr2str(dt) * ".nc"
     return joinpath(fol,fnc)
 
 end
@@ -58,7 +58,7 @@ function npdanc(
 ) where {ST<:AbstractString, DT<:TimeType}
 
     fol = joinpath(npd.datapath,geo.ID)
-    fnc = npd.npdID * "-" * geo.ID * "-" * yr2str(dt) * ".nc"
+    fnc = npd.ID * "-" * geo.ID * "-" * yr2str(dt) * ".nc"
     return joinpath(fol,fnc)
 
 end
