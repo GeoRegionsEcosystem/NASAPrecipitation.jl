@@ -27,7 +27,7 @@ export
 
         IMERGDummy, TRMMDummy,
 
-        getLandSea, getIMERGlsd, getTRMMlsd, addNPDGeoRegions,
+        getLandSea, addNPDGeoRegions,
 
         download, read, npdfnc, setup, extract
 
