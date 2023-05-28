@@ -1,5 +1,9 @@
-using NASAPrecipitation
 using Documenter
+using NASAPrecipitation
+using Literate
+
+using CairoMakie # to avoid capturing precompilation output by Literate
+CairoMakie.activate!(type = "svg")
 
 makedocs(;
     modules  = [NASAPrecipitation],
@@ -10,10 +14,11 @@ makedocs(;
     pages    = [
         "Home"                        => "index.md",
         "NASAPrecipitation Datasets" => [
-            "The NASAPrecipitation Dataset Type" => "datasets/npd.md",
-            "GPM IMERG Datasets"             => "datasets/imerg.md",
-            "TRMM TMPA Datasets"             => "datasets/trmm.md",
-            "Land-Sea Mask Datasets"         => "datasets/landseamask.md",
+            "What is a NASA Precipitation Dataset?" => "nasaprecipitation/intro.md",
+            "Defining NASA Precipitation Datasets"  => "nasaprecipitation/define.md",
+            "GPM IMERG Datasets" => "nasaprecipitation/imerg.md",
+            "TRMM TMPA Datasets" => "nasaprecipitation/trmm.md",
+            "Dummy Datasets"     => "nasaprecipitation/dummy.md",
         ],
         "A Basic Primer to `GeoRegion`s" => "georegions/basics.md",
         "Downloading Datasets" => "download.md",
