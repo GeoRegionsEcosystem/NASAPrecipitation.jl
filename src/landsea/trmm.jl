@@ -92,6 +92,10 @@ function downloadLandSea(
 	NCDatasets.load!(npdds["landseamask"].var,var,:,:)
 	close(npdds)
 
+	for ilon = 1 : nlon, ilat = 1 : nlat
+		var[ilat,ilon] = 1 - var[ilat,ilon] / 100
+	end
+
 	saveLandSea(npd,GeoRegion("TRMMLSM"),lon,lat,var',mask)
 
 end
