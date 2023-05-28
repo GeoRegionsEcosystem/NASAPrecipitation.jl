@@ -1,3 +1,22 @@
+"""
+    getLandSea(
+        npd :: NASAPrecipitationDataset,
+	    geo :: GeoRegion = GeoRegion("GLB");
+	    returnlsd = true,
+	    FT = Float32
+    ) -> LandSea
+
+Retrieve the Land-Sea Mask data for the `NASAPrecipitationDataset` specified.
+
+Arguments
+=========
+- `npd` : The `NASAPrecipitationDataset` specified, can be either IMERG or TRMM, the function will download the relevant Land-Sea mask without needing further specification.
+- `geo` : The GeoRegion of interest
+
+Keyword Arguments
+=================
+- `returnlsd` : If `true` return the data as a `LandSea` dataset. Otherwise, the data is simply saved into the npd.maskpath directory.
+"""
 function getLandSea(
 	npd :: IMERGDataset,
 	geo :: GeoRegion = GeoRegion("GLB");
@@ -88,7 +107,7 @@ function downloadLandSea(
 	@info "$(modulelog()) - Retrieving the original IMERG Land-Sea Mask data from NASA's EOSDIS OPeNDAP servers"
 	hroot = "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/AUXILIARY"
     npdnc = "GPM_IMERG_LandSeaMask.2/GPM_IMERG_LandSeaMask.2.nc4"
-    npdds = NCDataset(joinpath(hroot,npdnc))
+    npdds = NCDataset(joinpath(hroot,npdnc),"r")
 	NCDatasets.load!(npdds["landseamask"].var,var,:,:)
 	close(npdds)
 

@@ -88,7 +88,7 @@ function downloadLandSea(
 	@info "$(modulelog()) - Retrieving the original TRMM-TMPA Land-Sea Mask data from NASA's EOSDIS OPeNDAP servers"
 	hroot = "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/AUXILIARY"
     npdnc = "TRMM_TMPA_LandSeaMask.2/TRMM_TMPA_LandSeaMask.2.nc4"
-    npdds = NCDataset(joinpath(hroot,npdnc))
+    npdds = NCDataset(joinpath(hroot,npdnc),"r")
 	NCDatasets.load!(npdds["landseamask"].var,var,:,:)
 	close(npdds)
 

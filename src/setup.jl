@@ -1,3 +1,18 @@
+"""
+    setup(;
+        login     :: AbstractString = "",
+        password  :: AbstractString = "",
+        overwrite :: Bool = false
+    )
+
+Function that sets up your .dodsrc and .netrc files for you.  If you do not provide the keyword arguments for `login` and `password`, the .netrc file will not be created.
+
+Keyword arguments
+=================
+- `login` : Your Earthdata username.  You need to specify both `login` and `password` arguments.
+- `password` : Your Earthdata password.  You need to specify both `login` and `password` arguments.
+- `overwrite` : If `true`, overwrite existing `.dodsrc` and `.netrc` files with the data provided.
+"""
 function setup(;
     login     :: AbstractString = "",
     password  :: AbstractString = "",
@@ -36,14 +51,18 @@ function setup(;
     end
 
     if login != "" && password != ""
-        @info "$(modulelog()) - Setting up .netrc file containing login and password information for NASA OPeNDAP servers ..."
-        netrc = netrc_read()
-        if netrc_check() && netrc_checkmachine(netrc,machine="urs.earthdata.nasa.gov")
-            netrc_modify!(netrc,machine="urs.earthdata.nasa.gov",login=login,password=password)
+        if overwrite || !netrc_check()
+            @info "$(modulelog()) - Setting up .netrc file containing login and password information for NASA OPeNDAP servers ..."
+            netrc = netrc_read()
+            if netrc_check() && netrc_checkmachine(netrc,machine="urs.earthdata.nasa.gov")
+                netrc_modify!(netrc,machine="urs.earthdata.nasa.gov",login=login,password=password)
+            else
+                netrc_add!(netrc,machine="urs.earthdata.nasa.gov",login=login,password=password)
+            end
+            netrc_write(netrc)
         else
-            netrc_add!(netrc,machine="urs.earthdata.nasa.gov",login=login,password=password)
+            @info "$(modulelog()) - Existing .netrc file detected, since overwrite options is not selected, leaving file be ..."
         end
-        netrc_write(netrc)
     end
 
 end
