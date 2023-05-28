@@ -8,7 +8,7 @@
 
 ## Installation Instructions
 
-NASAPrecipitation.jl has  been officially registered as a Julia package yet.  To add it, just do:
+NASAPrecipitation.jl has been officially registered as a Julia package.  To add it, just do:
 ```
 julia> ]
 (@v1.6) pkg> add NASAPrecipitation
@@ -22,10 +22,11 @@ julia> ]
 
 ## Documentation Overview
 
-The documentation for `NASAPrecipitation.jl` is divided into three components:
-1. Tutorials - meant as an introduction to the package
-2. How-to Examples - geared towards those looking for specific examples of what can be done
-3. API Reference - comprehensive summary of all exported functionalities
+The documentation for `NASAPrecipitation.jl` is divided into four components:
+1. Introduction - meant as an introduction to the package, the `NASAPrecipitatonDataset` and its subtypes
+2. Tutorials - meant to show how to use NASAPrecipitation.jl to download data, and how it interacts with the GeoRegions.jl package for data extraction and manipulation
+3. How-to Examples - geared towards those looking for specific examples of what can be done
+4. API Reference - comprehensive summary of all exported functionalities
 
 !!! tip "Obtaining Example Datasets"
     All the output for the coding examples were produced using my computer with key security information (such as login info) omitted.  The examples cannot be run online because the file size requirements are too big.  Copying and pasting the code examples (with relevant directory and login information changes) should produce the same results.
