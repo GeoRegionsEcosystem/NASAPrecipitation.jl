@@ -23,14 +23,14 @@ function setup(;
     if !isfile(fdodsrc)
         @info "$(modulelog()) - Setting up .dodsrc file for NASA OPeNDAP servers to point at cookie and .netrc directories ..."
         open(fdodsrc,"w") do f
-            write(f,"HTTP.COOKIEJAR=$(joinpath(homedir(),".urs_cookies"))")
+            write(f,"HTTP.COOKIEJAR=$(joinpath(homedir(),".urs_cookies"))\n")
             write(f,"HTTP.NETRC=$(joinpath(homedir(),".netrc"))")
         end
     else
         if overwrite
             @warn "$(modulelog()) - .dodsrc file exists at $fdodsrc, overwriting again"
             open(fdodsrc,"w") do f
-                write(f,"HTTP.COOKIEJAR=$(joinpath(homedir(),".urs_cookies"))")
+                write(f,"HTTP.COOKIEJAR=$(joinpath(homedir(),".urs_cookies"))\n")
                 write(f,"HTTP.NETRC=$(joinpath(homedir(),".netrc"))")
             end
         else
