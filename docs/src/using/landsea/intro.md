@@ -15,4 +15,5 @@ This land-sea mask is then saved into a `LandSea` data type, which is defined to
 
 ```@docs
 NASAPrecipitation.LandSea
+GeoRegions.AbstractLandSea
 ```

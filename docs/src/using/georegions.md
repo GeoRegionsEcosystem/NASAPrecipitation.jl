@@ -44,3 +44,17 @@ GeoRegion("IMERG")
 ```@docs
 NASAPrecipitation.addNPDGeoRegions()
 ```
+
+## GeoRegions.jl API
+
+```@docs
+GeoRegions.GeoRegion
+GeoRegions.PolyRegion
+GeoRegions.RectRegion
+GeoRegions.isinGeoRegion
+GeoRegions.coordGeoRegion
+GeoRegions.RegionGrid
+GeoRegions.RegionGrid(::RectRegion,::Vector{<:Real},::Vector{<:Real})
+GeoRegions.RegionGrid(::GeoRegion,::Array{<:Real,2},::Array{<:Real,2})
+GeoRegions.extractGrid
+```
