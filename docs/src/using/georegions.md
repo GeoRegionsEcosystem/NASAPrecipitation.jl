@@ -1,4 +1,4 @@
-# Integration GeoRegions.jl with NASAPrecipitation.jl
+# Integrating GeoRegions.jl with NASAPrecipitation.jl
 
 When downloading and analysing the NASA Precipitation data, we are often not interested in global data.  Instead, we are interest in the statistics and trends, etc., in a specific geographic region.  We use the functionality of GeoRegions.jl, and the exported `GeoRegion` and `RegionGrid` Types to manipulate and extract out data from our region of interest from the datasets provided.
 

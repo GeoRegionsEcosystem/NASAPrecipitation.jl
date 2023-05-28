@@ -27,12 +27,12 @@ makedocs(;
         ],
         "Using NASAPrecipitation.jl" => [
             "Integration with GeoRegions.jl"   => "using/georegions.md",
+            "LandSea Datasets: GPM and TRMM" => [
+                "What is a LandSea Dataset?" => "using/landsea/intro.md",
+                "Loading LandSea Datasets"   => "using/landsea/create.md",
+            ],
             "Downloading and Reading Datasets" => "using/download.md",
             "Extraction of subGeoRegions"     => "using/extract.md",
-        ],
-        "LandSea Datasets: GPM and TRMM" => [
-            "What is a LandSea Dataset?" => "landsea/intro.md",
-            "Loading LandSea Datasets"   => "landsea/create.md",
         ],
     ],
 )

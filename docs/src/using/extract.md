@@ -9,8 +9,8 @@ The extraction of data is as easy as
 ```
 extract(
     <NASAPrecipitation Dataset>,
-	<subGeoRegion>,
-	<parentGeoRegion>,
+    <subGeoRegion>,
+    <parentGeoRegion>,
 )
 ```
 
@@ -33,7 +33,7 @@ Let's define the Tropical Domain and download some NASAPrecipitation data for th
 
 ```@example download
 npd = TRMMMonthly(start=Date(2015),stop=Date(2015))
-pgeo = RectRegion("TRP","GLB","Tropics",[30,-30,360,0])
+pgeo = RectRegion("TRP","GLB","Tropics",[30,-30,360,0],savegeo=false)
 download(npd,pgeo)
 ```
 
@@ -61,7 +61,7 @@ aspect = (maximum(slon)-minimum(slon)+90)/(maximum(slat)-minimum(slat)+30)
 
 ax = Axis(
     fig[1,1],width=750,height=750/aspect,
-    title="February 2020",xlabel="Longitude / º",ylabel="Latitude / º",
+    title="February 2015",xlabel="Longitude / º",ylabel="Latitude / º",
     limits=(minimum(slon)-45,maximum(slon)+45,minimum(slat)-15,maximum(slat)+15)
 )
 contourf!(
@@ -77,4 +77,10 @@ lines!(ax,slon,slat,color=:red,linewidth=5)
 
 resize_to_layout!(fig)
 fig
+```
+
+## API
+
+```@docs
+NASAPrecipitation.extract
 ```

@@ -98,10 +98,19 @@ resize_to_layout!(fig)
 fig
 ```
 
+## Where is the data saved to?
+
+You can check where the data is saved to for a given dataset, georegion and datetime by using the function `npdfnc()`
+
+```@example download
+fnc = npdfnc(npd,geo,Date(2020))
+```
+
 ## API
 
 ```@docs
 NASAPrecipitation.setup
 NASAPrecipitation.download
 NASAPrecipitation.read
+NASAPrecipitation.npdfnc
 ```
