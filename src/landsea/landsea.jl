@@ -1,18 +1,11 @@
-struct LandSea{FT<:Real}
+"""
+    NASAPrecipitation.LandSea <: GeoRegions.LandSeaFlat
+
+Object containing information on the Land Sea mask for IMERG or TRMM, a subType extension of the `GeoRegions.LandSeaFlat` superType
+"""
+struct LandSea{FT<:Real} <: LandSeaFlat
     lon  :: Vector{FT}
     lat  :: Vector{FT}
     lsm  :: Array{FT,2}
     mask :: Array{Int,2}
-end
-
-function show(io::IO, lsd::LandSea)
-	nlon = length(lsd.lon)
-	nlat = length(lsd.lat)
-    print(
-		io,
-		"The Land-Sea Mask Dataset has the following properties:\n",
-		"    Longitude Points    (lon) : ", lsd.lon,  '\n',
-		"    Latitude Points     (lat) : ", lsd.lat,  '\n',
-		"    Region Size (nlon * nlat) : $(nlon) lon points x $(nlat) lat points\n",
-	)
 end
