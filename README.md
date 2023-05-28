@@ -45,19 +45,7 @@ To get the most recent release on the `#main` branch, do
 
 ## **Required Installation**
 
-In order to access NASA's EOSDIS OPeNDAP servers, the following steps are required for [NCDatasets.jl](https://github.com/Alexander-Barth/NCDatasets.jl) to access the data:
-* You need to register an account with Earthdata
-* Create a `.netrc` file, and paste the following:
-  * `machine urs.earthdata.nasa.gov login <your login> password <your password>`
-* Create a `.dodsrc` file, and paste the following:
-  * `HTTP.COOKIEJAR=/<home directory>/.urs_cookies`
-  * `HTTP.NETRC=/<home directory>/.netrc`
-
-## **Usage**
-
-Please refer to the [documentation](https://natgeo-wong.github.io/NASAPrecipitation.jl/dev/) for instructions and examples.  A working knowledge of the `GeoRegion` and `RegionInfo` supertypes used in [`GeoRegions.jl`](https://github.com/JuliaClimate/GeoRegions.jl) v2 is also needed.
-
-*__Tip:__ Both the `GeoRegions.jl` and `Dates` dependencies are reexported by `NASAPrecipitation.jl`, and therefore there is no need to call either `GeoRegions.jl` or `Dates` separately when using the `NASAPrecipitation.jl` package.*
+In order to access NASA's EOSDIS OPeNDAP servers, you need to register an account with [Earthdata](https://www.earthdata.nasa.gov/) in order for [NCDatasets.jl](https://github.com/Alexander-Barth/NCDatasets.jl) to access the data.  Then, follow the steps desribed [here](https://natgeo-wong.github.io/NASAPrecipitation.jl/dev/using/download.html) in the documentation for your downloads to work.
 
 ## **Supported Datasets**
 
@@ -72,3 +60,7 @@ The following datasets are supported:
 Only the calibrated precipitation data is downloaded, with units of rate in mm/s.
 
 If there is demand, I can easily add other datasets available on the `gpm1` and `disc2` NASA OPeNDAP servers to the mix as well. Please open an issue if you want me to do so.
+
+## **Other Information**
+
+*__Tip:__ The [GeoRegions.jl](https://github.com/JuliaClimate/GeoRegions.jl), [NCDatasets.jl](https://github.com/Alexander-Barth/NCDatasets.jl) and [Dates](https://docs.julialang.org/en/v1/stdlib/Dates) dependencies are reexported by `NASAPrecipitation.jl`, and therefore there is no need to call them separately when the `NASAPrecipitation.jl` package has been loaded.*
