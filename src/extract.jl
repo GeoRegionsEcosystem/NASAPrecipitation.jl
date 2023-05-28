@@ -5,7 +5,7 @@ function extract(
 
     @info "$(modulelog()) - Retrieving GeoRegion and LandSea Dataset information for the parent GeoRegion of \"$(geo.ID)\", \"$(geo.pID)\""
     pgeo = GeoRegion(geo.pID)
-    plsd = extract_LandSea(pgeo,npd)
+    plsd = getLandSea(npd,pgeo)
     plon = plsd.lon
     plat = plsd.lat
 
@@ -58,7 +58,7 @@ function extract(
     isinGeoRegion(sgeo,pgeo)
 
     @info "$(modulelog()) - Retrieving GeoRegion and LandSea Dataset information for the parent GeoRegion of \"$(pgeo.ID)\", \"$(pgeo.pID)\""
-    plsd = extract_LandSea(pgeo,npd)
+    plsd = getLandSea(npd,pgeo)
     plon = plsd.lon
     plat = plsd.lat
 
@@ -141,6 +141,3 @@ function extract_mat(
     return zeros(Float32,nlon,nlat,12), zeros(Float32,nplon,nplat,12)
 
 end
-
-extract_LandSea(geo::GeoRegion, npd::IMERGDataset) = getIMERGlsd(geo,path=npd.maskpath)
-extract_LandSea(geo::GeoRegion, npd::TRMMDataset)  = getTRMMlsd( geo,path=npd.maskpath)
