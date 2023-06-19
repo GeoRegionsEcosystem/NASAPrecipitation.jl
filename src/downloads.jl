@@ -31,7 +31,7 @@ function download(
 		isinGeoRegion(geo,GeoRegion("IMERG"))
 	end
 
-	fnc  = imergrawfiles()
+	dyfnc = imergrawfiles()
 	lon,lat = gpmlonlat(); nlon = length(lon)
 	ginfo = RegionGrid(geo,lon,lat)
 
@@ -75,9 +75,9 @@ function download(
 			
 			for it = 1 : 48
 
-				@debug "$(modulelog()) - Loading data into temporary array for timestep $(fnc[it])"
+				@debug "$(modulelog()) - Loading data into temporary array for timestep $(dyfnc[it])"
 
-				npdfnc = "$(npd.fpref).$ymdfnc-$(fnc[it]).$(npd.fsuff)"
+				npdfnc = "$(npd.fpref).$ymdfnc-$(dyfnc[it]).$(npd.fsuff)"
 				ds = NCDataset(joinpath(npddir,npdfnc))
 				if !shift
 					NCDatasets.load!(ds["precipitationCal"].var,tmp0,iglat,iglon,1)
@@ -318,7 +318,7 @@ function download(
 		isinGeoRegion(geo,GeoRegion("TRMM"))
 	end
 
-	lon,lat = trmmlonloat(); nlon = length(lon)
+	lon,lat = trmmlonlat(); nlon = length(lon)
 	ginfo = RegionGrid(geo,lon,lat)
 
 	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.name) data for the $(geo.name) GeoRegion from the original gridded dataset"
@@ -360,14 +360,14 @@ function download(
 
 			for it = 1 : 8
 
-				@debug "$(modulelog()) - Loading data into temporary array for timestep $(fnc[it])"
+				@debug "$(modulelog()) - Loading data into temporary array for timestep $(@sprintf("%02d",(it-1)*3))00-$(@sprintf("%02d",(it)*3-2))59"
 
 				if isone(it); di = dt-Day(1)
 					npddir = joinpath(npd.hroot,"$(year(di))",@sprintf("%03d",dayofyear(di)))
 				else; npddir = joinpath(npd.hroot,"$(year(dt))",@sprintf("%03d",dayofyear(dt)))
 				end
 
-				npdfnc = "$(npd.fpref).$ymdfnc.$((it-1)*3).$(npd.fsuff)"
+				npdfnc = "$(npd.fpref).$ymdfnc.$(@sprintf("%02d",(it-1)*3)).$(npd.fsuff)"
 				ds = NCDataset(joinpath(npddir,npdfnc))
 				if !shift
 					NCDatasets.load!(ds["precipitation"].var,tmp0,iglat,iglon,1)
