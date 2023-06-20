@@ -53,9 +53,6 @@ function TRMM3Hourly(
 
     fol = joinpath(path,"trmm3hourly"); if !isdir(fol); mkpath(fol) end
     fol = joinpath(path,"trmmmask");    if !isdir(fol); mkpath(fol) end
-
-	start = Date(year(start),month(start),1)
-	stop = Date(year(stop),month(stop),daysinmonth(stop))
     trmmcheckdates(start,stop)
 
     return TRMM3Hourly{ST,DT}(
@@ -64,7 +61,7 @@ function TRMM3Hourly(
 		joinpath(path,"trmm3hourly"),
 		joinpath(path,"trmmmask"),
         "https://disc2.gesdisc.eosdis.nasa.gov/opendap/TRMM_L3/TRMM_3B42.7",
-        "3B42", "7.HDF",
+        "3B42", "7A.HDF",
     )
 
 end
@@ -106,9 +103,6 @@ function TRMM3HourlyNRT(
 
     fol = joinpath(path,"trmm3hourlynrt"); if !isdir(fol); mkpath(fol) end
     fol = joinpath(path,"trmmmask");       if !isdir(fol); mkpath(fol) end
-
-	start = Date(year(start),month(start),1)
-	stop = Date(year(stop),month(stop),daysinmonth(stop))
     trmmcheckdates(start,stop)
 
     return TRMM3Hourly{ST,DT}(
