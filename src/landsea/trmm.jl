@@ -1,7 +1,11 @@
 function getLandSea(
 	npd :: TRMMDataset,
 	geo :: GeoRegion = GeoRegion("GLB");
-    returnlsd = true,
+    returnlsd :: Bool = true,
+    smooth    :: Bool = false,
+    σlon :: Int = 0,
+    σlat :: Int = 0,
+    iterations :: Int = 100,
     FT = Float32
 )
 
@@ -12,7 +16,12 @@ function getLandSea(
 		@info "$(modulelog()) - Checking to see if the specified GeoRegion \"$(geo.ID)\" is within the \"TRMMLSM\" GeoRegion"
 		isinGeoRegion(geo,GeoRegion("TRMMLSM"))
 	end
-	lsmfnc = joinpath(npd.maskpath,"trmmmask-$(geo.ID).nc")
+	
+	if !smooth
+		fnc = joinpath(npd.maskpath,"trmmmask-$(geo.ID).nc")
+	else
+		fnc = joinpath(npd.maskpath,"trmmmask-$(geo.ID)-smooth_$(σlon)x$(σlat).nc")
+	end
 
 	if !isfile(lsmfnc)
 
@@ -30,13 +39,17 @@ function getLandSea(
 		glsm = gds["lsm"][:]
 		close(gds)
 
-		rinfo = RegionGrid(geo,glon,glat)
-		ilon  = rinfo.ilon; nlon = length(rinfo.ilon)
-		ilat  = rinfo.ilat; nlat = length(rinfo.ilat)
+        if smooth
+            smooth!(glsm,σlon=σlon,σlat=σlat,iterations=iterations)
+        end
+
+		ggrd = RegionGrid(geo,glon,glat)
+		ilon  = ggrd.ilon; nlon = length(ggrd.ilon)
+		ilat  = ggrd.ilat; nlat = length(ggrd.ilat)
 		rlsm  = zeros(nlon,nlat)
 		
-		if typeof(rinfo) <: PolyGrid
-			  mask = rinfo.mask; mask[isnan.(mask)] .= 0
+		if typeof(ggrd) <: PolyGrid
+			  mask = ggrd.mask; mask[isnan.(mask)] .= 0
 		else; mask = ones(Int16,nlon,nlat)
 		end
 
@@ -50,7 +63,7 @@ function getLandSea(
 			end
 		end
 
-		saveLandSea(npd,geo,rinfo.lon,rinfo.lat,rlsm,Int16.(mask))
+		saveLandSea(npd,geo,ggrd.lon,ggrd.lat,rlsm,Int16.(mask))
 
 	end
 
@@ -107,9 +120,16 @@ function saveLandSea(
     lat  :: Vector{<:Real},
     lsm  :: AbstractArray{<:Real,2},
     mask :: AbstractArray{Int16,2},
+    smooth :: Bool = false,
+    σlon :: Int = 0,
+    σlat :: Int = 0,
 )
-
-    fnc = joinpath(npd.maskpath,"trmmmask-$(geo.ID).nc")
+	
+	if !smooth
+		fnc = joinpath(npd.maskpath,"trmmmask-$(geo.ID).nc")
+	else
+		fnc = joinpath(npd.maskpath,"trmmmask-$(geo.ID)-smooth_$(σlon)x$(σlat).nc")
+	end
     if isfile(fnc)
         rm(fnc,force=true)
     end
