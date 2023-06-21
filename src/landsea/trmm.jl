@@ -16,7 +16,7 @@ function getLandSea(
 		@info "$(modulelog()) - Checking to see if the specified GeoRegion \"$(geo.ID)\" is within the \"TRMMLSM\" GeoRegion"
 		isinGeoRegion(geo,GeoRegion("TRMMLSM"))
 	end
-	
+
 	if !smooth
 		fnc = joinpath(npd.maskpath,"trmmmask-$(geo.ID).nc")
 	else
@@ -63,7 +63,7 @@ function getLandSea(
 			end
 		end
 
-		saveLandSea(npd,geo,ggrd.lon,ggrd.lat,rlsm,Int16.(mask))
+		saveLandSea(npd,geo,ggrd.lon,ggrd.lat,rlsm,Int16.(mask),smooth,σlon,σlat)
 
 	end
 

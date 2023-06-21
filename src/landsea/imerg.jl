@@ -82,7 +82,7 @@ function getLandSea(
 			end
 		end
 
-		saveLandSea(npd,geo,ggrd.lon,ggrd.lat,rlsm,Int16.(mask))
+		saveLandSea(npd,geo,ggrd.lon,ggrd.lat,rlsm,Int16.(mask),smooth,σlon,σlat)
 
 	end
 
@@ -139,6 +139,9 @@ function saveLandSea(
     lat  :: Vector{<:Real},
     lsm  :: AbstractArray{<:Real,2},
     mask :: AbstractArray{Int16,2},
+    smooth :: Bool = false,
+    σlon :: Int = 0,
+    σlat :: Int = 0,
 )
 
 	if !smooth
