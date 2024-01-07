@@ -36,7 +36,7 @@ function getLandSea(
 		gds  = NCDataset(glbfnc)
 		glon = gds["longitude"][:]
 		glat = gds["latitude"][:]
-		glsm = gds["lsm"][:]
+		glsm = gds["lsm"][:,:]
 		close(gds)
 
         if smooth
@@ -72,8 +72,8 @@ function getLandSea(
 		lds = NCDataset(lsmfnc)
 		lon = lds["longitude"][:]
 		lat = lds["latitude"][:]
-		lsm = lds["lsm"][:]
-		msk = lds["mask"][:]
+		lsm = lds["lsm"][:,:]
+		msk = lds["mask"][:,:]
 		close(lds)
 
 		@info "$(modulelog()) - Retrieving the regional TRMM Land-Sea mask for the \"$(geo.ID)\" GeoRegion ..."
@@ -172,8 +172,8 @@ function saveLandSea(
 
     nclon[:] = lon
     nclat[:] = lat
-	nclsm[:] = lsm
-    ncmsk[:] = mask
+	nclsm[:,:] = lsm
+    ncmsk[:,:] = mask
 
     close(ds)
 

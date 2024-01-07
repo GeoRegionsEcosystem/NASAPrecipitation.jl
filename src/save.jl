@@ -39,7 +39,7 @@ function save(
 
 	nclon[:] = ginfo.lon
 	nclat[:] = ginfo.lat
-	ncvar[:] = var
+	ncvar[:,:,:] = var
 
 	close(pds)
 
