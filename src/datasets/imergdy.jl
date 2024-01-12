@@ -14,6 +14,7 @@ struct IMERGDaily{ST<:AbstractString, DT<:TimeType} <: IMERGDataset
     hroot :: ST
     fpref :: ST
     fsuff :: ST
+    v6    :: Bool
 end
 
 """
@@ -65,7 +66,7 @@ function IMERGEarlyDY(
 		joinpath(path,"imergearlydy"),
 		joinpath(path,"imergmask"),
         "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDE.06",
-        "3B-DAY-E.MS.MRG.3IMERG", "S000000-E235959.V06.nc4",
+        "3B-DAY-E.MS.MRG.3IMERG", "S000000-E235959.V06.nc4", v6
     )
 
 end
@@ -119,7 +120,7 @@ function IMERGLateDY(
 		joinpath(path,"imerglatedy"),
 		joinpath(path,"imergmask"),
         "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDL.06",
-        "3B-DAY-L.MS.MRG.3IMERG", "S000000-E235959.V06.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG", "S000000-E235959.V06.nc4", v6
     )
 
 end
@@ -178,7 +179,7 @@ function IMERGFinalDY(
             joinpath(path,"imergv6finaldy"),
             joinpath(path,"imergmask"),
             "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06",
-            "3B-DAY.MS.MRG.3IMERG", "S000000-E235959.V06.nc4",
+            "3B-DAY.MS.MRG.3IMERG", "S000000-E235959.V06.nc4", v6
         )
     else
         return IMERGDaily{ST,DT}(
@@ -187,7 +188,7 @@ function IMERGFinalDY(
             joinpath(path,"imergv7finaldy"),
             joinpath(path,"imergmask"),
             "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.07",
-            "3B-DAY.MS.MRG.3IMERG", "S000000-E235959.V07B.nc4",
+            "3B-DAY.MS.MRG.3IMERG", "S000000-E235959.V07B.nc4", v6
         )
     end
 

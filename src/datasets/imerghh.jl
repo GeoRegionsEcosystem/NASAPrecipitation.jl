@@ -14,6 +14,7 @@ struct IMERGHalfHourly{ST<:AbstractString, DT<:TimeType} <: IMERGDataset
     hroot :: ST
     fpref :: ST
     fsuff :: ST
+    v6    :: Bool
 end
 
 """
@@ -62,7 +63,7 @@ function IMERGEarlyHH(
 		joinpath(path,"imergearlyhh"),
 		joinpath(path,"imergmask"),
         "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHHE.06",
-        "3B-HHR-E.MS.MRG.3IMERG", "V06B.HDF5",
+        "3B-HHR-E.MS.MRG.3IMERG", "V06B.HDF5", v6
     )
 
 end
@@ -113,7 +114,7 @@ function IMERGLateHH(
 		joinpath(path,"imerglatehh"),
 		joinpath(path,"imergmask"),
         "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHHL.06",
-        "3B-HHR-L.MS.MRG.3IMERG", "V06B.HDF5",
+        "3B-HHR-L.MS.MRG.3IMERG", "V06B.HDF5", v6
     )
 
 end
@@ -169,7 +170,7 @@ function IMERGFinalHH(
             joinpath(path,"imergv6finalhh"),
             joinpath(path,"imergmask"),
             "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHH.06",
-            "3B-HHR.MS.MRG.3IMERG", "V06B.HDF5",
+            "3B-HHR.MS.MRG.3IMERG", "V06B.HDF5", v6
         )
     else
         return IMERGHalfHourly{ST,DT}(
@@ -178,7 +179,7 @@ function IMERGFinalHH(
             joinpath(path,"imergv7finalhh"),
             joinpath(path,"imergmask"),
             "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHH.07",
-            "3B-HHR.MS.MRG.3IMERG", "V07B.HDF5",
+            "3B-HHR.MS.MRG.3IMERG", "V07B.HDF5", v6
         )
     end
 

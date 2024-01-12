@@ -14,6 +14,7 @@ struct IMERGMonthly{ST<:AbstractString, DT<:TimeType} <: IMERGDataset
     hroot :: ST
     fpref :: ST
     fsuff :: ST
+    v6    :: Bool
 end
 
 """
@@ -70,7 +71,7 @@ function IMERGMonthly(
             joinpath(path,"imergv6monthly"),
             joinpath(path,"imergmask"),
             "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.06",
-            "3B-MO.MS.MRG.3IMERG", "V06B.HDF5",
+            "3B-MO.MS.MRG.3IMERG", "V06B.HDF5", v6
         )
     else
         return IMERGMonthly{ST,DT}(
@@ -79,7 +80,7 @@ function IMERGMonthly(
             joinpath(path,"imergv7monthly"),
             joinpath(path,"imergmask"),
             "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.07",
-            "3B-MO.MS.MRG.3IMERG", "V07B.HDF5",
+            "3B-MO.MS.MRG.3IMERG", "V07B.HDF5", v6
         )
     end
 
