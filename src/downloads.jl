@@ -258,8 +258,6 @@ function download(
 		iglat = iglat[1] : iglat[end]
 	end
 
-	if npd.v6; varID = "precipitationCal"; else; varID = "precipitation" end
-
 	for dt in npd.start : Year(1) : npd.stop
 
 		fnc = npdfnc(npd,geo,dt)
@@ -275,10 +273,10 @@ function download(
 				npdfnc = "$(npd.fpref).$ymdfnc.$(@sprintf("%02d",mo)).$(npd.fsuff)"
 				ds = NCDataset(joinpath(npddir,npdfnc))
 				if !shift
-					NCDatasets.load!(ds[varID].var,tmp0,iglat,iglon,1)
+					NCDatasets.load!(ds["precipitation"].var,tmp0,iglat,iglon,1)
 				else
-					NCDatasets.load!(ds[varID].var,tmp1,iglat,iglon1,1)
-					NCDatasets.load!(ds[varID].var,tmp2,iglat,iglon2,1)
+					NCDatasets.load!(ds["precipitation"].var,tmp1,iglat,iglon1,1)
+					NCDatasets.load!(ds["precipitation"].var,tmp2,iglat,iglon2,1)
 				end
 				close(ds)
 
