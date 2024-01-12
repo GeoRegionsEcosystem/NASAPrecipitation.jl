@@ -47,6 +47,7 @@ function IMERGEarlyHH(
     start :: TimeType = Date(2000,6,1),
     stop  :: TimeType = Dates.now() - Day(3),
     path  :: AbstractString = homedir(),
+    v6    :: Bool = false,
 )
 
 	@info "$(modulelog()) - Setting up data structure containing information on Early IMERG Half-Hourly data to be downloaded"
@@ -97,6 +98,7 @@ function IMERGLateHH(
     start :: TimeType = Date(2000,6,1),
     stop  :: TimeType = Dates.now() - Day(3),
     path  :: AbstractString = homedir(),
+    v6    :: Bool = false
 )
 
 	@info "$(modulelog()) - Setting up data structure containing information on Late IMERG Half-Hourly data to be downloaded"
@@ -147,22 +149,38 @@ function IMERGFinalHH(
     start :: TimeType = Date(2000,6,1),
     stop  :: TimeType = Dates.now() - Month(6),
     path  :: AbstractString = homedir(),
+    v6    :: Bool = false
 )
 
 	@info "$(modulelog()) - Setting up data structure containing information on Final IMERG Half-Hourly data to be downloaded"
 
-    fol = joinpath(path,"imergfinalhh"); if !isdir(fol); mkpath(fol) end
+    if v6
+        fol = joinpath(path,"imergv6finalhh")
+    else
+        fol = joinpath(path,"imergv7finalhh")
+    end; if !isdir(fol); mkpath(fol) end
     fol = joinpath(path,"imergmask");    if !isdir(fol); mkpath(fol) end
     imergcheckdates(start,stop)
 
-    return IMERGHalfHourly{ST,DT}(
-		"imergfinalhh", "Final IMERG Half-Hourly", "10.5067/GPM/IMERG/3B-HH/06",
-        start, stop,
-		joinpath(path,"imergfinalhh"),
-		joinpath(path,"imergmask"),
-        "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHH.06",
-        "3B-HHR.MS.MRG.3IMERG", "V06B.HDF5",
-    )
+    if v6
+        return IMERGHalfHourly{ST,DT}(
+            "imergv6finalhh", "Final IMERGv6 Half-Hourly", "10.5067/GPM/IMERG/3B-HH/06",
+            start, stop,
+            joinpath(path,"imergv6finalhh"),
+            joinpath(path,"imergmask"),
+            "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHH.06",
+            "3B-HHR.MS.MRG.3IMERG", "V06B.HDF5",
+        )
+    else
+        return IMERGHalfHourly{ST,DT}(
+            "imergv7finalhh", "Final IMERGv7 Half-Hourly", "10.5067/GPM/IMERG/3B-HH/07",
+            start, stop,
+            joinpath(path,"imergv7finalhh"),
+            joinpath(path,"imergmask"),
+            "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHH.07",
+            "3B-HHR.MS.MRG.3IMERG", "V07B.HDF5",
+        )
+    end
 
 end
 
@@ -170,8 +188,8 @@ function show(io::IO, npd::IMERGHalfHourly{ST,DT}) where {ST<:AbstractString, DT
     print(
 		io,
 		"The NASA Precipitation Dataset {$ST,$DT} has the following properties:\n",
-		"    Dataset ID         (ID) : ", npd.ID, '\n',
-		"    Logging Name       (name) : ", npd.name, '\n',
+		"    Dataset ID            (ID) : ", npd.ID, '\n',
+		"    Logging Name        (name) : ", npd.name, '\n',
 		"    DOI URL              (doi) : ", npd.doi,   '\n',
 		"    Data Directory  (datapath) : ", npd.datapath, '\n',
 		"    Mask Directory  (maskpath) : ", npd.maskpath, '\n',

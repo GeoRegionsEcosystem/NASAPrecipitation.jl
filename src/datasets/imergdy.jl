@@ -47,6 +47,7 @@ function IMERGEarlyDY(
     start :: TimeType = Date(2000,6),
     stop  :: TimeType = Dates.now() - Month(2),
     path  :: AbstractString = homedir(),
+    v6    :: Bool = false
 )
 
 	@info "$(modulelog()) - Setting up data structure containing information on Early IMERG Daily data to be downloaded"
@@ -99,7 +100,8 @@ function IMERGLateDY(
     DT = Date;
     start :: TimeType = Date(2000,6),
     stop  :: TimeType = Dates.now() - Month(2),
-    path :: AbstractString = homedir(),
+    path  :: AbstractString = homedir(),
+    v6    :: Bool = false
 )
 
 	@info "$(modulelog()) - Setting up data structure containing information on Late IMERG Daily data to be downloaded"
@@ -152,26 +154,42 @@ function IMERGFinalDY(
     DT = Date;
     start :: TimeType = Date(2000,6),
     stop  :: TimeType = Dates.now() - Month(6),
-    path :: AbstractString = homedir(),
+    path  :: AbstractString = homedir(),
+    v6    :: Bool = false
 )
 
 	@info "$(modulelog()) - Setting up data structure containing information on Final IMERG Daily data to be downloaded"
 
-    fol = joinpath(path,"imergfinaldy"); if !isdir(fol); mkpath(fol) end
-    fol = joinpath(path,"imergmask");    if !isdir(fol); mkpath(fol) end
+    if v6
+        fol = joinpath(path,"imergv6finaldy") 
+    else
+        fol = joinpath(path,"imergv7finaldy")
+    end; if !isdir(fol); mkpath(fol) end
+    fol = joinpath(path,"imergmask"); if !isdir(fol); mkpath(fol) end
 
 	start = Date(year(start),month(start),1)
 	stop  = Date(year(stop),month(stop),daysinmonth(stop))
     imergcheckdates(start,stop )
 
-    return IMERGDaily{ST,DT}(
-		"imergfinaldy", "Final IMERG Daily", "10.5067/GPM/IMERGDF/DAY/06",
-        start, stop ,
-		joinpath(path,"imergfinaldy"),
-		joinpath(path,"imergmask"),
-        "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06",
-        "3B-DAY.MS.MRG.3IMERG", "S000000-E235959.V06.nc4",
-    )
+    if v6
+        return IMERGDaily{ST,DT}(
+            "imergv6finaldy", "Final IMERGv6 Daily", "10.5067/GPM/IMERGDF/DAY/06",
+            start, stop ,
+            joinpath(path,"imergv6finaldy"),
+            joinpath(path,"imergmask"),
+            "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06",
+            "3B-DAY.MS.MRG.3IMERG", "S000000-E235959.V06.nc4",
+        )
+    else
+        return IMERGDaily{ST,DT}(
+            "imergv7finaldy", "Final IMERGv7 Daily", "10.5067/GPM/IMERGDF/DAY/07",
+            start, stop ,
+            joinpath(path,"imergv7finaldy"),
+            joinpath(path,"imergmask"),
+            "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.07",
+            "3B-DAY.MS.MRG.3IMERG", "S000000-E235959.V07B.nc4",
+        )
+    end
 
 end
 
@@ -179,8 +197,8 @@ function show(io::IO, npd::IMERGDaily{ST,DT}) where {ST<:AbstractString, DT<:Tim
     print(
 		io,
 		"The NASA Precipitation Dataset {$ST,$DT} has the following properties:\n",
-		"    Dataset ID        (ID) : ", npd.ID, '\n',
-		"    Logging Name      (name) : ", npd.name, '\n',
+		"    Dataset ID           (ID) : ", npd.ID, '\n',
+		"    Logging Name       (name) : ", npd.name, '\n',
 		"    DOI URL             (doi) : ", npd.doi,   '\n',
 		"    Data Directory (datapath) : ", npd.datapath, '\n',
 		"    Mask Directory (maskpath) : ", npd.maskpath, '\n',

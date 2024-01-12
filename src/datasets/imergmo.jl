@@ -47,25 +47,41 @@ function IMERGMonthly(
     start :: TimeType = Date(2001),
     stop  :: TimeType = Dates.now() - Year(2),
     path  :: AbstractString = homedir(),
+    v6    :: Bool = false,
 )
 
 	@info "$(modulelog()) - Setting up data structure containing information on IMERG Monthly data to be downloaded"
 
-    fol = joinpath(path,"imergmonthly"); if !isdir(fol); mkpath(fol) end
+    if v6
+        fol = joinpath(path,"imergv6monthly")
+    else
+        fol = joinpath(path,"imergv7monthly")
+    end; if !isdir(fol); mkpath(fol) end
     fol = joinpath(path,"imergmask");    if !isdir(fol); mkpath(fol) end
 
 	start = Date(year(start),1,1)
 	stop  = Date(year(stop),12,31)
     imergcheckdates(start,stop)
 
-    return IMERGMonthly{ST,DT}(
-		"imergmonthly", "IMERG Monthly", "10.5067/GPM/IMERG/3B-MONTH/06",
-        start, stop,
-		joinpath(path,"imergmonthly"),
-		joinpath(path,"imergmask"),
-        "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.06",
-        "3B-MO.MS.MRG.3IMERG", "V06B.HDF5",
-    )
+    if v6
+        return IMERGMonthly{ST,DT}(
+            "imergv6monthly", "IMERGv6 Monthly", "10.5067/GPM/IMERG/3B-MONTH/06",
+            start, stop,
+            joinpath(path,"imergv6monthly"),
+            joinpath(path,"imergmask"),
+            "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.06",
+            "3B-MO.MS.MRG.3IMERG", "V06B.HDF5",
+        )
+    else
+        return IMERGMonthly{ST,DT}(
+            "imergv7monthly", "IMERGv7 Monthly", "10.5067/GPM/IMERG/3B-MONTH/07",
+            start, stop,
+            joinpath(path,"imergv7monthly"),
+            joinpath(path,"imergmask"),
+            "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.07",
+            "3B-MO.MS.MRG.3IMERG", "V07B.HDF5",
+        )
+    end
 
 end
 
@@ -73,8 +89,8 @@ function show(io::IO, npd::IMERGMonthly{ST,DT}) where {ST<:AbstractString, DT<:T
     print(
 		io,
 		"The NASA Precipitation Dataset {$ST,$DT} has the following properties:\n",
-		"    Dataset ID         (ID) : ", npd.ID, '\n',
-		"    Logging Name       (name) : ", npd.name, '\n',
+		"    Dataset ID            (ID) : ", npd.ID, '\n',
+		"    Logging Name        (name) : ", npd.name, '\n',
 		"    DOI URL              (doi) : ", npd.doi,   '\n',
 		"    Data Directory  (datapath) : ", npd.datapath, '\n',
 		"    Mask Directory  (maskpath) : ", npd.maskpath, '\n',
