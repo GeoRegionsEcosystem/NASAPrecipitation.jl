@@ -81,7 +81,17 @@ function download(
 				@debug "$(modulelog()) - Loading data into temporary array for timestep $(dyfnc[it])"
 
 				npdfnc = "$(npd.fpref).$ymdfnc-$(dyfnc[it]).$(npd.fsuff)"
-				ds = NCDataset(joinpath(npddir,npdfnc))
+
+				tryretrieve = 0
+				ds = 0
+				while !(typeof(ds) <: NCDataset) && (tryretrieve < 20)
+					if tryretrieve > 0
+						@info "$(modulelog()) - Attempting to request data from NASA OPeNDAP servers on Attempt $(tryretrieve+1) of 20"
+					end
+					ds = NCDataset(joinpath(npddir,npdfnc))
+					tryretrieve += 1
+				end
+				
 				if !shift
 					NCDatasets.load!(ds[varID].var,tmp0,iglat,iglon,1)
 				else
