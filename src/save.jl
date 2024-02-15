@@ -4,11 +4,18 @@ function save(
 	npd   :: NASAPrecipitationDataset,
 	geo   :: GeoRegion,
 	ginfo :: RegionGrid,
+    smooth  :: Bool = false,
+    smoothlon  :: Real = 0,
+    smoothlat  :: Real = 0,
+    smoothtime :: Int = 0,
 )
 
 	@info "$(modulelog()) - Saving $(npd.name) data in the $(geo.name) GeoRegion for $(dt)"
 
 	fnc = npdfnc(npd,geo,dt)
+	if smooth
+        fnc = npdsmth(npd,geo,dt,smoothlon,smoothlat,smoothtime)
+    end
 	if !isdir(dirname(fnc)); mkpath(dirname(fnc)) end
 	if isfile(fnc)
 		@info "$(modulelog()) - Overwrite stale NetCDF file $(fnc) ..."

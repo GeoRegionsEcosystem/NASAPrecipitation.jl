@@ -62,3 +62,59 @@ function npdanc(
     return joinpath(fol,fnc)
 
 end
+
+####
+
+function npdsmth(
+    npd :: Union{IMERGHalfHourly{ST,DT},TRMM3Hourly{ST,DT}},
+	geo :: GeoRegion,
+    dt  :: TimeType,
+    smoothlon  :: Real,
+    smoothlat  :: Real,
+    smoothtime :: Int
+) where {ST<:AbstractString, DT<:TimeType}
+
+    fol = joinpath(npd.datapath,geo.ID,yrmo2dir(dt))
+    fnc = npd.ID * "-" * geo.ID * "-" * "smooth" * "_" *
+          @sprintf("%.2f",smoothlon) * "x" * @sprintf("%.2f",smoothlat) *
+          "_" * @sprintf("%02d",smoothtime) * "steps" *
+          "-" * ymd2str(dt) * ".nc"
+    return joinpath(fol,fnc)
+
+end
+
+function npdsmth(
+    npd :: Union{IMERGDaily{ST,DT},TRMMDaily{ST,DT}},
+	geo :: GeoRegion,
+    dt  :: TimeType,
+    smoothlon  :: Real,
+    smoothlat  :: Real,
+    smoothtime :: Int
+) where {ST<:AbstractString, DT<:TimeType}
+
+    fol = joinpath(npd.datapath,geo.ID,yr2str(dt))
+    fnc = npd.ID * "-" * geo.ID * "-" * "smooth" * "_" *
+          @sprintf("%.2f",smoothlon) * "x" * @sprintf("%.2f",smoothlat) *
+          "_" * @sprintf("%02d",smoothtime) * "steps" *
+          "-" * yrmo2str(dt) * ".nc"
+    return joinpath(fol,fnc)
+
+end
+
+function npdsmth(
+    npd :: Union{IMERGMonthly{ST,DT},TRMMMonthly{ST,DT}},
+	geo :: GeoRegion,
+    dt  :: TimeType,
+    smoothlon  :: Real,
+    smoothlat  :: Real,
+    smoothtime :: Int
+) where {ST<:AbstractString, DT<:TimeType}
+
+    fol = joinpath(npd.datapath,geo.ID)
+    fnc = npd.ID * "-" * geo.ID * "-" * "smooth" * "_" *
+          @sprintf("%.2f",smoothlon) * "x" * @sprintf("%.2f",smoothlat) *
+          "_" * @sprintf("%02d",smoothtime) * "steps" *
+          "-" * yr2str(dt) * ".nc"
+    return joinpath(fol,fnc)
+
+end
