@@ -13,6 +13,7 @@ setup(
 makedocs(;
     modules  = [NASAPrecipitation, GeoRegions],
     doctest  = false,
+    warnonly = true,
     format   = Documenter.HTML(collapselevel=1,prettyurls=false),
     authors  = "Nathanael Wong <natgeo.wong@outlook.com>",
     sitename = "NASAPrecipitation.jl",
