@@ -46,13 +46,13 @@ function read(
     end
 
     if raw
-        if !isfile(enc)
+        if !isfile(pnc)
             error("$(modulelog()) - The $(npd.name) Dataset for the $(geo.ID) GeoRegion at Date $dt does not exist at $(pnc).  Check if files exist at $(npd.datapath) or download the files here")
         end
         @info "$(modulelog()) - Opening the $(npd.name) NCDataset in the $(geo.ID) GeoRegion for $dt"
     end
     if smooth
-        if !isfile(enc)
+        if !isfile(pnc)
             error("$(modulelog()) - The spatially smoothed ($(@sprintf("%.2f",smoothlon))x$(@sprintf("%.2f",smoothlat))) $(npd.name) Dataset for $(geo.ID) GeoRegion at Date $dt does not exist at $(pnc).  Check if files exist at $(npd.datapath) or download the files here")
         end
         @info "$(modulelog()) - Opening the spatialtemporally smoothed ($(@sprintf("%.2f",smoothlon))ºx$(@sprintf("%.2f",smoothlat))º, $(@sprintf("%02d",smoothtime)) timesteps) $(npd.name) NCDataset in the $(geo.ID) GeoRegion for $dt"
