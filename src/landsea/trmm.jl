@@ -18,9 +18,9 @@ function getLandSea(
 	end
 
 	if !smooth
-		fnc = joinpath(npd.maskpath,"trmmmask-$(geo.ID).nc")
+		lsmfnc = joinpath(npd.maskpath,"trmmmask-$(geo.ID).nc")
 	else
-		fnc = joinpath(npd.maskpath,"trmmmask-$(geo.ID)-smooth_$(σlon)x$(σlat).nc")
+		lsmfnc = joinpath(npd.maskpath,"trmmmask-$(geo.ID)-smooth_$(σlon)x$(σlat).nc")
 	end
 
 	if !isfile(lsmfnc)
