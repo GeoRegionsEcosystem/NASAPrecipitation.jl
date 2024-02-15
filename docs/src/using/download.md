@@ -61,7 +61,7 @@ ds = read(npd,geo,Date(2020))
 As shown in the printout of the `NCDataset`, the precipitation data is saved under the field name `precipitation`, and is in units of `kg m**-2 s**-1`, or alternatively `mm s**-1`.
 
 ```@example download
-prcp = ds["precipitation"][:] * 3600
+prcp = ds["precipitation"][:,:,:] * 3600
 close(ds)
 
 fig = Figure()

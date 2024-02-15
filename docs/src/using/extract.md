@@ -47,11 +47,11 @@ Now, let us proceed to compare and contrast the two Regions
 
 ```@example download
 ds = read(npd,pgeo,Date(2015))
-prcp_pgeo = ds["precipitation"][:] * 3600
+prcp_pgeo = ds["precipitation"][:,:,:] * 3600
 lsd_pgeo  = getLandSea(npd,pgeo)
 close(ds)
 ds = read(npd,sgeo,Date(2015))
-prcp_sgeo = ds["precipitation"][:] * 3600
+prcp_sgeo = ds["precipitation"][:,:,:] * 3600
 lsd_sgeo  = getLandSea(npd,sgeo)
 close(ds)
 
