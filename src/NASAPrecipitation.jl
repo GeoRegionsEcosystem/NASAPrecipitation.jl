@@ -29,7 +29,7 @@ export
 
         getLandSea, addNPDGeoRegions,
 
-        download, read, npdfnc, setup, extract
+        download, read, npdfnc, setup, extract, smoothing
 
 ## Abstract types
 """
@@ -119,6 +119,7 @@ include("downloads.jl")
 include("save.jl")
 include("read.jl")
 include("extract.jl")
+include("smoothing.jl")
 include("filesystem.jl")
 include("backend.jl")
 

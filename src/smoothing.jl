@@ -11,12 +11,35 @@ function calculatebufferweights(shiftsteps)
 
 end
 
+"""
+    smoothing(;
+        npd :: Union{IMERGHalfHourly},
+        geo :: GeoRegion = GeoRegion("GLB");
+        spatial  :: Bool = false,
+        temporal :: Bool = false,
+        hours     :: Real = 0,
+        smoothlon :: Real = 0,
+        smoothlat :: Real = 0,
+        verbose :: Bool = false
+    )
+
+Perform spatialtemporal smoothing of the NASAPrecipitation dataset over the dates specified in the `npd` NASAPrecipitationDataset and `geo` GeoRegion.
+
+Keyword arguments
+=================
+- `spatial` : If `true`, perform spatial smoothing
+- `temporal` : If `true`, perform temporal smoothing
+- `hours` : The number of hours that temporal smoothing is performed over. Must be an integer multiple of the timestep.
+- `smoothlon` : The number of longitude degrees to smooth over. Must be an integer multiple of the `npd` dataset resolution.
+- `smoothlat` : The number of latitude degrees to smooth over. Must be an integer multiple of the `npd` dataset resolution.
+- `verbose` : If `true`, then do extra logging
+"""
 function smoothing(
     npd :: IMERGHalfHourly,
 	geo :: GeoRegion;
     spatial  :: Bool = false,
     temporal :: Bool = false,
-    hours :: Int = 0,
+    hours :: Real = 0,
     smoothlon :: Real = 0,
     smoothlat :: Real = 0,
     verbose :: Bool = false
@@ -44,8 +67,8 @@ function smoothing(
         error("$(modulelog()) - For temporal smoothing, we need to specify the time in half-hourly increments")
     end
 
-    if hours > 48
-        error("$(modulelog()) - Setting a hard cap to the maximum number of days that can be included in the timeaveraging to 24 hours. This may expand in the future.")
+    if hours > 96
+        error("$(modulelog()) - Setting a hard cap to the maximum number of hours that can be included in the timeaveraging to 48 hours. This may expand in the future.")
     end
 
     shiftlon = smoothlon/0.1; if !isinteger(shiftlon)
@@ -78,7 +101,7 @@ function smoothing(
 
     for dt in npd.start : Month(1) : npd.stop
 
-        ds  = read(npd,geo,dt)
+        ds  = read(npd,geo,dt,quiet=true)
         NCDatasets.load!(
             ds["precipitation"].var,
             view(tmpdata,:,:,(1:nhr).+buffer_time),
@@ -88,7 +111,7 @@ function smoothing(
 
         if temporal
 
-            ds  = read(npd,geo,dt-Day(1))
+            ds  = read(npd,geo,dt-Day(1),quiet=true)
             NCDatasets.load!(
                 ds["precipitation"].var,
                 view(tmpdata,:,:,(1:buffer_time)),
@@ -98,7 +121,7 @@ function smoothing(
 
             flush(stderr)
 
-            ds  = read(npd,geo,dt+Day(1))
+            ds  = read(npd,geo,dt+Day(1),quiet=true)
             NCDatasets.load!(
                 ds["precipitation"].var,
                 view(tmpdata,:,:,(1:buffer_time).+(nhr+buffer_time)),
@@ -206,6 +229,29 @@ function smoothing(
 
 end
 
+"""
+    smoothing(;
+        npd :: Union{IMERGDaily,TRMMDaily},
+        geo :: GeoRegion;
+        spatial  :: Bool = false,
+        temporal :: Bool = false,
+        days :: Int = 0,
+        smoothlon :: Real = 0,
+        smoothlat :: Real = 0,
+        verbose :: Bool = false
+    )
+
+Perform spatialtemporal smoothing of a daily NASAPrecipitation dataset over the dates specified in the `npd` NASAPrecipitationDataset and `geo` GeoRegion.
+
+Keyword arguments
+=================
+- `spatial` : If `true`, perform spatial smoothing
+- `temporal` : If `true`, perform temporal smoothing
+- `days` : The number of days that temporal smoothing is performed over. Must be an integer.
+- `smoothlon` : The number of longitude degrees to smooth over. Must be an integer multiple of the `npd` dataset resolution.
+- `smoothlat` : The number of latitude degrees to smooth over. Must be an integer multiple of the `npd` dataset resolution.
+- `verbose` : If `true`, then do extra logging
+"""
 function smoothing(
     npd :: Union{IMERGDaily,TRMMDaily},
     geo :: GeoRegion;
@@ -233,8 +279,8 @@ function smoothing(
         error("$(modulelog()) - Incomplete specification of temporal smoothing parameters")
     end
 
-    if days > 28
-        error("$(modulelog()) - Setting a hard cap to the maximum number of days that can be included in the timeaveraging to 28 days. This may expand in the future.")
+    if days > 56
+        error("$(modulelog()) - Setting a hard cap to the maximum number of days that can be included in the timeaveraging to 56 days. This may expand in the future.")
     end
 
     shiftlon = smoothlon/0.1; if !isinteger(shiftlon)
@@ -267,7 +313,7 @@ function smoothing(
     for dt in npd.start : Month(1) : npd.stop
 
         ndy = daysinmonth(dt)
-        ds  = read(npd,geo,dt+Month(1))
+        ds  = read(npd,geo,dt+Month(1),quiet=true)
         NCDatasets.load!(
             ds["precipitation"].var,
             view(tmpdata,:,:,(1:ndy).+buffer_time),
@@ -279,7 +325,7 @@ function smoothing(
 
         if temporal
             
-            ds  = read(npd,geo,dt-Month(1))
+            ds  = read(npd,geo,dt-Month(1),quiet=true)
             NCDatasets.load!(
                 ds["precipitation"].var,
                 view(tmpdata,:,:,(1:buffer_time)),
@@ -289,7 +335,7 @@ function smoothing(
 
             flush(stderr)
 
-            ds  = read(npd,geo,dt+Month(1))
+            ds  = read(npd,geo,dt+Month(1),quiet=true)
             NCDatasets.load!(
                 ds["precipitation"].var,
                 view(tmpdata,:,:,(1:buffer_time).+(ndy+buffer_time)),
@@ -395,6 +441,26 @@ function smoothing(
 
 end
 
+"""
+    smoothing(;
+        npd :: Union{IMERGMonthly,TRMMMonthly},
+        geo :: GeoRegion;
+        smoothlon :: Real = 0,
+        smoothlat :: Real = 0,
+        verbose :: Bool = false
+    )
+
+Perform spatial smoothing of the **Monthly* NASAPrecipitation dataset over the dates specified in the `npd` NASAPrecipitationDataset and `geo` GeoRegion.
+
+!!! warn
+    Temporal smoothing _**cannot**_ be performed on IMERGMonthly and TRMMMonthly datasets. They can only be spatially smoothed.
+
+Keyword arguments
+=================
+- `smoothlon` : The number of longitude degrees to smooth over. Must be an integer multiple of the `npd` dataset resolution.
+- `smoothlat` : The number of latitude degrees to smooth over. Must be an integer multiple of the `npd` dataset resolution.
+- `verbose` : If `true`, then do extra logging
+"""
 function smoothing(
     npd :: Union{IMERGMonthly,TRMMMonthly},
     geo :: GeoRegion;
@@ -423,8 +489,7 @@ function smoothing(
 
     @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(geo.name) Region ..."
 
-    ndt = ntimesteps(npd)
-    smthdata = zeros(Float32,nlon,nlat,ndt)
+    smthdata = zeros(Float32,nlon,nlat,12)
     shftlon  = zeros(Float32,nlon,nlat,(2*buffer_lon+1))
     shftlat  = zeros(Float32,nlon,nlat,(2*buffer_lat+1))
     nanlat   = zeros(Bool,(2*buffer_lat+1))
@@ -434,19 +499,14 @@ function smoothing(
 
     for dt in npd.start : Month(1) : npd.stop
 
-        ds  = read(npd,geo,dt)
-        sc  = ds["precipitation"].attrib["scale_factor"]
-        of  = ds["precipitation"].attrib["add_offset"]
-        mv  = ds["precipitation"].attrib["missing_value"]
-        fv  = ds["precipitation"].attrib["_FillValue"]
-        NCDatasets.load!(ds["precipitation"].var,tmpload,:,:,:)
-        int2real!(smthdata,tmpload,scale=sc,offset=of,mvalue=mv,fvalue=fv)
+        ds  = read(npd,geo,dt,quiet=true)
+        NCDatasets.load!(ds["precipitation"].var,smthdata,:,:,:)
         close(ds)
 
         flush(stderr)
 
         @info "$(modulelog()) - Performing spatial smoothing ($(@sprintf("%.2f",smoothlon))x$(@sprintf("%.2f",smoothlat))) on $(npd.name) Precipitation Rate data in $(geo.name) during $(year(dt)) $(monthname(dt)) ..."
-        for idt = 1 : ndt
+        for idt = 1 : 12
 
             if !iszero(buffer_lat)
                 ishift = 0
@@ -494,18 +554,18 @@ function smoothing(
             @info "$(modulelog()) - Setting edges to NaN32 because we used cyclical circshift to do spatial smoothing, which doesn't make sense if boundaries are not periodic ..."
         end
         if !iszero(buffer_lon) && !geo.is360
-            for idt = 1 : ndt, ilat = 1 : nlat, ilon = 1 : buffer_lon
+            for idt = 1 : 12, ilat = 1 : nlat, ilon = 1 : buffer_lon
                 smthdata[ilon,ilat,idt] = NaN32
             end
-            for idt = 1 : ndt, ilat = 1 : nlat, ilon = (nlon-buffer_lon+1) : nlon
+            for idt = 1 : 12, ilat = 1 : nlat, ilon = (nlon-buffer_lon+1) : nlon
                 smthdata[ilon,ilat,idt] = NaN32
             end
         end
         if !iszero(buffer_lat)
-            for idt = 1 : ndt, ilat = 1 : buffer_lat, ilon = 1 : nlon
+            for idt = 1 : 12, ilat = 1 : buffer_lat, ilon = 1 : nlon
                 smthdata[ilon,ilat,idt] = NaN32
             end
-            for idt = 1 : ndt, ilat = (nlat-buffer_lat+1) : nlat, ilon = 1 : nlon
+            for idt = 1 : 12, ilat = (nlat-buffer_lat+1) : nlat, ilon = 1 : nlon
                 smthdata[ilon,ilat,idt] = NaN32
             end
         end
