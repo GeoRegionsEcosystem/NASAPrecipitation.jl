@@ -199,7 +199,7 @@ function smoothing(
             if verbose
                 @info "$(modulelog()) - Setting edges to NaN32 because we used cyclical circshift to do spatial smoothing, which doesn't make sense if boundaries are not periodic ..."
             end
-            if !iszero(buffer_lon) && !geo.is360
+            if !iszero(buffer_lon) && (mod(geo.E,360)!==mod(geo.W,360))
                 for ihr = 1 : nhr, ilat = 1 : nlat, ilon = 1 : buffer_lon
                     smthdata[ilon,ilat,ihr] = NaN32
                 end
@@ -300,10 +300,10 @@ function smoothing(
 
     @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(geo.name) Region ..."
 
-    tmpdata  = zeros(nlon,nlat,31+buffer_time*2)
-    shftlon  = zeros(nlon,nlat,(2*buffer_lon+1))
-    shftlat  = zeros(nlon,nlat,(2*buffer_lat+1))
-    smthdata = zeros(nlon,nlat,31)
+    tmpdata  = zeros(Float32,nlon,nlat,31+buffer_time*2)
+    shftlon  = zeros(Float32,nlon,nlat,(2*buffer_lon+1))
+    shftlat  = zeros(Float32,nlon,nlat,(2*buffer_lat+1))
+    smthdata = zeros(Float32,nlon,nlat,31)
     nanlat   = zeros(Bool,(2*buffer_lat+1))
     nanlon   = zeros(Bool,(2*buffer_lon+1))
     smthii   = zeros(1+buffer_time*2)
@@ -313,7 +313,7 @@ function smoothing(
     for dt in npd.start : Month(1) : npd.stop
 
         ndy = daysinmonth(dt)
-        ds  = read(npd,geo,dt+Month(1),quiet=true)
+        ds  = read(npd,geo,dt,quiet=true)
         NCDatasets.load!(
             ds["precipitation"].var,
             view(tmpdata,:,:,(1:ndy).+buffer_time),
@@ -411,7 +411,7 @@ function smoothing(
             if verbose
                 @info "$(modulelog()) - Setting edges to NaN32 because we used cyclical circshift to do spatial smoothing, which doesn't make sense if boundaries are not periodic ..."
             end
-            if !iszero(buffer_lon) && !geo.is360
+            if !iszero(buffer_lon) && (mod(geo.E,360)!==mod(geo.W,360))
                 for idy = 1 : ndy, ilat = 1 : nlat, ilon = 1 : buffer_lon
                     smthdata[ilon,ilat,idy] = NaN32
                 end
@@ -452,7 +452,7 @@ end
 
 Perform spatial smoothing of the **Monthly* NASAPrecipitation dataset over the dates specified in the `npd` NASAPrecipitationDataset and `geo` GeoRegion.
 
-!!! warn
+!!! warning
     Temporal smoothing _**cannot**_ be performed on IMERGMonthly and TRMMMonthly datasets. They can only be spatially smoothed.
 
 Keyword arguments
@@ -489,6 +489,7 @@ function smoothing(
 
     @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(geo.name) Region ..."
 
+    tmpdata  = zeros(Float32,nlon,nlat,12)
     smthdata = zeros(Float32,nlon,nlat,12)
     shftlon  = zeros(Float32,nlon,nlat,(2*buffer_lon+1))
     shftlat  = zeros(Float32,nlon,nlat,(2*buffer_lat+1))
@@ -500,8 +501,12 @@ function smoothing(
     for dt in npd.start : Month(1) : npd.stop
 
         ds  = read(npd,geo,dt,quiet=true)
-        NCDatasets.load!(ds["precipitation"].var,smthdata,:,:,:)
+        NCDatasets.load!(ds["precipitation"].var,tmpdata,:,:,:)
         close(ds)
+
+        for ii in eachindex(tmpdata)
+            smthdata[ii] = tmpdata[ii]
+        end
 
         flush(stderr)
 
@@ -537,9 +542,9 @@ function smoothing(
                     )
                 end
                 for ilat = 1 : nlat, ilon = 1 : nlon
-                    if !isnan(tmpdata[ilon,ilat,idt])
+                    if !isnan(smthdata[ilon,ilat,idt])
                         smthdata[ilon,ilat,idt] = nanmean(
-                            view(shftlat,ilon,ilat,:),nanlon,weights_lon
+                            view(shftlon,ilon,ilat,:),nanlon,weights_lon
                         )
                     else; smthdata[ilon,ilat,idt] = NaN32
                     end
@@ -553,7 +558,7 @@ function smoothing(
         if verbose
             @info "$(modulelog()) - Setting edges to NaN32 because we used cyclical circshift to do spatial smoothing, which doesn't make sense if boundaries are not periodic ..."
         end
-        if !iszero(buffer_lon) && !geo.is360
+        if !iszero(buffer_lon) && (mod(geo.E,360)!==mod(geo.W,360))
             for idt = 1 : 12, ilat = 1 : nlat, ilon = 1 : buffer_lon
                 smthdata[ilon,ilat,idt] = NaN32
             end

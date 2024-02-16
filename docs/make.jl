@@ -33,7 +33,8 @@ makedocs(;
                 "Loading LandSea Datasets"   => "using/landsea/create.md",
             ],
             "Downloading and Reading Datasets" => "using/download.md",
-            "Extraction of subGeoRegions"     => "using/extract.md",
+            "Extraction of subGeoRegions"      => "using/extract.md",
+            "Spatialtemporal Smoothing"        => "using/smoothing.md",
         ],
     ],
 )
