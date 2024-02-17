@@ -45,12 +45,16 @@ download(npd,geo)
 lsd = getLandSea(npd,geo)
 ```
 
-Now, let us proceed to perform a spatial smoothing of the data
+We then proceed to perform a spatial smoothing (1.0º longitude, 0.2º latitude) of the data.
 
 ```@example smooth
 npd_smth = IMERGMonthly(start=Date(2015,2),stop=Date(2015,2))
 smoothing(npd_smth,geo,smoothlon=1,smoothlat=0.2)
+```
 
+Now let us compare the difference between the raw and smoothed data.
+
+```@example smooth
 ds_raw  = read(npd_smth,geo,Date(2015))
 ds_smth = read(npd_smth,geo,Date(2015),smooth=true,smoothlon=1,smoothlat=0.2)
 
@@ -64,12 +68,12 @@ fig = Figure()
 aspect = (maximum(lsd.lon)-minimum(lsd.lon)+2)/(maximum(lsd.lat)-minimum(lsd.lat)+2)
 
 ax1 = Axis(
-    fig[1,1],width=500,height=500/aspect,
+    fig[1,1],width=350,height=350/aspect,
     title="November 2015 (Raw)",xlabel="Longitude / º",ylabel="Latitude / º",
     limits=(minimum(lsd.lon)-1,maximum(lsd.lon)+1,minimum(lsd.lat)-1,maximum(lsd.lat)+1)
 )
 ax2 = Axis(
-    fig[1,2],width=500,height=500/aspect,
+    fig[1,2],width=350,height=350/aspect,
     title="November 2015 (Smoothed 1.0ºx0.2º)",xlabel="Longitude / º",
     limits=(minimum(lsd.lon)-1,maximum(lsd.lon)+1,minimum(lsd.lat)-1,maximum(lsd.lat)+1)
 )
@@ -87,6 +91,8 @@ lines!(ax2,clon,clat,color=:black)
 resize_to_layout!(fig)
 fig
 ```
+
+And we see that the data is smoothed in the longitude-direction. Because they are not smoothed equally in both longitude and latitude, the fields look stretched in the longitude direction.
 
 ## API
 
