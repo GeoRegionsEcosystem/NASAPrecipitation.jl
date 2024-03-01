@@ -23,6 +23,7 @@ GeoRegions = "^5.1"
 NCDatasets = "0.13, ^0.14.1"
 NetRC = "0.1"
 Reexport = "1"
+Statistics = "1"
 julia = "^1.6"
 
 [extras]
