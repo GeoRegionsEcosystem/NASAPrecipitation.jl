@@ -30,9 +30,9 @@ function extract(
     rinfo = RegionGrid(geo,plon,plat)
     ilon  = rinfo.ilon; nlon = length(ilon)
     ilat  = rinfo.ilat; nlat = length(ilat)
-    if typeof(rinfo) <: PolyGrid
-          mask = rinfo.mask
-    else; mask = ones(nlon,nlat)
+    if typeof(rinfo) <: RectGrid
+          mask = ones(nlon,nlat)
+    else; mask = rinfo.mask
     end
     
     rmat,pmat = extract_mat(nlon,nlat,length(plon),length(plat),npd)
@@ -101,9 +101,9 @@ function extract(
     rinfo = RegionGrid(sgeo,plon,plat)
     ilon  = rinfo.ilon; nlon = length(ilon)
     ilat  = rinfo.ilat; nlat = length(ilat)
-    if typeof(rinfo) <: PolyGrid
-          mask = rinfo.mask
-    else; mask = ones(nlon,nlat)
+    if typeof(rinfo) <: RectGrid
+          mask = ones(nlon,nlat)
+    else; mask = rinfo.mask
     end
     
     rmat,pmat = extract_mat(nlon,nlat,length(plon),length(plat),npd)

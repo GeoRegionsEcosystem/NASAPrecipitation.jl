@@ -41,9 +41,9 @@ function download(
 	tmp0 = zeros(Float32,nglat,nglon)
 	var  = zeros(Float32,nglon,nglat,48)
 
-	if typeof(geo) <: PolyRegion
-		  msk = ginfo.mask
-	else; msk = ones(nglon,nglat)
+	if typeof(geo) <: RectRegion
+		  msk = ones(nglon,nglat)
+	else; msk = ginfo.mask
 	end
 
 	if iglon[1] > iglon[end]
@@ -149,9 +149,9 @@ function download(
 	tmp0 = zeros(Float32,nglat,nglon)
 	var  = zeros(Float32,nglon,nglat,31)
 
-	if typeof(geo) <: PolyRegion
-		  msk = ginfo.mask
-	else; msk = ones(nglon,nglat)
+	if typeof(geo) <: RectRegion
+		  msk = ones(nglon,nglat)
+	else; msk = ginfo.mask
 	end
 
 	if iglon[1] > iglon[end]
@@ -247,9 +247,9 @@ function download(
 	tmp0 = zeros(Float32,nglat,nglon)
 	var  = zeros(Float32,nglon,nglat,12)
 
-	if typeof(geo) <: PolyRegion
-		  msk = ginfo.mask
-	else; msk = ones(nglon,nglat)
+	if typeof(geo) <: RectRegion
+		  msk = ones(nglon,nglat)
+	else; msk = ginfo.mask
 	end
 
 	if iglon[1] > iglon[end]
@@ -342,9 +342,9 @@ function download(
 	tmp0 = zeros(Float32,nglat,nglon)
 	var  = zeros(Float32,nglon,nglat,8)
 
-	if typeof(geo) <: PolyRegion
-		  msk = ginfo.mask
-	else; msk = ones(nglon,nglat)
+	if typeof(geo) <: RectRegion
+		  msk = ones(nglon,nglat)
+	else; msk = ginfo.mask
 	end
 
 	if iglon[1] > iglon[end]
@@ -441,9 +441,9 @@ function download(
 	tmp0 = zeros(Float32,nglat,nglon)
 	var  = zeros(Float32,nglon,nglat,31)
 
-	if typeof(geo) <: PolyRegion
-		  msk = ginfo.mask
-	else; msk = ones(nglon,nglat)
+	if typeof(geo) <: RectRegion
+		  msk = ones(nglon,nglat)
+	else; msk = ginfo.mask
 	end
 
 	if iglon[1] > iglon[end]
@@ -537,9 +537,9 @@ function download(
 	tmp0 = zeros(Float32,nglat,nglon)
 	var  = zeros(Float32,nglon,nglat,12)
 
-	if typeof(geo) <: PolyRegion
-		  msk = ginfo.mask
-	else; msk = ones(nglon,nglat)
+	if typeof(geo) <: RectRegion
+		  msk = ones(nglon,nglat)
+	else; msk = ginfo.mask
 	end
 
 	if iglon[1] > iglon[end]

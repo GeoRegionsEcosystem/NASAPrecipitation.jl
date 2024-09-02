@@ -67,9 +67,9 @@ function getLandSea(
 		ilat  = ggrd.ilat; nlat = length(ggrd.ilat)
 		rlsm  = zeros(nlon,nlat)
 		
-		if typeof(ggrd) <: PolyGrid
-			  mask = ggrd.mask; mask[isnan.(mask)] .= 0
-		else; mask = ones(Int16,nlon,nlat)
+		if typeof(ggrd) <: RectGrid
+			  mask = ones(Int16,nlon,nlat)
+		else; mask = ggrd.mask; mask[isnan.(mask)] .= 0
 		end
 
 		@info "$(modulelog()) - Extracting regional IMERG Land-Sea mask for the \"$(geo.ID)\" GeoRegion from the Global IMERG Land-Sea mask dataset ..."
