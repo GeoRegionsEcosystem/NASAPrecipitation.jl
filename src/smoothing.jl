@@ -99,7 +99,7 @@ function smoothing(
 
     flush(stderr)
 
-    for dt in npd.start : Month(1) : npd.stop
+    for dt in npd.start : Day(1) : npd.stop
 
         ds  = read(npd,geo,dt,quiet=true)
         NCDatasets.load!(
@@ -115,7 +115,7 @@ function smoothing(
             NCDatasets.load!(
                 ds["precipitation"].var,
                 view(tmpdata,:,:,(1:buffer_time)),
-                :,:,:
+                :,:,(49-buffer_time):48
             )
             close(ds)
 
@@ -125,7 +125,7 @@ function smoothing(
             NCDatasets.load!(
                 ds["precipitation"].var,
                 view(tmpdata,:,:,(1:buffer_time).+(nhr+buffer_time)),
-                :,:,:
+                :,:,1:buffer_time
             )
             close(ds)
 
@@ -325,11 +325,12 @@ function smoothing(
 
         if temporal
             
+            ndb = daysinmonth(dt-Month(1))
             ds  = read(npd,geo,dt-Month(1),quiet=true)
             NCDatasets.load!(
                 ds["precipitation"].var,
                 view(tmpdata,:,:,(1:buffer_time)),
-                :,:,:
+                :,:,(ndb+1-buffer_time):ndb
             )
             close(ds)
 
@@ -339,7 +340,7 @@ function smoothing(
             NCDatasets.load!(
                 ds["precipitation"].var,
                 view(tmpdata,:,:,(1:buffer_time).+(ndy+buffer_time)),
-                :,:,:
+                :,:,1:buffer_time
             )
             close(ds)
 
