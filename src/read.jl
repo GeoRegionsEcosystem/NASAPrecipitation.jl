@@ -3,21 +3,28 @@
         npd :: NASAPrecipitationDataset,
         geo :: GeoRegion,
         dt  :: TimeType;
-        lonlat :: Bool = false
-    ) -> NCDataset           (if lonlat = false)
-      -> lon, lat, NCDataset (if lonlat = true)
+        smooth   :: Bool = false,
+        smoothlon  :: Real = 0,
+        smoothlat  :: Real = 0,
+        smoothtime :: Real = 0,
+        quiet  :: Bool = false
+    ) -> NCDataset
 
 Reads a NASA Precipitation dataset specified by `npd` for a GeoRegion specified by `geo` at a date specified by `dt`.
 
 Arguments
 =========
 - `npd` : a `NASAPrecipitationDataset` specifying the dataset details and date download range
-- `geo` : a `GeoRegion` (see [GeoRegions.jl](https://github.com/JuliaClimate/GeoRegions.jl)) that sets the geographic bounds of the data array in lon-lat
+- `geo` : a `GeoRegion` (see [GeoRegions.jl](https://github.com/GeoRegionsEcosystem/GeoRegions.jl)) that sets the geographic bounds of the data array in lon-lat
 - `dt`  : A specified date. The NCDataset retrieved may will contain data for the date, although it may also contain data for other dates depending on the `NASAPrecipitationDataset` specified by `npd`
 
 Keyword Arguments
 =================
-- `lonlat` : if `true`, then return the longitude and latitude vectors for the dataset. Otherwise only the NCDataset type will be returned.
+- `smooth` :
+- `smoothlon` :
+- `smoothlat` :
+- `smoothtime` :
+- `quiet` : 
 """
 function read(
 	npd :: NASAPrecipitationDataset,

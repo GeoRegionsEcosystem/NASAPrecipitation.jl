@@ -1,9 +1,9 @@
 function save(
-	var   :: AbstractArray{Float32,3},
-	dt    :: TimeType,
-	npd   :: NASAPrecipitationDataset,
-	geo   :: GeoRegion,
-	ginfo :: RegionGrid;
+	var  :: AbstractArray{Float32,3},
+	dt   :: TimeType,
+	npd  :: NASAPrecipitationDataset,
+	geo  :: GeoRegion,
+	ggrd :: RegionGrid;
     smooth  :: Bool = false,
     smoothlon  :: Real = 0,
     smoothlat  :: Real = 0,
@@ -24,8 +24,8 @@ function save(
 	@info "$(modulelog()) - Creating NetCDF file $(fnc) ..."
 	pds = makenpdnc(npd,fnc)
 
-	pds.dim["longitude"] = length(ginfo.lon)
-	pds.dim["latitude"]  = length(ginfo.lat)
+	pds.dim["longitude"] = length(ggrd.lon)
+	pds.dim["latitude"]  = length(ggrd.lat)
 	pds.dim["time"]      = size(var,3)
 
 	nclon = defVar(pds,"longitude",Float32,("longitude",),attrib = Dict(
@@ -44,8 +44,8 @@ function save(
 		"full_name" => "Precipitation Rate",
 	))
 
-	nclon[:] = ginfo.lon
-	nclat[:] = ginfo.lat
+	nclon[:] = ggrd.lon
+	nclat[:] = ggrd.lat
 	ncvar[:,:,:] = var
 
 	close(pds)
@@ -59,7 +59,7 @@ function save(
 	dt  :: TimeType,
 	npd :: NASAPrecipitationDataset,
 	geo :: GeoRegion,
-	lsd :: LandSea;
+	lsd :: LandSeaData;
     smooth  :: Bool = false,
     smoothlon  :: Real = 0,
     smoothlat  :: Real = 0,
