@@ -1,24 +1,3 @@
-"""
-    addNPDGeoRegions() -> nothing
-
-Checks for the three GeoRegions (GPM, TRMM, TRMMLSM) required by NASAPrecipitation.jl, and adds them if they do not exist.
-"""
-function addNPDGeoRegions()
-	@info "$(modulelog()) - Checking to see if GeoRegions required by NASAPrecipitation.jl have been added to the list of available GeoRegions"
-    disable_logging(Logging.Warn)
-	if !isGeoRegion("IMERG",throw=false) ||
-	    !isGeoRegion("TRMM",throw=false) ||
-	    !isGeoRegion("TRMMLSM",throw=false)
-        disable_logging(Logging.Debug)
-        @info "$(modulelog()) - At least one of the required three GeoRegions (IMERG, TRMM, TRMMLSM) has not been added, proceeding to add them again ..."
-	    addGeoRegions(joinpath(@__DIR__,"NPDGeoRegions.txt"))
-    else
-        disable_logging(Logging.Debug)
-        @info "$(modulelog()) - All of the required three GeoRegions (IMERG, TRMM, TRMMLSM) have been added"
-	end
-	return
-end
-
 ## DateString Aliasing
 yrmo2dir(date::TimeType) = Dates.format(date,dateformat"yyyy/mm")
 yrmo2str(date::TimeType) = Dates.format(date,dateformat"yyyymm")
@@ -132,34 +111,6 @@ function real2int16!(
     end
 
     return
-
-end
-
-function extractregionlsm!(
-	outarray :: Array{<:Real,2},
-	inarray  :: Array{<:Real,2},
-	ginfo	 :: RectGrid
-)
-
-    iglon = ginfo.ilon
-    iglat = ginfo.ilat
-    for ilat in eachindex(iglat), ilon in eachindex(iglon)
-		outarray[ilon,ilat] = inarray[iglat[ilat],iglon[ilon]]
-	end
-
-end
-
-function extractregionlsm!(
-	outarray :: Array{<:Real,2},
-	inarray  :: Array{<:Real,2},
-	ginfo	 :: PolyGrid
-)
-
-	iglon = ginfo.ilon
-	iglat = ginfo.ilat
-	for ilat in eachindex(iglat), ilon in eachindex(iglon)
-		outarray[ilon,ilat] = inarray[iglat[ilat],iglon[ilon]] * ginfo.mask[ilon,ilat]
-	end
 
 end
 

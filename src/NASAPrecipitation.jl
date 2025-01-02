@@ -7,12 +7,13 @@ using Printf
 using Statistics
 
 import Base: download, show, read
-import GeoRegions: getLandSea
+import LandSea: getLandSea
 
 ## Reexporting exported functions within these modules
 using Reexport
 @reexport using Dates
-@reexport using GeoRegions
+@reexport using LandSea
+@reexport using RegionGrids
 @reexport using NCDatasets
 
 ## Exporting the following functions:
@@ -79,24 +80,10 @@ Abstract supertype for TRMM TMPA datasets on NASA OPeNDAP Servers, a subType of 
 abstract type TRMMDataset  <: NASAPrecipitationDataset end
 
 modulelog() = "$(now()) - NASAPrecipitation.jl"
+npddir = joinpath(@__DIR__,"files")
 
 function __init__()
     setup()
-    @info "$(modulelog()) - Checking to see if GeoRegions required by NASAPrecipitation.jl have been added to the list of available GeoRegions"
-    disable_logging(Logging.Warn)
-	if !isGeoRegion("IMERG",throw=false) ||
-	    !isGeoRegion("TRMM",throw=false) ||
-	    !isGeoRegion("TRMMLSM",throw=false)
-        disable_logging(Logging.Debug)
-        @info "$(modulelog()) - At least one of the required three GeoRegions (IMERG, TRMM, TRMMLSM) has not been added, proceeding to add them again ..."
-        disable_logging(Logging.Warn)
-	    addGeoRegions(joinpath(@__DIR__,"NPDGeoRegions.txt"))
-    else
-        disable_logging(Logging.Debug)
-        @info "$(modulelog()) - All of the required three GeoRegions (IMERG, TRMM, TRMMLSM) have been added"
-        disable_logging(Logging.Warn)
-	end
-    disable_logging(Logging.Debug)
 end
 
 ## Including Relevant Files
@@ -111,7 +98,6 @@ include("datasets/trmmdy.jl")
 include("datasets/trmmmo.jl")
 include("datasets/dummy.jl")
 
-include("landsea/landsea.jl")
 include("landsea/imerg.jl")
 include("landsea/trmm.jl")
 

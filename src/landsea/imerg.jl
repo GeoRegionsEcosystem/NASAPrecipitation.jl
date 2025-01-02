@@ -30,10 +30,10 @@ function getLandSea(
 
 	if geo.ID == "GLB"
 		@info "$(modulelog()) - Global dataset request has been detected, switching to the IMERG LandSea Mask GeoRegion"
-		addNPDGeoRegions(); geo = GeoRegion("IMERG")
+		geo = GeoRegion("IMERG",path=npddir)
 	else
 		@info "$(modulelog()) - Checking to see if the specified GeoRegion \"$(geo.ID)\" is within the \"IMERG\" GeoRegion"
-		isinGeoRegion(geo,GeoRegion("IMERG"))
+		in(geo,GeoRegion("TRMMLSM",path=npddir),throw=true)
 	end
 	
 	if !smooth
