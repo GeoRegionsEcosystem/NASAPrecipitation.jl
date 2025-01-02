@@ -5,6 +5,7 @@ using Logging
 using NetRC
 using Printf
 using Statistics
+using RegionGrids
 
 import Base: download, show, read
 import LandSea: getLandSea
@@ -12,8 +13,8 @@ import LandSea: getLandSea
 ## Reexporting exported functions within these modules
 using Reexport
 @reexport using Dates
+@reexport using GeoRegions
 @reexport using LandSea
-@reexport using RegionGrids
 @reexport using NCDatasets
 
 ## Exporting the following functions:
