@@ -44,24 +44,11 @@ function getLandSea(
         end
 
 		ggrd = RegionGrid(geo,glon,glat)
-		ilon  = ggrd.ilon; nlon = length(ggrd.ilon)
-		ilat  = ggrd.ilat; nlat = length(ggrd.ilat)
-		rlsm  = zeros(nlon,nlat)
-		
-		if typeof(ggrd) <: RectGrid
-			  mask = ones(Int16,nlon,nlat)
-		else; mask = ggrd.mask; mask[isnan.(mask)] .= 0
-		end
+		mask = ggrd.mask; mask[isnan.(mask)] .= 0
 
 		@info "$(modulelog()) - Extracting regional TRMM Land-Sea mask for the \"$(geo.ID)\" GeoRegion from the Global TRMM Land-Sea mask dataset ..."
 
-		for iglat = 1 : nlat, iglon = 1 : nlon
-			if isone(mask[iglon,iglat])
-				rlsm[iglon,iglat] = glsm[ilon[iglon],ilat[iglat]]
-			else
-				rlsm[iglon,iglat] = NaN
-			end
-		end
+		rlsm = extract(glsm,ggrd)
 
 		saveLandSea(npd,geo,ggrd.lon,ggrd.lat,rlsm,Int16.(mask),smooth,σlon,σlat)
 
@@ -70,15 +57,14 @@ function getLandSea(
 	if returnlsd
 
 		lds = NCDataset(lsmfnc)
-		lon = lds["longitude"][:]
-		lat = lds["latitude"][:]
-		lsm = lds["lsm"][:,:]
-		msk = lds["mask"][:,:]
+		lon = nomissing(lds["longitude"][:],NaN)
+		lat = nomissing(lds["latitude"][:],NaN)
+		lsm = nomissing(lds["lsm"][:,:],NaN)
 		close(lds)
 
 		@info "$(modulelog()) - Retrieving the regional TRMM Land-Sea mask for the \"$(geo.ID)\" GeoRegion ..."
 
-		return LandSea{FT}(lon,lat,lsm,msk)
+		return LandSeaFlat{FT}(lon,lat,lsm)
 
 	else
 
