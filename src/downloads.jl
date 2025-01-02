@@ -10,7 +10,7 @@ Downloads a NASA Precipitation dataset specified by `npd` for a GeoRegion specif
 Arguments
 =========
 - `npd` : a `NASAPrecipitationDataset` specifying the dataset details and date download range
-- `geo` : a `GeoRegion` (see [GeoRegions.jl](https://github.com/JuliaClimate/GeoRegions.jl)) that sets the geographic bounds of the data array in lon-lat
+- `geo` : a `GeoRegion` (see [GeoRegions.jl](https://github.com/GeoRegionsEcosystem/GeoRegions.jl)) that sets the geographic bounds of the data array in lon-lat
 
 Keyword Arguments
 =================
@@ -25,26 +25,21 @@ function download(
 	@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.ID == "GLB"
-		@info "$(modulelog()) - Global dataset request has been detected, switching to the IMERG GeoRegion"
-		addNPDGeoRegions(); geo = GeoRegion("IMERG")
+		geo = GeoRegion("IMERG",path=npddir)
 	else
-		isinGeoRegion(geo,GeoRegion("IMERG"))
+		in(geo,GeoRegion("IMERG",path=npddir))
 	end
 
 	dyfnc = imergrawfiles()
 	lon,lat = gpmlonlat(); nlon = length(lon)
-	ginfo = RegionGrid(geo,lon,lat)
+	ggrd = RegionGrid(geo,lon,lat)
 
 	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.name) data for the $(geo.name) GeoRegion from the original gridded dataset"
-	glon = ginfo.lon; nglon = length(glon); iglon = ginfo.ilon
-	glat = ginfo.lat; nglat = length(glat); iglat = ginfo.ilat
-	tmp0 = zeros(Float32,nglat,nglon)
+	glon = ggrd.lon; nglon = length(glon); iglon = ggrd.ilon
+	glat = ggrd.lat; nglat = length(glat); iglat = ggrd.ilat
+	mask = ggrd.mask
 	var  = zeros(Float32,nglon,nglat,48)
-
-	if typeof(geo) <: RectRegion
-		  msk = ones(nglon,nglat)
-	else; msk = ginfo.mask
-	end
+	tmp0 = zeros(Float32,nglat,nglon)
 
 	if iglon[1] > iglon[end]
 		shift = true
@@ -103,7 +98,7 @@ function download(
 				@debug "$(modulelog()) - Extraction of data from temporary array for the $(geo.name) GeoRegion"
 				for ilat = 1 : nglat, ilon = 1 : nglon
 					varii = tmp0[ilat,ilon]
-					mskii = msk[ilon,ilat]
+					mskii = mask[ilon,ilat]
 					if (varii != -9999.9f0) && !isnan(mskii)
 						var[ilon,ilat,it] = varii / 3600
 					else; var[ilon,ilat,it] = NaN32
@@ -111,7 +106,7 @@ function download(
 				end
 			end
 
-			save(var,dt,npd,geo,ginfo)
+			save(var,dt,npd,geo,ggrd)
 
 		else
 
@@ -134,25 +129,20 @@ function download(
 	@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.ID == "GLB"
-		@info "$(modulelog()) - Global dataset request has been detected, switching to the IMERG GeoRegion"
-		addNPDGeoRegions(); geo = GeoRegion("IMERG")
+		geo = GeoRegion("IMERG",path=npddir)
 	else
-		isinGeoRegion(geo,GeoRegion("IMERG"))
+		in(geo,GeoRegion("IMERG",path=npddir))
 	end
 
 	lon,lat = gpmlonlat(); nlon = length(lon)
-	ginfo = RegionGrid(geo,lon,lat)
+	ggrd = RegionGrid(geo,lon,lat)
 
 	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.name) data for the $(geo.name) GeoRegion from the original gridded dataset"
-	glon = ginfo.lon; nglon = length(glon); iglon = ginfo.ilon
-	glat = ginfo.lat; nglat = length(glat); iglat = ginfo.ilat
-	tmp0 = zeros(Float32,nglat,nglon)
+	glon = ggrd.lon; nglon = length(glon); iglon = ggrd.ilon
+	glat = ggrd.lat; nglat = length(glat); iglat = ggrd.ilat
+	mask = ggrd.mask
 	var  = zeros(Float32,nglon,nglat,31)
-
-	if typeof(geo) <: RectRegion
-		  msk = ones(nglon,nglat)
-	else; msk = ginfo.mask
-	end
+	tmp0 = zeros(Float32,nglat,nglon)
 
 	if iglon[1] > iglon[end]
 		shift = true
@@ -200,7 +190,7 @@ function download(
 
 				for ilat = 1 : nglat, ilon = 1 : nglon
 					varii = tmp0[ilat,ilon]
-					mskii = msk[ilon,ilat]
+					mskii = mask[ilon,ilat]
 					if (varii != -9999.9f0) && !isnan(mskii)
 						var[ilon,ilat,dy] = varii / 86400
 					else; var[ilon,ilat,dy] = NaN32
@@ -209,7 +199,7 @@ function download(
 
 			end
 
-			save(view(var,:,:,1:ndy),dt,npd,geo,ginfo)
+			save(view(var,:,:,1:ndy),dt,npd,geo,ggrd)
 
 		else
 
@@ -232,25 +222,20 @@ function download(
 	@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.ID == "GLB"
-		@info "$(modulelog()) - Global dataset request has been detected, switching to the IMERG GeoRegion"
-		addNPDGeoRegions(); geo = GeoRegion("IMERG")
+		geo = GeoRegion("IMERG",path=npddir)
 	else
-		isinGeoRegion(geo,GeoRegion("IMERG"))
+		in(geo,GeoRegion("IMERG",path=npddir))
 	end
 
 	lon,lat = gpmlonlat(); nlon = length(lon)
-	ginfo = RegionGrid(geo,lon,lat)
+	ggrd = RegionGrid(geo,lon,lat)
 
 	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.name) data for the $(geo.name) GeoRegion from the original gridded dataset"
-	glon = ginfo.lon; nglon = length(glon); iglon = ginfo.ilon
-	glat = ginfo.lat; nglat = length(glat); iglat = ginfo.ilat
-	tmp0 = zeros(Float32,nglat,nglon)
+	glon = ggrd.lon; nglon = length(glon); iglon = ggrd.ilon
+	glat = ggrd.lat; nglat = length(glat); iglat = ggrd.ilat
+	mask = ggrd.mask
 	var  = zeros(Float32,nglon,nglat,12)
-
-	if typeof(geo) <: RectRegion
-		  msk = ones(nglon,nglat)
-	else; msk = ginfo.mask
-	end
+	tmp0 = zeros(Float32,nglat,nglon)
 
 	if iglon[1] > iglon[end]
 		shift = true
@@ -295,7 +280,7 @@ function download(
 
 				for ilat = 1 : nglat, ilon = 1 : nglon
 					varii = tmp0[ilat,ilon]
-					mskii = msk[ilon,ilat]
+					mskii = mask[ilon,ilat]
 					if (varii != -9999.9f0) && !isnan(mskii)
 						var[ilon,ilat,mo] = varii / 3600
 					else; var[ilon,ilat,mo] = NaN32
@@ -304,7 +289,7 @@ function download(
 
 			end
 
-			save(var,dt,npd,geo,ginfo)
+			save(var,dt,npd,geo,ggrd)
 
 		else
 
@@ -327,25 +312,20 @@ function download(
 	@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.ID == "GLB"
-		@info "$(modulelog()) - Global dataset request has been detected, switching to the TRMM GeoRegion"
-		addNPDGeoRegions(); geo = GeoRegion("TRMM")
+		geo = GeoRegion("IMERG",path=npddir)
 	else
-		isinGeoRegion(geo,GeoRegion("TRMM"))
+		in(geo,GeoRegion("IMERG",path=npddir))
 	end
 
 	lon,lat = trmmlonlat(); nlon = length(lon)
-	ginfo = RegionGrid(geo,lon,lat)
+	ggrd = RegionGrid(geo,lon,lat)
 
 	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.name) data for the $(geo.name) GeoRegion from the original gridded dataset"
-	glon = ginfo.lon; nglon = length(glon); iglon = ginfo.ilon
-	glat = ginfo.lat; nglat = length(glat); iglat = ginfo.ilat
-	tmp0 = zeros(Float32,nglat,nglon)
+	glon = ggrd.lon; nglon = length(glon); iglon = ggrd.ilon
+	glat = ggrd.lat; nglat = length(glat); iglat = ggrd.ilat
+	mask = ggrd.mask
 	var  = zeros(Float32,nglon,nglat,8)
-
-	if typeof(geo) <: RectRegion
-		  msk = ones(nglon,nglat)
-	else; msk = ginfo.mask
-	end
+	tmp0 = zeros(Float32,nglat,nglon)
 
 	if iglon[1] > iglon[end]
 		shift = true
@@ -395,7 +375,7 @@ function download(
 				@debug "$(modulelog()) - Extraction of data from temporary array for the $(geo.name) GeoRegion"
 				for ilat = 1 : nglat, ilon = 1 : nglon
 					varii = tmp0[ilat,ilon]
-					mskii = msk[ilon,ilat]
+					mskii = mask[ilon,ilat]
 					if (varii != -9999.9f0) && !isnan(mskii)
 						var[ilon,ilat,it] = varii / 3600
 					else; var[ilon,ilat,it] = NaN32
@@ -403,7 +383,7 @@ function download(
 				end
 			end
 
-			save(var,dt,npd,geo,ginfo)
+			save(var,dt,npd,geo,ggrd)
 
 		else
 
@@ -426,25 +406,20 @@ function download(
 	@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.ID == "GLB"
-		@info "$(modulelog()) - Global dataset request has been detected, switching to the TRMM GeoRegion"
-		addNPDGeoRegions(); geo = GeoRegion("TRMM")
+		geo = GeoRegion("IMERG",path=npddir)
 	else
-		isinGeoRegion(geo,GeoRegion("TRMM"))
+		in(geo,GeoRegion("IMERG",path=npddir))
 	end
 
 	lon,lat = trmmlonlat(); nlon = length(lon)
-	ginfo = RegionGrid(geo,lon,lat)
+	ggrd = RegionGrid(geo,lon,lat)
 
 	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.name) data for the $(geo.name) GeoRegion from the original gridded dataset"
-	glon = ginfo.lon; nglon = length(glon); iglon = ginfo.ilon
-	glat = ginfo.lat; nglat = length(glat); iglat = ginfo.ilat
-	tmp0 = zeros(Float32,nglat,nglon)
+	glon = ggrd.lon; nglon = length(glon); iglon = ggrd.ilon
+	glat = ggrd.lat; nglat = length(glat); iglat = ggrd.ilat
+	mask = ggrd.mask
 	var  = zeros(Float32,nglon,nglat,31)
-
-	if typeof(geo) <: RectRegion
-		  msk = ones(nglon,nglat)
-	else; msk = ginfo.mask
-	end
+	tmp0 = zeros(Float32,nglat,nglon)
 
 	if iglon[1] > iglon[end]
 		shift = true
@@ -490,7 +465,7 @@ function download(
 
 				for ilat = 1 : nglat, ilon = 1 : nglon
 					varii = tmp0[ilat,ilon]
-					mskii = msk[ilon,ilat]
+					mskii = mask[ilon,ilat]
 					if (varii != -9999.9f0) && !isnan(mskii)
 						var[ilon,ilat,dy] = varii / 86400
 					else; var[ilon,ilat,dy] = NaN32
@@ -499,7 +474,7 @@ function download(
 
 			end
 
-			save(view(var,:,:,1:ndy),dt,npd,geo,ginfo)
+			save(view(var,:,:,1:ndy),dt,npd,geo,ggrd)
 
 		else
 
@@ -522,25 +497,20 @@ function download(
 	@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.ID == "GLB"
-		@info "$(modulelog()) - Global dataset request has been detected, switching to the TRMM GeoRegion"
-		addNPDGeoRegions(); geo = GeoRegion("TRMM")
+		geo = GeoRegion("IMERG",path=npddir)
 	else
-		isinGeoRegion(geo,GeoRegion("TRMM"))
+		in(geo,GeoRegion("IMERG",path=npddir))
 	end
 
 	lon,lat = trmmlonlat(); nlon = length(lon)
-	ginfo = RegionGrid(geo,lon,lat)
+	ggrd = RegionGrid(geo,lon,lat)
 
 	@info "$(modulelog()) - Preallocating temporary arrays for extraction of $(npd.name) data for the $(geo.name) GeoRegion from the original gridded dataset"
-	glon = ginfo.lon; nglon = length(glon); iglon = ginfo.ilon
-	glat = ginfo.lat; nglat = length(glat); iglat = ginfo.ilat
-	tmp0 = zeros(Float32,nglat,nglon)
+	glon = ggrd.lon; nglon = length(glon); iglon = ggrd.ilon
+	glat = ggrd.lat; nglat = length(glat); iglat = ggrd.ilat
+	mask = ggrd.mask
 	var  = zeros(Float32,nglon,nglat,12)
-
-	if typeof(geo) <: RectRegion
-		  msk = ones(nglon,nglat)
-	else; msk = ginfo.mask
-	end
+	tmp0 = zeros(Float32,nglat,nglon)
 
 	if iglon[1] > iglon[end]
 		shift = true
@@ -585,7 +555,7 @@ function download(
 
 				for ilat = 1 : nglat, ilon = 1 : nglon
 					varii = tmp0[ilat,ilon]
-					mskii = msk[ilon,ilat]
+					mskii = mask[ilon,ilat]
 					if (varii != -9999.9f0) && !isnan(mskii)
 						var[ilon,ilat,mo] = varii / 3600
 					else; var[ilon,ilat,mo] = NaN32
@@ -594,7 +564,7 @@ function download(
 
 			end
 
-			save(var,dt,npd,geo,ginfo)
+			save(var,dt,npd,geo,ggrd)
 
 		else
 

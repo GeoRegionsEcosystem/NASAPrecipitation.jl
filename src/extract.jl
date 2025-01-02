@@ -12,7 +12,7 @@ Extracts NASAPrecipitation data for a GeoRegion `geo` from its parent GeoRegion 
 Arguments
 =========
 - `npd` : a `NASAPrecipitationDataset` specifying the dataset details and date download range
-- `geo` : a `GeoRegion` (see [GeoRegions.jl](https://github.com/JuliaClimate/GeoRegions.jl)) that sets the geographic bounds of the data array in lon-lat
+- `geo` : a `GeoRegion` (see [GeoRegions.jl](https://github.com/GeoRegionsEcosystem/GeoRegions.jl)) that sets the geographic bounds of the data array in lon-lat
 """
 function extract(
     npd :: NASAPrecipitationDataset,
@@ -30,10 +30,7 @@ function extract(
     rinfo = RegionGrid(geo,plon,plat)
     ilon  = rinfo.ilon; nlon = length(ilon)
     ilat  = rinfo.ilat; nlat = length(ilat)
-    if typeof(rinfo) <: RectGrid
-          mask = ones(nlon,nlat)
-    else; mask = rinfo.mask
-    end
+    mask  = rinfo.mask
     
     rmat,pmat = extract_mat(nlon,nlat,length(plon),length(plat),npd)
 
@@ -80,7 +77,7 @@ Extracts NASAPrecipitation data for a GeoRegion `sgeo` from a bigger GeoRegion `
 Arguments
 =========
 - `npd` : a `NASAPrecipitationDataset` specifying the dataset details and date download range
-- `sgeo` : a `GeoRegion` (see [GeoRegions.jl](https://github.com/JuliaClimate/GeoRegions.jl)) that sets the geographic bounds of the data array in lon-lat
+- `sgeo` : a `GeoRegion` (see [GeoRegions.jl](https://github.com/GeoRegionsEcosystem/GeoRegions.jl)) that sets the geographic bounds of the data array in lon-lat
 - `pgeo` : a `GeoRegion` that is a "parent" of the `GeoRegion` of interest `sgeo`, in the sense that `sgeo` must be fully within `pgeo`.
 """
 function extract(
@@ -98,13 +95,9 @@ function extract(
 
     @info "$(modulelog()) - Creating RegionGrid for \"$(sgeo.ID)\" based on the longitude and latitude vectors of the parent GeoRegion \"$(pgeo.pID)\""
 
-    rinfo = RegionGrid(sgeo,plon,plat)
-    ilon  = rinfo.ilon; nlon = length(ilon)
-    ilat  = rinfo.ilat; nlat = length(ilat)
-    if typeof(rinfo) <: RectGrid
-          mask = ones(nlon,nlat)
-    else; mask = rinfo.mask
-    end
+    ggrd = RegionGrid(sgeo,plon,plat)
+    nlon = length(ggrd.ilon)
+    nlat = length(ggrd.ilat)
     
     rmat,pmat = extract_mat(nlon,nlat,length(plon),length(plat),npd)
 
@@ -117,14 +110,7 @@ function extract(
 
         @info "$(modulelog()) - Extracting the $(npd.name) precipitation data in $(sgeo.name) GeoRegion from the $(pgeo.name) GeoRegion for $(year(dt)) $(Dates.monthname(dt))"
 
-        for it = 1 : nt, i_ilat = 1 : nlat, i_ilon = 1 : nlon
-
-            if isone(mask[i_ilon,i_ilat])
-                  rmat[i_ilon,i_ilat,it] = tmat[ilon[i_ilon],ilat[i_ilat],it]
-            else; rmat[i_ilon,i_ilat,it] = NaN32
-            end
-
-        end
+        extract!(rmat,tmat,ggrd)
 
         close(pds)
 
