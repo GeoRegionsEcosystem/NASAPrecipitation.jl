@@ -86,7 +86,7 @@ function extract(
 	pgeo :: GeoRegion,
 )
 
-    isinGeoRegion(sgeo,pgeo)
+    in(sgeo,pgeo)
 
     @info "$(modulelog()) - Retrieving GeoRegion and LandSea Dataset information for the parent GeoRegion of \"$(pgeo.ID)\", \"$(pgeo.pID)\""
     plsd = getLandSea(npd,pgeo)
@@ -114,7 +114,7 @@ function extract(
 
         close(pds)
 
-        save(view(rmat,:,:,1:nt),dt,npd,sgeo,rinfo)
+        save(view(rmat,:,:,1:nt),dt,npd,sgeo,ggrd)
 
         flush(stderr)
 

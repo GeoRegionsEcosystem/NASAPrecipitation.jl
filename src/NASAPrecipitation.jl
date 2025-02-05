@@ -8,6 +8,7 @@ using Statistics
 using RegionGrids
 
 import Base: download, show, read
+import RegionGrids: extract
 import LandSea: getLandSea
 
 ## Reexporting exported functions within these modules
