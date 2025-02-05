@@ -20,12 +20,7 @@ Keyword Arguments
 function getLandSea(
 	npd :: IMERGDataset,
 	geo :: GeoRegion = GeoRegion("GLB");
-    returnlsd :: Bool = true,
-    smooth    :: Bool = false,
-    σlon :: Int = 0,
-    σlat :: Int = 0,
-    iterations :: Int = 100,
-    FT = Float32
+    returnlsd :: Bool = true
 )
 
 	if geo.ID == "GLB"
@@ -33,14 +28,10 @@ function getLandSea(
 		geo = GeoRegion("IMERG",path=npddir)
 	else
 		@info "$(modulelog()) - Checking to see if the specified GeoRegion \"$(geo.ID)\" is within the \"IMERG\" GeoRegion"
-		in(geo,GeoRegion("TRMMLSM",path=npddir),throw=true)
+		in(geo,GeoRegion("IMERG",path=npddir),throw=true)
 	end
 	
-	if !smooth
-        lsmfnc = joinpath(npd.maskpath,"imergmask-$(geo.ID).nc")
-    else
-        lsmfnc = joinpath(npd.maskpath,"imergmask-$(geo.ID)-smooth_$(σlon)x$(σlat).nc")
-    end
+	lsmfnc = joinpath(npd.maskpath,"imergmask-$(geo.ID).nc")
 
 	if !isfile(lsmfnc)
 
@@ -58,10 +49,6 @@ function getLandSea(
 		glsm = gds["lsm"][:,:]
 		close(gds)
 
-        if smooth
-            smooth!(glsm,σlon=σlon,σlat=σlat,iterations=iterations)
-        end
-
 		ggrd = RegionGrid(geo,glon,glat)
 		mask = ggrd.mask; mask[isnan.(mask)] .= 0
 
@@ -69,7 +56,7 @@ function getLandSea(
 
 		rlsm = extract(glsm,ggrd)
 
-		saveLandSea(npd,geo,ggrd.lon,ggrd.lat,rlsm,Int16.(mask),smooth,σlon,σlat)
+		saveLandSea(npd,geo,ggrd.lon,ggrd.lat,rlsm,Int16.(mask))
 
 	end
 
@@ -83,7 +70,7 @@ function getLandSea(
 
 		@info "$(modulelog()) - Retrieving the regional IMERG Land-Sea mask for the \"$(geo.ID)\" GeoRegion ..."
 
-		return LandSeaFlat{FT}(lon,lat,lsm)
+		return LandSeaFlat(lon,lat,lsm)
 
 	else
 
@@ -114,7 +101,7 @@ function downloadLandSea(
 		var[ilat,ilon] = 1 - var[ilat,ilon] / 100
 	end
 
-	saveLandSea(npd,GeoRegion("IMERG"),lon,lat,var',mask)
+	saveLandSea(npd,GeoRegion("IMERG",path=npddir),lon,lat,var',mask)
 
 end
 
@@ -125,16 +112,9 @@ function saveLandSea(
     lat  :: Vector{<:Real},
     lsm  :: AbstractArray{<:Real,2},
     mask :: AbstractArray{Int16,2},
-    smooth :: Bool = false,
-    σlon :: Int = 0,
-    σlat :: Int = 0,
 )
 
-	if !smooth
-		fnc = joinpath(npd.maskpath,"imergmask-$(geo.ID).nc")
-	else
-		fnc = joinpath(npd.maskpath,"imergmask-$(geo.ID)-smooth_$(σlon)x$(σlat).nc")
-	end
+	fnc = joinpath(npd.maskpath,"imergmask-$(geo.ID).nc")
     if isfile(fnc)
         rm(fnc,force=true)
     end
