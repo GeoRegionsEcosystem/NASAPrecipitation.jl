@@ -3,7 +3,7 @@ uuid = "a018b980-0677-41c0-b9a4-7f34595c2b14"
 keywords = ["meteorology", "climate", "precipitation", "nasa", "satellite"]
 desc = "Download and analyze data from the NASA GPM/TRMM missions"
 authors = ["Nathanael Wong <natgeo.wong@outlook.com>"]
-version = "0.5.0"
+version = "0.5.1"
 
 [deps]
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
@@ -20,7 +20,7 @@ Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 [compat]
 Dates = "1"
 GeoRegions = "7"
-LandSea = "0.0.1"
+LandSea = "0.0.2"
 Logging = "1"
 NCDatasets = "0.14"
 NetRC = "0.1"
