@@ -8,6 +8,7 @@ using Statistics
 using RegionGrids
 
 import Base: download, show, read
+import GeoRegions: in
 import RegionGrids: extract
 import LandSea: getLandSea
 
@@ -82,7 +83,7 @@ Abstract supertype for TRMM TMPA datasets on NASA OPeNDAP Servers, a subType of 
 abstract type TRMMDataset  <: NASAPrecipitationDataset end
 
 modulelog() = "$(now()) - NASAPrecipitation.jl"
-npddir = joinpath(@__DIR__,"files")
+geopath = joinpath(@__DIR__,".georegions")
 
 function __init__()
     setup()

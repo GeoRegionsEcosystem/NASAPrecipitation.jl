@@ -25,9 +25,9 @@ function download(
 	@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.ID == "GLB"
-		geo = GeoRegion("IMERG",path=npddir)
+		geo = GeoRegion("GLB180",path=geopath)
 	else
-		in(geo,GeoRegion("IMERG",path=npddir))
+		in(geo,GeoRegion("GLB180",path=geopath))
 	end
 
 	dyfnc = imergrawfiles()
@@ -129,9 +129,9 @@ function download(
 	@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.ID == "GLB"
-		geo = GeoRegion("IMERG",path=npddir)
+		geo = GeoRegion("GLB180",path=geopath)
 	else
-		in(geo,GeoRegion("IMERG",path=npddir))
+		in(geo,GeoRegion("GLB180",path=geopath))
 	end
 
 	lon,lat = gpmlonlat(); nlon = length(lon)
@@ -222,9 +222,9 @@ function download(
 	@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.ID == "GLB"
-		geo = GeoRegion("IMERG",path=npddir)
+		geo = GeoRegion("GLB180",path=geopath)
 	else
-		in(geo,GeoRegion("IMERG",path=npddir))
+		in(geo,GeoRegion("GLB180",path=geopath))
 	end
 
 	lon,lat = gpmlonlat(); nlon = length(lon)
@@ -312,9 +312,9 @@ function download(
 	@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.ID == "GLB"
-		geo = GeoRegion("IMERG",path=npddir)
+		geo = GeoRegion("GLB180",path=geopath)
 	else
-		in(geo,GeoRegion("IMERG",path=npddir))
+		in(geo,GeoRegion("GLB180",path=geopath))
 	end
 
 	lon,lat = trmmlonlat(); nlon = length(lon)
@@ -406,9 +406,9 @@ function download(
 	@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.ID == "GLB"
-		geo = GeoRegion("IMERG",path=npddir)
+		geo = GeoRegion("GLB180",path=geopath)
 	else
-		in(geo,GeoRegion("IMERG",path=npddir))
+		in(geo,GeoRegion("GLB180",path=geopath))
 	end
 
 	lon,lat = trmmlonlat(); nlon = length(lon)
@@ -497,9 +497,9 @@ function download(
 	@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.ID == "GLB"
-		geo = GeoRegion("IMERG",path=npddir)
+		geo = GeoRegion("GLB180",path=geopath)
 	else
-		in(geo,GeoRegion("IMERG",path=npddir))
+		in(geo,GeoRegion("GLB180",path=geopath))
 	end
 
 	lon,lat = trmmlonlat(); nlon = length(lon)

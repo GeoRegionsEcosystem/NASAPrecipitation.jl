@@ -24,11 +24,11 @@ function getLandSea(
 )
 
 	if geo.ID == "GLB"
-		@info "$(modulelog()) - Global dataset request has been detected, switching to the IMERG LandSea Mask GeoRegion"
-		geo = GeoRegion("IMERG",path=npddir)
+		@info "$(modulelog()) - Global dataset request has been detected, switching to the Global (180 Grid) LandSea Mask GeoRegion"
+		geo = GeoRegion("GLB180",path=geopath)
 	else
 		@info "$(modulelog()) - Checking to see if the specified GeoRegion \"$(geo.ID)\" is within the \"IMERG\" GeoRegion"
-		in(geo,GeoRegion("IMERG",path=npddir),throw=true)
+		in(geo,GeoRegion("GLB180",path=geopath),throw=true)
 	end
 	
 	lsmfnc = joinpath(npd.maskpath,"imergmask-$(geo.ID).nc")
@@ -37,9 +37,9 @@ function getLandSea(
 
 		@info "$(modulelog()) - The IMERG Land-Sea mask dataset for the \"$(geo.ID)\" GeoRegion is not available, extracting from Global IMERG Land-Sea mask dataset ..."
 
-		glbfnc = joinpath(npd.maskpath,"imergmask-IMERG.nc")
+		glbfnc = joinpath(npd.maskpath,"imergmask-GLB180.nc")
 		if !isfile(glbfnc)
-			@info "$(modulelog()) - The Global IMERG Land-Sea mask dataset for the \"$(geo.ID)\" GeoRegion is not available, downloading from the NASA OPeNDAP servers ..."
+			@info "$(modulelog()) - The Global (180 Grid) IMERG Land-Sea mask dataset for the \"$(geo.ID)\" GeoRegion is not available, downloading from the NASA OPeNDAP servers ..."
 			downloadLandSea(npd)
 		end
 
@@ -52,7 +52,7 @@ function getLandSea(
 		ggrd = RegionGrid(geo,glon,glat)
 		mask = ggrd.mask; mask[isnan.(mask)] .= 0
 
-		@info "$(modulelog()) - Extracting regional IMERG Land-Sea mask for the \"$(geo.ID)\" GeoRegion from the Global IMERG Land-Sea mask dataset ..."
+		@info "$(modulelog()) - Extracting regional IMERG Land-Sea mask for the \"$(geo.ID)\" GeoRegion from the Global (180 Grid) IMERG Land-Sea mask dataset ..."
 
 		rlsm = extract(glsm,ggrd)
 
@@ -101,7 +101,7 @@ function downloadLandSea(
 		var[ilat,ilon] = 1 - var[ilat,ilon] / 100
 	end
 
-	saveLandSea(npd,GeoRegion("IMERG",path=npddir),lon,lat,var',mask)
+	saveLandSea(npd,GeoRegion("GLB180",path=geopath),lon,lat,var',mask)
 
 end
 
