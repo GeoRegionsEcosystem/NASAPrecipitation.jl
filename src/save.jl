@@ -59,7 +59,7 @@ function save(
 	dt  :: TimeType,
 	npd :: NASAPrecipitationDataset,
 	geo :: GeoRegion,
-	lsd :: LandSeaData;
+	lsd :: LandSeaFlat;
     smooth  :: Bool = false,
     smoothlon  :: Real = 0,
     smoothlat  :: Real = 0,

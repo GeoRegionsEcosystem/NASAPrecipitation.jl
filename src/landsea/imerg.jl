@@ -4,7 +4,7 @@
 	    geo :: GeoRegion = GeoRegion("GLB");
 	    returnlsd = true,
 	    FT = Float32
-    ) -> LandSea
+    ) -> LandSea.LandSeaFlat
 
 Retrieve the Land-Sea Mask data for the `NASAPrecipitationDataset` specified.
 
@@ -15,7 +15,7 @@ Arguments
 
 Keyword Arguments
 =================
-- `returnlsd` : If `true` return the data as a `LandSea` dataset. Otherwise, the data is simply saved into the npd.maskpath directory.
+- `returnlsd` : If `true` return the data as a `LandSea.LandSeaFlat` dataset. Otherwise, the data is simply saved into the npd.maskpath directory.
 """
 function getLandSea(
 	npd :: IMERGDataset,
