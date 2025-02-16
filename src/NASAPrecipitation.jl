@@ -1,13 +1,17 @@
 module NASAPrecipitation
 
-## Modules Used
+## Base Modules Used
 using Logging
-using NetRC
 using Printf
 using Statistics
+
+## Modules Used
+using LandSea
+using NetRC
 using RegionGrids
 
 import Base: download, show, read
+import GeoRegions: in
 import RegionGrids: extract
 import LandSea: getLandSea
 
@@ -15,7 +19,6 @@ import LandSea: getLandSea
 using Reexport
 @reexport using Dates
 @reexport using GeoRegions
-@reexport using LandSea
 @reexport using NCDatasets
 
 ## Exporting the following functions:
@@ -82,7 +85,7 @@ Abstract supertype for TRMM TMPA datasets on NASA OPeNDAP Servers, a subType of 
 abstract type TRMMDataset  <: NASAPrecipitationDataset end
 
 modulelog() = "$(now()) - NASAPrecipitation.jl"
-npddir = joinpath(@__DIR__,"files")
+geopath = joinpath(@__DIR__,".georegions")
 
 function __init__()
     setup()
