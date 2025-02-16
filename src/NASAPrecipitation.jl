@@ -1,10 +1,12 @@
 module NASAPrecipitation
 
-## Modules Used
+## Base Modules Used
 using Logging
-using NetRC
 using Printf
 using Statistics
+
+## Modules Used
+using NetRC
 using RegionGrids
 
 import Base: download, show, read
@@ -16,7 +18,6 @@ import LandSea: getLandSea
 using Reexport
 @reexport using Dates
 @reexport using GeoRegions
-@reexport using LandSea
 @reexport using NCDatasets
 
 ## Exporting the following functions:
