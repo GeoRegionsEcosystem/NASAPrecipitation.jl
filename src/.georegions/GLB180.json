@@ -1,1 +1,1 @@
-{"ID":"GLB180","pID":"GLB","name":"Globe (180 Grid)","rotation":0.0,"geometry":{"level":1,"longitude":[-180.0,180.0,180.0,-180.0,-180.0],"latitude":[-90.0,-90.0,90.0,-90.0,-90.0]}}
+{"ID":"GLB180","pID":"GLB","name":"Globe (180 Grid)","rotation":0.0,"geometry":{"level":1,"longitude":[-180.0,180.0,180.0,-180.0,-180.0],"latitude":[-90.0,-90.0,90.0,90.0,-90.0]}}
