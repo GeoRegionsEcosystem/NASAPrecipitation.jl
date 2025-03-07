@@ -54,6 +54,6 @@ for file in files
 end
 
 deploydocs(
-    repo = "github.com/natgeo-wong/NASAPrecipitation.jl.git",
+    repo = "github.com/GeoRegionsEcosystem/NASAPrecipitation.jl.git",
     devbranch = "main"
 )
