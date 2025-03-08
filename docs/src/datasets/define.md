@@ -12,7 +12,7 @@ DatasetFunction(
 )
 ```
 
-## Examples
+## Example for an IMERG Dataset
 
 See below for an example of defining an `IMERGDataset`
 ```@repl
@@ -25,6 +25,8 @@ typeof(npd)
 typeof(npd) <: NASAPrecipitation.NASAPrecipitationDataset
 ```
 
+## Example for an TRMM Dataset
+
 And below for an example of defining a `TRMMDataset`
 ```@repl
 using NASAPrecipitation
@@ -35,5 +37,3 @@ npd.fpref
 typeof(npd)
 typeof(npd) <: NASAPrecipitation.NASAPrecipitationDataset
 ```
-
-We see that the input arguments, and the fields of the resulting dataset, are the same despite the different dataset Types.

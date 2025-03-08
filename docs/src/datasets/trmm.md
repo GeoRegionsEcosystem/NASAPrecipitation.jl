@@ -30,12 +30,16 @@ The `TRMM3Hourly` dataset structure is used to contain information regarding 3-h
 * `TRMM3HourlyNRT`, which is used to retrieve Near Real-Time runs
 * `TRMM3Hourly`, which is used to retrieve the Final post-processing runs
 
+First, let's define an "Near Real-Time" dataset:
+
 ```@example trmm
 npd = TRMM3HourlyNRT(start=Date(2017,2,1),stop=Date(2017,2,1))
 ```
 ```@example trmm
 typeof(npd)
 ```
+
+First, let's define a "Standard" dataset:
 
 ```@example trmm
 npd = TRMM3Hourly(start=Date(2017,2,1),stop=Date(2017,2,1))
@@ -44,7 +48,10 @@ npd = TRMM3Hourly(start=Date(2017,2,1),stop=Date(2017,2,1))
 typeof(npd)
 ```
 
-We see as above that whether a dataset is `EarlyNRT` or `LateNRT` or `Final` doesn't matter, it will return the same dataset type.  What changes will be the values in the fields, not the dataset structure or type itself.
+We see as above that whether a dataset is "Near Real-Time" or "Standard/Final" doesn't matter, it will return the same dataset type.  What changes will be the values in the fields, not the dataset structure or type itself.
+
+!!! warning
+    `TRMM3Hourly` datasets are designed to select data by entire days, and so here `npd.start` and `npd.stop` are defined by the entire days for which data is downloaded.
 
 ## Creating a `TRMMDaily` dataset
 
@@ -59,8 +66,8 @@ npd = TRMMDailyNRT(start=Date(2017,2,5),stop=Date(2017,2,5))
 typeof(npd)
 ```
 
-!!! info
-    Notice here, that `npd.start` and `npd.stop` define the whole month of Feb 2017, as, for efficiency purposes, `TRMMDaily` datasets are designed to select data by entire months.
+!!! warning
+    `TRMMDaily` datasets are designed to select data by entire months, and so here `npd.start` and `npd.stop` define the whole month of Feb 2017.
 
 ## Creating a `TRMMMonthly` dataset
 
@@ -74,5 +81,5 @@ npd = TRMMMonthly(start=Date(2017,6,1),stop=Date(2017,8,15))
 typeof(npd)
 ```
 
-!!! info
-    Notice here, that `npd.start` and `npd.stop` define the whole year of 2017, as, for efficiency purposes, `TRMMMonthly` datasets are designed to select data by entire years.
+!!! warning
+    `TRMMMonthly` datasets are designed to select data by entire years, and so here `npd.start` and `npd.stop` define the whole year of 2017.

@@ -14,11 +14,11 @@ hero:
       text: Getting Started
       link: /basics
     - theme: alt
+      text: Datasets
+      link: /datasets/intro
+    - theme: alt
       text: Tutorials
       link: /tutorials
-    - theme: alt
-      text: API
-      link: /api
     - theme: alt
       text: View on Github
       link: https://github.com/GeoRegionsEcosystem/NASAPrecipitation.jl
