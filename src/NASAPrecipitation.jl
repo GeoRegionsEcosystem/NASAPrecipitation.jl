@@ -11,7 +11,7 @@ using NetRC
 using RegionGrids
 
 import Base: download, show, read
-import GeoRegions: in
+import GeoRegions: in, AbstractGeoRegion
 import RegionGrids: extract
 import LandSea: getLandSea
 

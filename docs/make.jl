@@ -1,4 +1,5 @@
 using Documenter
+using DocumenterVitepress
 using NASAPrecipitation
 using Literate
 
@@ -11,31 +12,30 @@ setup(
 )
 
 makedocs(;
-    modules  = [NASAPrecipitation, GeoRegions],
-    doctest  = false,
-    warnonly = true,
-    format   = Documenter.HTML(collapselevel=1,prettyurls=false),
+    modules  = [NASAPrecipitation],
     authors  = "Nathanael Wong <natgeo.wong@outlook.com>",
     sitename = "NASAPrecipitation.jl",
+    doctest  = false,
+    warnonly = true,
+    format   = DocumenterVitepress.MarkdownVitepress(
+        repo = "https://github.com/GeoRegionsEcosystem/NASAPrecipitation.jl",
+    ),
     pages    = [
-        "Home"                        => "index.md",
-        "NASAPrecipitation Datasets" => [
-            "What is a NASA Precipitation Dataset?" => "nasaprecipitation/intro.md",
-            "Defining NASA Precipitation Datasets"  => "nasaprecipitation/define.md",
-            "GPM IMERG Datasets" => "nasaprecipitation/imerg.md",
-            "TRMM TMPA Datasets" => "nasaprecipitation/trmm.md",
-            "Dummy Datasets"     => "nasaprecipitation/dummy.md",
-        ],
-        "Using NASAPrecipitation.jl" => [
-            "Integration with GeoRegions.jl"   => "using/georegions.md",
-            "LandSea Datasets: GPM and TRMM" => [
-                "What is a LandSea Dataset?" => "using/landsea/intro.md",
-                "Loading LandSea Datasets"   => "using/landsea/create.md",
-            ],
-            "Downloading and Reading Datasets" => "using/download.md",
-            "Extraction of subGeoRegions"      => "using/extract.md",
-            "Spatialtemporal Smoothing"        => "using/smoothing.md",
-        ],
+        "Home"       => "index.md",
+        "The Basics" => "basics.md",
+        # "Datasets"   => [
+        #     "Available Datasets" => "datasets/intro.md",
+        #     "Defining a NPD"     => "datasets/define.md",
+        #     "GPM IMERG Datasets" => "datasets/imerg.md",
+        #     "TRMM TMPA Datasets" => "datasets/trmm.md",
+        #     "Dummy Datasets"     => "datasets/dummy.md",
+        # ],
+        # "Tutorials"  => [
+        #     "Integration with LandSea.jl" => "using/landsea.md",
+        #     "Downloading Datasets"        => "using/download.md",
+        #     "Extraction of subGeoRegions" => "using/extract.md",
+        #     "Spatialtemporal Smoothing"   => "using/smoothing.md",
+        # ],
     ],
 )
 
@@ -54,6 +54,8 @@ for file in files
 end
 
 deploydocs(
-    repo = "github.com/GeoRegionsEcosystem/NASAPrecipitation.jl.git",
-    devbranch = "main"
+    repo      = "github.com/GeoRegionsEcosystem/NASAPrecipitation.jl.git",
+    target    = "build", # this is where Vitepress stores its output
+    devbranch = "main",
+    branch    = "gh-pages",
 )

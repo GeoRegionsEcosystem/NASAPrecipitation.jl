@@ -1,35 +1,62 @@
-# [NASAPrecipitation.jl](https://github.com/natgeo-wong/NASAPrecipitation.jl)
-*Managing Datasets from the NASA Precipitation Measurement Mission*
+```@raw html
+---
+layout: home
 
-`NASAPrecipitation.jl` is a Julia package that aims to streamline the following processes:
-* downloads of NASA Precipitation Measurement Mission datasets
+hero:
+  name: "NASAPrecipitation.jl"
+  text: "Handling NASA's Precipitation Datasets"
+  tagline: Download, extract and manipulate NASA's Precipitation Datasets in Julia.
+  image:
+    src: /logo.png
+    alt: NASAPrecipitation
+  actions:
+    - theme: brand
+      text: Getting Started
+      link: /basics
+    - theme: alt
+      text: Tutorials
+      link: /tutorials
+    - theme: alt
+      text: API
+      link: /api
+    - theme: alt
+      text: View on Github
+      link: https://github.com/GeoRegionsEcosystem/NASAPrecipitation.jl
+
+features:
+  - title: 🔍 Simple and Intuitive
+    details: NASAPrecipitation aims to be simple and intuitive to the user, with basic functions like `download()` and `read()`.
+  - title: 🌍 Region of Interest
+    details: You don't have to download the global dataset, only for your (Geo)Region of interest, saving you time and disk space for small domains.
+  - title: 🏔️ Comprehensive
+    details: NASAPrecipitation.jl aims to easily download all IMERG Level 3 products, and eventually even Level 2 products as well.
+---
+```
+
+## Introduction
+
+NASAPrecipitation.jl builds upon the [GeoRegions Ecosystem](https://github.com/GeoRegionsEcosystem) to streamline the following processes:
+* downloads of NASA Precipitation Measurement Mission datasets (e.g., TRMM 3B42, IMERGv7)
 * basic analysis of said datasets
-* perform all the above operations innately over a given geographical region using the [`GeoRegion`](https://github.com/JuliaClimate/GeoRegions.jl) functionality of GeoRegions.jl (v2 and above)
+* perform all the above operations innately over a given geographical region using the [GeoRegions.jl](https://github.com/GeoRegionsEcosystem/GeoRegions.jl) package
 
 ## Installation Instructions
 
-NASAPrecipitation.jl has been officially registered as a Julia package.  To add it, just do:
-```
+The latest version of ETOPO can be installed using the Julia package manager (accessed by pressing `]` in the Julia command prompt)
+```julia-repl
 julia> ]
-(@v1.6) pkg> add NASAPrecipitation
+(@v1.10) pkg> add NASAPrecipitation
 ```
 
-Or if you want the latest version of NASAPrecipitation.jl, you can also install the `#main` branch.
+You can update `NASAPrecipitation.jl` to the latest version using
+```julia-repl
+(@v1.10) pkg> update NASAPrecipitation
 ```
-julia> ]
-(@v1.6) pkg> add NASAPrecipitation#main
+
+And if you want to get the latest release without waiting for me to update the Julia Registry (although this generally isn't necessary since I make a point to release patch versions as soon as I find bugs or add new working features), you may fix the version to the `main` branch of the GitHub repository:
+```julia-repl
+(@v1.10) pkg> add NASAPrecipitation#main
 ```
-
-## Documentation Overview
-
-The documentation for `NASAPrecipitation.jl` is divided into four components:
-1. Introduction - meant as an introduction to the package, the `NASAPrecipitatonDataset` and its subtypes
-2. Tutorials - meant to show how to use NASAPrecipitation.jl to download data, and how it interacts with the GeoRegions.jl package for data extraction and manipulation
-3. How-to Examples - geared towards those looking for specific examples of what can be done
-4. API Reference - comprehensive summary of all exported functionalities
-
-!!! tip "Obtaining Example Datasets"
-    All the output for the coding examples were produced using my computer with key security information (such as login info) omitted.  The examples cannot be run online because the file size requirements are too big.  Copying and pasting the code examples (with relevant directory and login information changes) should produce the same results.
 
 ## Getting help
-If you are interested in using `NASAPrecipitation.jl` or are trying to figure out how to use it, please feel free to ask me questions and get in touch!  Please feel free to [open an issue](https://github.com/natgeo-wong/NASAPrecipitation.jl/issues/new) if you have any questions, comments, suggestions, etc!
+If you are interested in using `NASAPrecipitation.jl` or are trying to figure out how to use it, please feel free to ask me questions and get in touch!  Please feel free to [open an issue](https://github.com/GeoRegionsEcosystem/NASAPrecipitation.jl/issues/new) if you have any questions, comments, suggestions, etc!
