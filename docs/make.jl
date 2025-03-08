@@ -12,7 +12,7 @@ setup(
 )
 
 makedocs(;
-    modules  = [NASAPrecipitation],
+    modules  = [NASAPrecipitation, GeoRegions],
     authors  = "Nathanael Wong <natgeo.wong@outlook.com>",
     sitename = "NASAPrecipitation.jl",
     doctest  = false,
