@@ -23,19 +23,24 @@ makedocs(;
     pages    = [
         "Home"       => "index.md",
         "The Basics" => "basics.md",
-        # "Datasets"   => [
-        #     "Available Datasets" => "datasets/intro.md",
-        #     "Defining a NPD"     => "datasets/define.md",
-        #     "GPM IMERG Datasets" => "datasets/imerg.md",
-        #     "TRMM TMPA Datasets" => "datasets/trmm.md",
-        #     "Dummy Datasets"     => "datasets/dummy.md",
-        # ],
+        "Datasets"   => [
+            "Available Datasets" => "datasets/intro.md",
+            "Defining a NPD"     => "datasets/define.md",
+            "GPM IMERG Datasets" => "datasets/imerg.md",
+            "TRMM TMPA Datasets" => "datasets/trmm.md",
+            "Dummy Datasets"     => "datasets/dummy.md",
+        ],
         # "Tutorials"  => [
         #     "Integration with LandSea.jl" => "using/landsea.md",
         #     "Downloading Datasets"        => "using/download.md",
         #     "Extraction of subGeoRegions" => "using/extract.md",
         #     "Spatialtemporal Smoothing"   => "using/smoothing.md",
         # ],
+        "API"       => [
+            "IMERG Datasets" => "api/imerg.md",
+            "TRMM Datasets"  => "api/trmm.md",
+            "Dummy Datasets" => "api/dummy.md",
+        ],
     ],
 )
 
