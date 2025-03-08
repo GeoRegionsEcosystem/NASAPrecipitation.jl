@@ -66,7 +66,7 @@ https://github.com/vuejs/vitepress/blob/main/src/client/theme-default/styles/var
 :root {
   --vp-button-brand-border: var(--vp-c-brand-lighter);
   --vp-button-brand-text: var(--vp-c-white);
-  --vp-button-brand-bg: var(--vp-c-dark);
+  --vp-button-brand-bg: var(--vp-c-brand-dark);
   --vp-button-brand-hover-border: var(--vp-c-brand-lighter);
   --vp-button-brand-hover-text: var(--vp-c-white);
   --vp-button-brand-hover-bg: var(--vp-c-brand-lighter);
