@@ -1,10 +1,14 @@
 # API for TRMM Datasets
 
+## Types of TRMM Datasets
+
 ```@docs
 NASAPrecipitation.TRMM3Hourly{<:AbstractString,<:TimeType}
 NASAPrecipitation.TRMMDaily{<:AbstractString,<:TimeType}
 NASAPrecipitation.TRMMMonthly{<:AbstractString,<:TimeType}
 ```
+
+## Creating TRMM Sub-Daily Datasets
 
 ```@docs
 NASAPrecipitation.TRMM3HourlyNRT
@@ -15,6 +19,11 @@ NASAPrecipitation.TRMM3Hourly(
     dtend :: TimeType,
     sroot :: AbstractString
 )
+```
+
+## Creating TRMM Daily Datasets
+
+```@docs
 NASAPrecipitation.TRMMDailyNRT
 NASAPrecipitation.TRMMDaily(
     ST = String,
@@ -23,6 +32,11 @@ NASAPrecipitation.TRMMDaily(
     dtend :: TimeType,
     sroot :: AbstractString
 )
+```
+
+## Creating TRMM Monthly Datasets
+
+```@docs
 NASAPrecipitation.TRMMMonthly(
     ST = String,
     DT = Date;
