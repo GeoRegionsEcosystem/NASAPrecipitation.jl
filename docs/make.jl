@@ -8,7 +8,8 @@ CairoMakie.activate!(type = "svg")
 
 setup(
     login = "nasaprecipitation",
-    password = "NASAPrecipitation1"
+    password = "NASAPrecipitation1",
+    overwrite = true
 )
 
 makedocs(;
