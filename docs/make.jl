@@ -30,12 +30,12 @@ makedocs(;
             "TRMM TMPA Datasets" => "datasets/trmm.md",
             "Dummy Datasets"     => "datasets/dummy.md",
         ],
-        # "Tutorials"  => [
+        "Tutorials"  => [
+            "Downloading Datasets"        => "using/download.md",
         #     "Integration with LandSea.jl" => "using/landsea.md",
-        #     "Downloading Datasets"        => "using/download.md",
         #     "Extraction of subGeoRegions" => "using/extract.md",
         #     "Spatialtemporal Smoothing"   => "using/smoothing.md",
-        # ],
+        ],
         "API"       => [
             "IMERG Datasets" => "api/imerg.md",
             "TRMM Datasets"  => "api/trmm.md",
