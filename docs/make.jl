@@ -7,7 +7,7 @@ using CairoMakie # to avoid capturing precompilation output by Literate
 CairoMakie.activate!(type = "svg")
 
 setup(
-    login = "nasaprecipitation",
+    login = "nasaprecipitationjl@gmail.com",
     password = "NASAPrecipitation1",
     overwrite = true
 )
