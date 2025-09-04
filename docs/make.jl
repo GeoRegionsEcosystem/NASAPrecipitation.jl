@@ -45,6 +45,13 @@ makedocs(;
     ],
 )
 
+DocumenterVitepress.deploydocs(
+    repo      = "github.com/GeoRegionsEcosystem/NASAPrecipitation.jl.git",
+    target    = "build", # this is where Vitepress stores its output
+    devbranch = "main",
+    branch    = "gh-pages",
+)
+
 recursive_find(directory, pattern) =
     mapreduce(vcat, walkdir(directory)) do (root, dirs, files)
         joinpath.(root, filter(contains(pattern), files))
@@ -58,10 +65,3 @@ end
 for file in files
     rm(file)
 end
-
-deploydocs(
-    repo      = "github.com/GeoRegionsEcosystem/NASAPrecipitation.jl.git",
-    target    = "build", # this is where Vitepress stores its output
-    devbranch = "main",
-    branch    = "gh-pages",
-)
