@@ -6,11 +6,11 @@ using Literate
 using CairoMakie # to avoid capturing precompilation output by Literate
 CairoMakie.activate!(type = "svg")
 
-setup(
-    login = "nasaprecipitationjl@gmail.com",
-    password = "NASAPrecipitation1",
-    overwrite = true
-)
+# setup(
+#     login = "nasaprecipitationjl@gmail.com",
+#     password = "NASAPrecipitation1",
+#     overwrite = true
+# )
 
 makedocs(;
     modules  = [NASAPrecipitation, GeoRegions],
@@ -24,6 +24,7 @@ makedocs(;
     pages    = [
         "Home"       => "index.md",
         "The Basics" => "basics.md",
+        "Setup"      => "setup.md",
         "Datasets"   => [
             "Available Datasets" => "datasets/intro.md",
             "Defining a NPD"     => "datasets/define.md",
