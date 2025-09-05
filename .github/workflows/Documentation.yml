@@ -30,6 +30,11 @@ jobs:
         with:
           version: '1'
       - uses: julia-actions/cache@v2
+      - uses: extractions/netrc@v2
+        with:
+          machine: machine urs.earthdata.nasa.gov
+          username: ${{ secrets.EARTHDATA_USERNAME }}
+          password: ${{ secrets.EARTHDATA_PASSWORD }}
       - name: Configure doc environment
         shell: julia --project=docs --color=yes {0}
         run: |
@@ -41,8 +46,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
-          EARTHDATA_USERNAME: ${{ secrets.EARTHDATA_USERNAME }}
-          EARTHDATA_PASSWORD: ${{ secrets.EARTHDATA_PASSWORD }}
       - name: Run doctests
         shell: julia --project=docs --color=yes {0}
         run: |
