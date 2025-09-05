@@ -44,10 +44,14 @@ download(npd,geo)
 Let us download the `IMERGMonthly` Dataset for 2020 over the Caribbean (as defined by the AR6 IPCC), for example
 
 ```@example download
-npd = IMERGMonthly(start=Date(2020),stop=Date(2020))
-geo = GeoRegion("AR6_CAR")
-lsd = getLandSea(npd,geo)
-download(npd,geo)
+# npd = IMERGMonthly(start=Date(2020),stop=Date(2020),path=pwd())
+# geo = GeoRegion("AR6_CAR")
+hroot = "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/AUXILIARY"
+npdnc = "GPM_IMERG_LandSeaMask.2/GPM_IMERG_LandSeaMask.2.nc4"
+npdds = NCDataset(joinpath(hroot,npdnc),"r")
+npdds["landseamask"][1]
+# lsd = getLandSea(npd,geo)
+# download(npd,geo)
 ```
 
 ## Reading data for a downloaded `NASAPrecipitationDataset`
