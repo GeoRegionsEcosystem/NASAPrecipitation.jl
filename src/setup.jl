@@ -5,13 +5,13 @@
         overwrite :: Bool = false
     )
 
-Function that sets up your .dodsrc and .netrc files for you.  If you do not provide the keyword arguments for `login` and `password`, the .netrc file will not be created.
+Function that sets up your .ncrc and .netrc files for you.  If you do not provide the keyword arguments for `login` and `password`, the .netrc file will not be created.
 
 Keyword arguments
 =================
 - `login` : Your Earthdata username.  You need to specify both `login` and `password` arguments.
 - `password` : Your Earthdata password.  You need to specify both `login` and `password` arguments.
-- `overwrite` : If `true`, overwrite existing `.dodsrc` and `.netrc` files with the data provided.
+- `overwrite` : If `true`, overwrite existing `.ncrc` and `.netrc` files with the data provided.
 """
 function setup(;
     login     :: AbstractString = "",
@@ -19,22 +19,22 @@ function setup(;
     overwrite :: Bool = false
 )
 
-    fdodsrc = joinpath(homedir(),".dodsrc")
-    if !isfile(fdodsrc)
-        @info "$(modulelog()) - Setting up .dodsrc file for NASA OPeNDAP servers to point at cookie and .netrc directories ..."
-        open(fdodsrc,"w") do f
+    fncrc = joinpath(homedir(),".ncrc")
+    if !isfile(fncrc)
+        @info "$(modulelog()) - Setting up .ncrc file for NASA OPeNDAP servers to point at cookie and .netrc directories ..."
+        open(fncrc,"w") do f
             write(f,"HTTP.COOKIEJAR=$(joinpath(homedir(),".urs_cookies"))\n")
             write(f,"HTTP.NETRC=$(joinpath(homedir(),".netrc"))")
         end
     else
         if overwrite
-            @warn "$(modulelog()) - .dodsrc file exists at $fdodsrc, overwriting again"
-            open(fdodsrc,"w") do f
+            @warn "$(modulelog()) - .ncrc file exists at $fncrc, overwriting again"
+            open(fncrc,"w") do f
                 write(f,"HTTP.COOKIEJAR=$(joinpath(homedir(),".urs_cookies"))\n")
                 write(f,"HTTP.NETRC=$(joinpath(homedir(),".netrc"))")
             end
         else
-            @info "$(modulelog()) - .dodsrc file exists at $fdodsrc"
+            @info "$(modulelog()) - .ncrc file exists at $fncrc"
         end
     end
 
