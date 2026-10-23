@@ -25,6 +25,7 @@ function download(
 	@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.ID == "GLB"
+		@info "$(modulelog()) - Global dataset request has been detected for `geo`, switching to the Global (180 Grid) GeoRegion for `pgeo`"
 		geo = GeoRegion("GLB180",path=geopath)
 	else
 		in(geo,GeoRegion("GLB180",path=geopath))
@@ -129,6 +130,7 @@ function download(
 	@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.ID == "GLB"
+		@info "$(modulelog()) - Global dataset request has been detected for `geo`, switching to the Global (180 Grid) GeoRegion for `pgeo`"
 		geo = GeoRegion("GLB180",path=geopath)
 	else
 		in(geo,GeoRegion("GLB180",path=geopath))
@@ -222,6 +224,7 @@ function download(
 	@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.ID == "GLB"
+		@info "$(modulelog()) - Global dataset request has been detected for `geo`, switching to the Global (180 Grid) GeoRegion for `pgeo`"
 		geo = GeoRegion("GLB180",path=geopath)
 	else
 		in(geo,GeoRegion("GLB180",path=geopath))
@@ -312,6 +315,7 @@ function download(
 	@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.ID == "GLB"
+		@info "$(modulelog()) - Global dataset request has been detected for `geo`, switching to the Global (180 Grid) GeoRegion for `pgeo`"
 		geo = GeoRegion("GLB180",path=geopath)
 	else
 		in(geo,GeoRegion("GLB180",path=geopath))
@@ -406,6 +410,7 @@ function download(
 	@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.ID == "GLB"
+		@info "$(modulelog()) - Global dataset request has been detected for `geo`, switching to the Global (180 Grid) GeoRegion for `pgeo`"
 		geo = GeoRegion("GLB180",path=geopath)
 	else
 		in(geo,GeoRegion("GLB180",path=geopath))
@@ -497,6 +502,7 @@ function download(
 	@info "$(modulelog()) - Downloading $(npd.name) data for the $(geo.name) GeoRegion from $(npd.start) to $(npd.stop)"
 
 	if geo.ID == "GLB"
+		@info "$(modulelog()) - Global dataset request has been detected for `geo`, switching to the Global (180 Grid) GeoRegion for `pgeo`"
 		geo = GeoRegion("GLB180",path=geopath)
 	else
 		in(geo,GeoRegion("GLB180",path=geopath))

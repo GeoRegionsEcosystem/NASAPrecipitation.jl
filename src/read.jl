@@ -37,6 +37,11 @@ function read(
     quiet  :: Bool = false
 )
 
+    if geo.ID == "GLB"
+		@info "$(modulelog()) - Global dataset request has been detected for `geo`, switching to the Global (180 Grid) GeoRegion for `pgeo`"
+		geo = GeoRegion("GLB180",path=geopath)
+	end
+
     pnc = npdfnc(npd,geo,dt)
 
     raw = true

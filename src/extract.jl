@@ -21,6 +21,12 @@ function extract(
 
     @info "$(modulelog()) - Retrieving GeoRegion and LandSea Dataset information for the parent GeoRegion of \"$(geo.ID)\", \"$(geo.pID)\""
     pgeo = GeoRegion(geo.pID)
+
+    if pgeo.ID == "GLB"
+		@info "$(modulelog()) - Global dataset request has been detected for `pgeo`, switching to the Global (180 Grid) GeoRegion for `pgeo`"
+		pgeo = GeoRegion("GLB180",path=geopath)
+	end
+    
     plsd = getLandSea(npd,pgeo)
     plon = plsd.lon
     plat = plsd.lat
@@ -85,6 +91,11 @@ function extract(
 	sgeo :: GeoRegion,
 	pgeo :: GeoRegion,
 )
+
+    if pgeo.ID == "GLB"
+		@info "$(modulelog()) - Global dataset request has been detected for `pgeo`, switching to the Global (180 Grid) GeoRegion for `pgeo`"
+		pgeo = GeoRegion("GLB180",path=geopath)
+	end
 
     in(sgeo,pgeo)
 

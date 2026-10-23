@@ -49,6 +49,11 @@ function smoothing(
         error("$(modulelog()) - You need to specify at least one of the `spatial` and `temporal` keyword arguments as true")
     end
 
+    if geo.ID == "GLB"
+		@info "$(modulelog()) - Global dataset request has been detected for `geo`, switching to the Global (180 Grid) GeoRegion for `pgeo`"
+		geo = GeoRegion("GLB180",path=geopath)
+	end
+
     if !spatial  && !iszero(smoothlon); smoothlon = 0 end
     if !spatial  && !iszero(smoothlat); smoothlat = 0 end
     if !temporal && !iszero(hours);     hours     = 0 end
@@ -267,6 +272,11 @@ function smoothing(
         error("$(modulelog()) - You need to specify at least one of the `spatial` and `temporal` keyword arguments as true")
     end
 
+    if geo.ID == "GLB"
+		@info "$(modulelog()) - Global dataset request has been detected for `geo`, switching to the Global (180 Grid) GeoRegion for `pgeo`"
+		geo = GeoRegion("GLB180",path=geopath)
+	end
+
     if !spatial  && !iszero(smoothlon); smoothlon = 0 end
     if !spatial  && !iszero(smoothlat); smoothlat = 0 end
     if !temporal && !iszero(days);      days     = 0 end
@@ -469,6 +479,11 @@ function smoothing(
     smoothlat :: Real = 0,
     verbose :: Bool = false
 )
+
+    if geo.ID == "GLB"
+		@info "$(modulelog()) - Global dataset request has been detected for `geo`, switching to the Global (180 Grid) GeoRegion for `pgeo`"
+		geo = GeoRegion("GLB180",path=geopath)
+	end
 
     if iszero(smoothlon) && iszero(smoothlat)
         error("$(modulelog()) - Incomplete specification of smoothing parameters in either the longitude or latitude directions")
