@@ -30,11 +30,12 @@ function read(
 	npd :: NASAPrecipitationDataset,
 	geo :: GeoRegion,
     dt  :: TimeType;
-    smooth   :: Bool = false,
+    smooth     :: Bool = false,
     smoothlon  :: Real = 0,
     smoothlat  :: Real = 0,
     smoothtime :: Real = 0,
-    quiet  :: Bool = false
+    throw :: Bool = true,
+    quiet :: Bool = false
 )
 
     if geo.ID == "GLB"
@@ -59,13 +60,22 @@ function read(
 
     if raw
         if !isfile(pnc)
-            error("$(modulelog()) - The $(npd.name) Dataset for the $(geo.ID) GeoRegion at Date $dt does not exist at $(pnc).  Check if files exist at $(npd.datapath) or download the files here")
+            if throw
+                error("$(modulelog()) - The $(npd.name) Dataset for the $(geo.ID) GeoRegion at Date $dt does not exist at $(pnc).  Check if files exist at $(npd.datapath) or download the files here")
+            else
+                @warn "$(modulelog()) - The $(npd.name) Dataset for the $(geo.ID) GeoRegion at Date $dt does not exist at $(pnc).  Check if files exist at $(npd.datapath) or download the files here"
+            end
         end
         @info "$(modulelog()) - Opening the $(npd.name) NCDataset in the $(geo.ID) GeoRegion for $dt"
     end
+
     if smooth
         if !isfile(pnc)
-            error("$(modulelog()) - The spatially smoothed ($(@sprintf("%.2f",smoothlon))x$(@sprintf("%.2f",smoothlat))) $(npd.name) Dataset for $(geo.ID) GeoRegion at Date $dt does not exist at $(pnc).  Check if files exist at $(npd.datapath) or download the files here")
+            if throw
+                error("$(modulelog()) - The spatially smoothed ($(@sprintf("%.2f",smoothlon))x$(@sprintf("%.2f",smoothlat))) $(npd.name) Dataset for $(geo.ID) GeoRegion at Date $dt does not exist at $(pnc).  Check if files exist at $(npd.datapath) or download the files here")
+            else
+                @warn "$(modulelog()) - The spatially smoothed ($(@sprintf("%.2f",smoothlon))x$(@sprintf("%.2f",smoothlat))) $(npd.name) Dataset for $(geo.ID) GeoRegion at Date $dt does not exist at $(pnc).  Check if files exist at $(npd.datapath) or download the files here"
+            end
         end
         @info "$(modulelog()) - Opening the spatialtemporally smoothed ($(@sprintf("%.2f",smoothlon))ºx$(@sprintf("%.2f",smoothlat))º, $(@sprintf("%02d",smoothtime)) timesteps) $(npd.name) NCDataset in the $(geo.ID) GeoRegion for $dt"
     end
@@ -75,7 +85,11 @@ function read(
     end
 
     flush(stderr)
-    
-    return NCDataset(pnc)
+
+    if isfile(pnc)
+        return NCDataset(pnc)
+    else
+        return nothing
+    end
 
 end
