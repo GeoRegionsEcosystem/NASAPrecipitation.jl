@@ -16,7 +16,8 @@ Arguments
 """
 function extract(
     npd :: NASAPrecipitationDataset,
-	geo :: GeoRegion,
+	geo :: GeoRegion;
+    throw :: Bool = false
 )
 
     @info "$(modulelog()) - Retrieving GeoRegion and LandSea Dataset information for the parent GeoRegion of \"$(geo.ID)\", \"$(geo.pID)\""
@@ -42,27 +43,29 @@ function extract(
 
     for dt in extract_time(npd)
 
-        pds  = read(npd,pgeo,dt)
-        nt   = pds.dim["time"]
-        tmat = @view pmat[:,:,1:nt]
-        NCDatasets.load!(pds["precipitation"].var,tmat,:,:,1:nt)
+        pds  = read(npd,pgeo,dt,throw=throw)
+        if !isnothing(pds)
+            nt   = pds.dim["time"]
+            tmat = @view pmat[:,:,1:nt]
+            NCDatasets.load!(pds["precipitation"].var,tmat,:,:,1:nt)
 
-        @info "$(modulelog()) - Extracting the $(npd.name) precipitation data in $(geo.name) GeoRegion from the $(pgeo.name) GeoRegion for $(year(dt)) $(Dates.monthname(dt))"
+            @info "$(modulelog()) - Extracting the $(npd.name) precipitation data in $(geo.name) GeoRegion from the $(pgeo.name) GeoRegion for $(year(dt)) $(Dates.monthname(dt))"
 
-        for it = 1 : nt, i_ilat = 1 : nlat, i_ilon = 1 : nlon
+            for it = 1 : nt, i_ilat = 1 : nlat, i_ilon = 1 : nlon
 
-            if isone(mask[i_ilon,i_ilat])
-                  rmat[i_ilon,i_ilat,it] = tmat[ilon[i_ilon],ilat[i_ilat],it]
-            else; rmat[i_ilon,i_ilat,it] = NaN32
+                if isone(mask[i_ilon,i_ilat])
+                    rmat[i_ilon,i_ilat,it] = tmat[ilon[i_ilon],ilat[i_ilat],it]
+                else; rmat[i_ilon,i_ilat,it] = NaN32
+                end
+
             end
 
+            close(pds)
+
+            save(view(rmat,:,:,1:nt),dt,npd,geo,rinfo)
+
+            flush(stderr)
         end
-
-        close(pds)
-
-        save(view(rmat,:,:,1:nt),dt,npd,geo,rinfo)
-
-        flush(stderr)
 
     end
 
@@ -89,7 +92,8 @@ Arguments
 function extract(
     npd  :: NASAPrecipitationDataset,
 	sgeo :: GeoRegion,
-	pgeo :: GeoRegion,
+	pgeo :: GeoRegion;
+    throw :: Bool = false
 )
 
     if pgeo.ID == "GLB"
@@ -114,20 +118,22 @@ function extract(
 
     for dt in extract_time(npd)
 
-        pds  = read(npd,pgeo,dt)
-        nt   = pds.dim["time"]
-        tmat = @view pmat[:,:,1:nt]
-        NCDatasets.load!(pds["precipitation"].var,tmat,:,:,1:nt)
+        pds  = read(npd,pgeo,dt,throw=throw)
+        if !isnothing(pds)
+            nt   = pds.dim["time"]
+            tmat = @view pmat[:,:,1:nt]
+            NCDatasets.load!(pds["precipitation"].var,tmat,:,:,1:nt)
 
-        @info "$(modulelog()) - Extracting the $(npd.name) precipitation data in $(sgeo.name) GeoRegion from the $(pgeo.name) GeoRegion for $(year(dt)) $(Dates.monthname(dt))"
+            @info "$(modulelog()) - Extracting the $(npd.name) precipitation data in $(sgeo.name) GeoRegion from the $(pgeo.name) GeoRegion for $(year(dt)) $(Dates.monthname(dt))"
 
-        extract!(rmat,tmat,ggrd)
+            extract!(rmat,tmat,ggrd)
 
-        close(pds)
+            close(pds)
 
-        save(view(rmat,:,:,1:nt),dt,npd,sgeo,ggrd)
+            save(view(rmat,:,:,1:nt),dt,npd,sgeo,ggrd)
 
-        flush(stderr)
+            flush(stderr)
+        end
 
     end
 
